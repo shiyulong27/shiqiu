@@ -1,0 +1,1160 @@
+---
+import Base from '../../layouts/Base.astro'
+import { naturalGeographyData } from '../../data/naturalGeographyData.js'
+
+const base = import.meta.env.BASE_URL
+const { meta, terrainSteps, mountainFramework, rivers, coreDividingLines, landformFeatures, worldGeography } = naturalGeographyData
+---
+
+<Base title="华夏自然地理与世界大画卷 · 十丘通识" wide={true}>
+  <div class="geo-container">
+    <!-- 顶部全景导言与导航 -->
+    <header class="geo-header">
+      <div class="geo-nav-bar">
+        <a href={base} class="geo-back-btn">← 返回【十丘】知识总门户</a>
+        <div class="geo-nav-links">
+          <a href={`${base}geography/explore/`} class="geo-sub-nav">🧭 中国省份通识</a>
+          <a href={`${base}geography/heritage/`} class="geo-sub-nav">🏯 中华世界遗产</a>
+          <a href={`${base}biology/`} class="geo-sub-nav">🌿 神奇动物与恐龙</a>
+          <a href={`${base}astronomy/`} class="geo-sub-nav">🌌 浩瀚星空与深空</a>
+          <a href={`${base}timeline/`} class="geo-sub-nav">📜 上下五千年长卷</a>
+        </div>
+      </div>
+
+      <div class="geo-hero">
+        <div class="geo-title-wrap">
+          <span class="geo-badge">🏔️ 山川壮美 · 华夏大地三级阶梯与万水千山</span>
+          <h1 class="geo-main-title">{meta.title}</h1>
+          <p class="geo-subtitle">{meta.subtitle}</p>
+        </div>
+      </div>
+
+      <!-- 锚点快速导航条 -->
+      <nav class="geo-anchor-bar">
+        <a href="#section-steps" class="geo-anchor-btn active">🏔️ 三级阶梯与山脉</a>
+        <a href="#section-rivers" class="geo-anchor-btn">🌊 长江与黄河</a>
+        <a href="#section-dividing" class="geo-anchor-btn">⚖️ 秦岭淮河与胡线</a>
+        <a href="#section-landforms" class="geo-anchor-btn">🏜️ 奇特地貌成因</a>
+        <a href="#section-world" class="geo-anchor-btn">🌍 世界之最与七大洲</a>
+      </nav>
+    </header>
+
+    <main class="geo-main-body">
+      <!-- 模块一：中国地形三级阶梯 -->
+      <section id="section-steps" class="geo-card-section">
+        <div class="section-title-wrap">
+          <span class="section-num">01</span>
+          <div>
+            <h2>🏔️ 中国地形三级阶梯与巨脉骨架</h2>
+            <p class="section-intro">{terrainSteps.intro}</p>
+          </div>
+        </div>
+
+        <!-- 三级阶梯卡片 -->
+        <div class="steps-grid">
+          {terrainSteps.steps.map(s => (
+            <div class="step-card" data-step={s.step}>
+              <div class="step-photo-wrap">
+                <img src={`${base}${s.image.replace(/^\//, '')}`} alt={s.name} class="step-real-img" loading="lazy" />
+                <span class="step-badge">第 {s.step} 级阶梯</span>
+                <span class="step-alt-badge">{s.altitude}</span>
+              </div>
+              <div class="step-body">
+                <h3 class="step-name">{s.name}</h3>
+                <div class="step-meta-row">
+                  <span class="step-tag">地形: {s.terrainTypes}</span>
+                </div>
+                <p class="step-regions"><strong>主要区域：</strong>{s.coreRegions}</p>
+                <div class="step-mountains">
+                  <strong>主要山脉：</strong>
+                  <div class="mountain-chips">
+                    {s.mountains.map(m => <span class="m-chip">{m}</span>)}
+                  </div>
+                </div>
+                <div class="step-water-significance">
+                  <strong>💧 水利与气候意义：</strong>
+                  <p>{s.waterSignificance}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- 阶梯分界线特别展台 -->
+        <div class="boundaries-deck">
+          <h4 class="sub-deck-title">⚡ 阶梯分界天堑</h4>
+          <div class="boundaries-grid">
+            {terrainSteps.boundaries.map(b => (
+              <div class="boundary-card">
+                <div class="boundary-name">{b.name}</div>
+                <div class="boundary-line"><strong>界线山脉：</strong>{b.line}</div>
+                <p class="boundary-desc">{b.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- 山脉走向骨架 -->
+        <div class="mountain-system-deck">
+          <h4 class="sub-deck-title">🗺️ 中国山脉走向三大骨架网络</h4>
+          <div class="mountain-directions-grid">
+            {mountainFramework.map(mf => (
+              <div class="m-direction-card" style={`--accent-border: ${mf.color}`}>
+                <div class="m-dir-header">
+                  <span class="m-dir-icon">⛰️</span>
+                  <h4>{mf.direction}</h4>
+                </div>
+                <div class="m-dir-items">
+                  {mf.items.map(it => (
+                    <div class="m-item">
+                      <div class="m-item-name">{it.name}</div>
+                      <div class="m-item-desc">{it.desc}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- 模块二：长江与黄河两大母亲河 -->
+      <section id="section-rivers" class="geo-card-section">
+        <div class="section-title-wrap">
+          <span class="section-num">02</span>
+          <div>
+            <h2>🌊 长江与黄河 · 中华民族的生命母亲河</h2>
+            <p class="section-intro">一条横贯东西奔流 6300 公里滋养江南沃野，一条九曲连环奔流 5464 公里铸就华夏文明摇篮。水文节点、泥沙奇观与全流域生态画卷！</p>
+          </div>
+        </div>
+
+        <!-- 长江 -->
+        <div class="river-hero-box yangtze-box">
+          <div class="river-header">
+            <div class="river-badge-tag yangtze-tag">长达 6300 公里 · 世界第三长河 · 黄金水道</div>
+            <h3 class="river-title">{rivers.yangtze.name} <small>({rivers.yangtze.length} · 流域面积 {rivers.yangtze.basinArea})</small></h3>
+            <p class="river-role">{rivers.yangtze.role}</p>
+          </div>
+
+          <div class="river-sections-grid">
+            {rivers.yangtze.sections.map(sec => (
+              <div class="river-section-card">
+                <div class="r-sec-name">{sec.name}</div>
+                <div class="r-sec-range">{sec.range}</div>
+                <p class="r-sec-features">{sec.features}</p>
+              </div>
+            ))}
+          </div>
+          <div class="river-fact-banner">
+            <span class="fact-bulb">💡</span>
+            <span><strong>生态与水运：</strong>{rivers.yangtze.vitalFact}</span>
+          </div>
+        </div>
+
+        <!-- 黄河 -->
+        <div class="river-hero-box yellow-box" style="margin-top: 2rem;">
+          <div class="river-header">
+            <div class="river-badge-tag yellow-tag">长达 5464 公里 · 几字形大弯 · 华夏摇篮</div>
+            <h3 class="river-title">{rivers.yellowRiver.name} <small>({rivers.yellowRiver.length} · 流域面积 {rivers.yellowRiver.basinArea})</small></h3>
+            <p class="river-role">{rivers.yellowRiver.role}</p>
+          </div>
+
+          <div class="river-sections-grid">
+            {rivers.yellowRiver.sections.map(sec => (
+              <div class="river-section-card">
+                <div class="r-sec-name">{sec.name}</div>
+                <div class="r-sec-range">{sec.range}</div>
+                <p class="r-sec-features">{sec.features}</p>
+              </div>
+            ))}
+          </div>
+          <div class="river-fact-banner yellow-fact">
+            <span class="fact-bulb">💡</span>
+            <span><strong>治河与悬河：</strong>{rivers.yellowRiver.vitalFact}</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 模块三：两大核心分水岭与分界线 -->
+      <section id="section-dividing" class="geo-card-section">
+        <div class="section-title-wrap">
+          <span class="section-num">03</span>
+          <div>
+            <h2>⚖️ 两大核心地理分界线：秦岭-淮河与胡焕庸线</h2>
+            <p class="section-intro">山脉如何决定南北生活方式？一条虚构的直线如何精准划分了 94% 的中国人口分布？自然密码大揭秘！</p>
+          </div>
+        </div>
+
+        <!-- 秦岭-淮河十大维度对比表 -->
+        <div class="dividing-sub-box">
+          <h3 class="dividing-sub-title">1. 秦岭 — 淮河一线：中国南北方分水岭十大维度</h3>
+          <p class="dividing-sub-intro">{coreDividingLines.qinlingHuaihe.significance}</p>
+
+          <div class="diff-table-wrap">
+            <table class="diff-table">
+              <thead>
+                <tr>
+                  <th style="width: 18%;">比较维度</th>
+                  <th style="width: 41%; background: #eff6ff; color: #1e3a8a;">❄️ 北方（秦岭-淮河以北）</th>
+                  <th style="width: 41%; background: #ecfdf5; color: #064e3b;">🌿 南方（秦岭-淮河以南）</th>
+                </tr>
+              </thead>
+              <tbody>
+                {coreDividingLines.qinlingHuaihe.dimensions.map(dim => (
+                  <tr>
+                    <td class="dim-name"><strong>{dim.dimension}</strong></td>
+                    <td class="dim-north">{dim.north}</td>
+                    <td class="dim-south">{dim.south}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- 胡焕庸线 -->
+        <div class="dividing-sub-box" style="margin-top: 2rem;">
+          <div class="huhuanyong-banner">
+            <div class="hh-head">
+              <span class="hh-badge">人口地理学第一定律</span>
+              <h3>2. 胡焕庸线 (黑河 — 腾冲线)</h3>
+              <div class="hh-points">📍 东北端点：黑龙江省黑河市 ⇄ 西南端点：云南省腾冲市</div>
+            </div>
+            <div class="hh-stats-row">
+              <div class="hh-stat-card southeast">
+                <div class="stat-pct">94%</div>
+                <div class="stat-label">全国人口集中度</div>
+                <div class="stat-land">仅占国土面积 36%</div>
+                <div class="stat-desc">季风湿润区、平原丘陵沃土、河网密集、城镇密布</div>
+              </div>
+              <div class="hh-stat-card northwest">
+                <div class="stat-pct">6%</div>
+                <div class="stat-label">全国人口集中度</div>
+                <div class="stat-land">占国土面积 64%</div>
+                <div class="stat-desc">干旱半干旱区、高寒高原、荒漠草原、生态保护屏障</div>
+              </div>
+            </div>
+            <p class="hh-secret"><strong>自然规律：</strong>{coreDividingLines.huLine.naturalCause}</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 模块四：奇特地质地貌成因 -->
+      <section id="section-landforms" class="geo-card-section">
+        <div class="section-title-wrap">
+          <span class="section-num">04</span>
+          <div>
+            <h2>🏜️ 奇异地质地貌成因机理与实景图鉴</h2>
+            <p class="section-intro">水与风在岩石上雕琢了千百万年，造就了桂林山水甲天下的喀斯特、张掖彩虹般的丹霞，以及狂风呼啸的魔鬼城雅丹！</p>
+          </div>
+        </div>
+
+        <div class="landforms-grid">
+          {landformFeatures.map(lf => (
+            <div class="landform-card" data-img={`${base}${lf.image.replace(/^\//, '')}`} data-name={lf.name} data-mechanics={lf.mechanics}>
+              <div class="landform-photo-wrap">
+                <img src={`${base}${lf.image.replace(/^\//, '')}`} alt={lf.name} class="lf-img" loading="lazy" />
+                <span class="lf-badge">{lf.representative}</span>
+              </div>
+              <div class="lf-body">
+                <h3 class="lf-title">{lf.name}</h3>
+                <div class="lf-rock">🪨 <b>岩石基底：</b>{lf.rockType}</div>
+                <div class="lf-force">🌪️ <b>主要营力：</b>{lf.externalForce}</div>
+                <p class="lf-mechanics"><strong>成因机理：</strong>{lf.mechanics}</p>
+                <div class="lf-action">点击放大观察地质实景 🔍</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- 模块五：世界地理与地球之最 -->
+      <section id="section-world" class="geo-card-section">
+        <div class="section-title-wrap">
+          <span class="section-num">05</span>
+          <div>
+            <h2>🌍 世界地理大版图与地球极端极值之最</h2>
+            <p class="section-intro">跳出华夏俯瞰整颗蓝色星球：七大洲四大洋的辽阔格局，从 8848 米世界屋脊到 10984 米深邃海沟！</p>
+          </div>
+        </div>
+
+        <!-- 七大洲四大洋概览 -->
+        <div class="continents-deck">
+          <h3 class="sub-deck-title">七大洲四大洋版图全览</h3>
+          <div class="continents-grid">
+            {worldGeography.continents.map(c => (
+              <div class="continent-card">
+                <div class="c-head">
+                  <h4>{c.name}</h4>
+                  <span class="c-area">{c.area}</span>
+                </div>
+                <p class="c-feat">{c.feature}</p>
+              </div>
+            ))}
+          </div>
+          <div class="oceans-grid" style="margin-top: 1.2rem;">
+            {worldGeography.oceans.map(o => (
+              <div class="ocean-card">
+                <h4>{o.name}</h4>
+                <div class="o-area">{o.area}</div>
+                <p class="o-feat">{o.feature}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- 地球极端极值图鉴 -->
+        <div class="extremes-deck" style="margin-top: 2.5rem;">
+          <h3 class="sub-deck-title">地球自然地理六大极值之最</h3>
+          <div class="extremes-grid">
+            {worldGeography.earthExtremes.map(ex => (
+              <div class="extreme-card" data-img={`${base}${ex.image.replace(/^\//, '')}`} data-title={ex.title} data-record={ex.record} data-desc={ex.description}>
+                <div class="ex-photo-wrap">
+                  <img src={`${base}${ex.image.replace(/^\//, '')}`} alt={ex.title} class="ex-img" loading="lazy" />
+                  <span class="ex-badge">{ex.record}</span>
+                </div>
+                <div class="ex-body">
+                  <div class="ex-title">{ex.title}</div>
+                  <div class="ex-loc">📍 {ex.location}</div>
+                  <p class="ex-desc">{ex.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 地理全屏大图灯箱 -->
+    <div id="geo-lightbox-modal" class="geo-lightbox-backdrop" style="display: none;">
+      <button id="btn-close-geo-lightbox" class="geo-lightbox-close" aria-label="关闭">&times;</button>
+      <div class="geo-lightbox-content">
+        <img id="geo-lightbox-img" src="" alt="" class="geo-lightbox-photo" />
+        <div id="geo-lightbox-caption" class="geo-lightbox-caption"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../client/nature-geography-ui.js"></script>
+</Base>
+
+<style>
+  .geo-container {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 5rem;
+    color: #1e293b;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+
+  /* 顶部导航与 Header */
+  .geo-header {
+    background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0369a1 100%);
+    color: #fff;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 12px 36px rgba(15, 23, 42, 0.25);
+    margin-bottom: 2.5rem;
+  }
+
+  .geo-nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 1.5rem;
+  }
+
+  .geo-back-btn {
+    color: #7dd3fc;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+  .geo-back-btn:hover {
+    color: #ffffff;
+  }
+
+  .geo-nav-links {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+  .geo-sub-nav {
+    color: #e0f2fe;
+    text-decoration: none;
+    font-size: 0.85rem;
+    background: rgba(255, 255, 255, 0.12);
+    padding: 0.35rem 0.8rem;
+    border-radius: 16px;
+    transition: all 0.2s;
+  }
+  .geo-sub-nav:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
+  }
+
+  .geo-badge {
+    display: inline-block;
+    background: rgba(56, 189, 248, 0.2);
+    color: #7dd3fc;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.3rem 0.8rem;
+    border-radius: 12px;
+    margin-bottom: 0.6rem;
+  }
+
+  .geo-main-title {
+    font-size: 2.3rem;
+    font-weight: 900;
+    margin: 0.2rem 0;
+    letter-spacing: -0.02em;
+  }
+  .geo-subtitle {
+    font-size: 1.05rem;
+    color: #bae6fd;
+    margin: 0.5rem 0 1.5rem 0;
+  }
+
+  /* 锚点导航 */
+  .geo-anchor-bar {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 0.6rem 1rem;
+    border-radius: 14px;
+  }
+  .geo-anchor-btn {
+    color: #e0f2fe;
+    text-decoration: none;
+    font-size: 0.88rem;
+    font-weight: 600;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .geo-anchor-btn:hover, .geo-anchor-btn.active {
+    background: #ffffff;
+    color: #0369a1;
+  }
+
+  /* 通用模块样式 */
+  .geo-card-section {
+    background: #ffffff;
+    border-radius: 20px;
+    border: 1px solid #e2e8f0;
+    padding: 2.2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.03);
+  }
+
+  .section-title-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 1.2rem;
+  }
+  .section-num {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #0284c7;
+    background: #e0f2fe;
+    padding: 0.2rem 0.8rem;
+    border-radius: 12px;
+    line-height: 1.2;
+  }
+  .section-title-wrap h2 {
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 0.4rem 0;
+  }
+  .section-intro {
+    font-size: 0.95rem;
+    color: #475569;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* 三级阶梯卡片 */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 1.8rem;
+    margin-bottom: 2.5rem;
+  }
+  .step-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+  }
+  .step-photo-wrap {
+    width: 100%;
+    height: 200px;
+    position: relative;
+    background: #0f172a;
+    overflow: hidden;
+  }
+  .step-real-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .step-card:hover .step-real-img {
+    transform: scale(1.06);
+  }
+  .step-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(15, 23, 42, 0.8);
+    color: #7dd3fc;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    backdrop-filter: blur(4px);
+  }
+  .step-alt-badge {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(15, 23, 42, 0.8);
+    color: #facc15;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    backdrop-filter: blur(4px);
+  }
+
+  .step-body {
+    padding: 1.4rem;
+  }
+  .step-name {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 0.5rem 0;
+  }
+  .step-meta-row {
+    margin-bottom: 0.8rem;
+  }
+  .step-tag {
+    font-size: 0.78rem;
+    background: #e2e8f0;
+    color: #334155;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+  .step-regions {
+    font-size: 0.88rem;
+    color: #475569;
+    margin: 0 0 0.8rem 0;
+    line-height: 1.5;
+  }
+  .step-mountains {
+    font-size: 0.85rem;
+    color: #334155;
+    margin-bottom: 0.8rem;
+  }
+  .mountain-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+  }
+  .m-chip {
+    background: #e0f2fe;
+    color: #0369a1;
+    font-size: 0.75rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+  .step-water-significance {
+    background: #f0fdf4;
+    border: 1px solid #dcfce7;
+    border-radius: 10px;
+    padding: 0.8rem;
+    font-size: 0.82rem;
+    color: #166534;
+    line-height: 1.5;
+  }
+  .step-water-significance p {
+    margin: 0.3rem 0 0 0;
+  }
+
+  /* 阶梯界线 */
+  .sub-deck-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 1rem 0;
+  }
+  .boundaries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 2.5rem;
+  }
+  .boundary-card {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+    padding: 1.2rem;
+  }
+  .boundary-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1e40af;
+    margin-bottom: 0.4rem;
+  }
+  .boundary-line {
+    font-size: 0.88rem;
+    color: #1e3a8a;
+    margin-bottom: 0.5rem;
+  }
+  .boundary-desc {
+    font-size: 0.82rem;
+    color: #475569;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* 山脉骨架走向 */
+  .mountain-directions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.2rem;
+  }
+  .m-direction-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-top: 4px solid var(--accent-border, #0284c7);
+    border-radius: 14px;
+    padding: 1.2rem;
+  }
+  .m-dir-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+  .m-dir-icon {
+    font-size: 1.5rem;
+  }
+  .m-dir-header h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+  }
+  .m-dir-items {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .m-item-name {
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #1e293b;
+  }
+  .m-item-desc {
+    font-size: 0.82rem;
+    color: #64748b;
+    line-height: 1.45;
+  }
+
+  /* 长江与黄河英雄展台 */
+  .river-hero-box {
+    border-radius: 18px;
+    padding: 1.8rem;
+    border: 1px solid #e2e8f0;
+  }
+  .yangtze-box {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-color: #bae6fd;
+  }
+  .yellow-box {
+    background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%);
+    border-color: #fef08a;
+  }
+  .river-header {
+    margin-bottom: 1.5rem;
+  }
+  .river-badge-tag {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.25rem 0.65rem;
+    border-radius: 20px;
+    margin-bottom: 0.4rem;
+  }
+  .yangtze-tag {
+    background: #0284c7;
+    color: #fff;
+  }
+  .yellow-tag {
+    background: #d97706;
+    color: #fff;
+  }
+  .river-title {
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: #0f172a;
+    margin: 0.2rem 0 0.4rem 0;
+  }
+  .river-role {
+    font-size: 0.92rem;
+    color: #475569;
+    margin: 0;
+  }
+
+  .river-sections-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+  .river-section-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.2rem;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  }
+  .r-sec-name {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 0.2rem;
+  }
+  .r-sec-range {
+    font-size: 0.78rem;
+    color: #0284c7;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .r-sec-features {
+    font-size: 0.82rem;
+    color: #475569;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .river-fact-banner {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 0.8rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    color: #0369a1;
+  }
+  .yellow-fact {
+    color: #92400e;
+  }
+
+  /* 秦岭淮河对比表 */
+  .diff-table-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    margin-top: 1rem;
+  }
+  .diff-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  .diff-table th, .diff-table td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid #f1f5f9;
+    text-align: left;
+  }
+  .diff-table th {
+    font-weight: 800;
+  }
+  .dim-name {
+    color: #0f172a;
+    background: #f8fafc;
+  }
+  .dim-north {
+    color: #1e3a8a;
+    background: rgba(239, 246, 255, 0.6);
+  }
+  .dim-south {
+    color: #064e3b;
+    background: rgba(236, 253, 245, 0.6);
+  }
+
+  /* 胡焕庸线 */
+  .huhuanyong-banner {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: #f8fafc;
+    border-radius: 16px;
+    padding: 1.8rem;
+  }
+  .hh-badge {
+    background: #ef4444;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+  }
+  .hh-head h3 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    margin: 0.4rem 0 0.2rem 0;
+  }
+  .hh-points {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-bottom: 1.2rem;
+  }
+  .hh-stats-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem;
+    margin-bottom: 1.2rem;
+  }
+  .hh-stat-card {
+    border-radius: 12px;
+    padding: 1.2rem;
+  }
+  .hh-stat-card.southeast {
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+  }
+  .hh-stat-card.northwest {
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+  }
+  .stat-pct {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #f8fafc;
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin: 0.3rem 0;
+  }
+  .stat-land {
+    font-size: 0.82rem;
+    color: #facc15;
+    margin-bottom: 0.5rem;
+  }
+  .stat-desc {
+    font-size: 0.82rem;
+    color: #cbd5e1;
+    line-height: 1.45;
+  }
+  .hh-secret {
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    margin: 0;
+    line-height: 1.5;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 1rem;
+  }
+
+  /* 奇异地貌 */
+  .landforms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 1.8rem;
+  }
+  .landform-card {
+    background: #f8fafc;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .landform-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+  }
+  .landform-photo-wrap {
+    width: 100%;
+    height: 220px;
+    overflow: hidden;
+    position: relative;
+    background: #0f172a;
+  }
+  .lf-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .landform-card:hover .lf-img {
+    transform: scale(1.06);
+  }
+  .lf-badge {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(15, 23, 42, 0.8);
+    color: #f8fafc;
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    backdrop-filter: blur(4px);
+  }
+  .lf-body {
+    padding: 1.4rem;
+  }
+  .lf-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 0.6rem 0;
+  }
+  .lf-rock, .lf-force {
+    font-size: 0.85rem;
+    color: #334155;
+    margin-bottom: 0.4rem;
+  }
+  .lf-mechanics {
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.55;
+    margin: 0.6rem 0 1rem 0;
+  }
+  .lf-action {
+    color: #0284c7;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  /* 世界地理 */
+  .continents-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .continent-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+  }
+  .c-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.4rem;
+  }
+  .c-head h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+  }
+  .c-area {
+    font-size: 0.78rem;
+    color: #0284c7;
+    font-weight: 600;
+  }
+  .c-feat {
+    font-size: 0.82rem;
+    color: #475569;
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  .oceans-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+  .ocean-card {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+  }
+  .ocean-card h4 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0369a1;
+    margin: 0 0 0.3rem 0;
+  }
+  .o-area {
+    font-size: 0.78rem;
+    color: #0284c7;
+    margin-bottom: 0.4rem;
+  }
+  .o-feat {
+    font-size: 0.82rem;
+    color: #475569;
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  .extremes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 1.5rem;
+  }
+  .extreme-card {
+    background: #f8fafc;
+    border-radius: 14px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .extreme-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.06);
+  }
+  .ex-photo-wrap {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+    position: relative;
+    background: #0f172a;
+  }
+  .ex-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .extreme-card:hover .ex-img {
+    transform: scale(1.06);
+  }
+  .ex-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(15, 23, 42, 0.85);
+    color: #facc15;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    backdrop-filter: blur(4px);
+  }
+  .ex-body {
+    padding: 1.2rem;
+  }
+  .ex-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 0.2rem;
+  }
+  .ex-loc {
+    font-size: 0.78rem;
+    color: #0284c7;
+    margin-bottom: 0.5rem;
+  }
+  .ex-desc {
+    font-size: 0.82rem;
+    color: #475569;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  /* 全屏灯箱 */
+  .geo-lightbox-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(2, 6, 23, 0.98);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    backdrop-filter: blur(12px);
+  }
+  .geo-lightbox-content {
+    max-width: 1100px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: zoomIn 0.25s ease-out;
+  }
+  .geo-lightbox-photo {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+  }
+  .geo-lightbox-caption {
+    color: #cbd5e1;
+    font-size: 0.95rem;
+    margin-top: 1rem;
+    text-align: center;
+    background: rgba(15, 23, 42, 0.7);
+    padding: 0.4rem 1.2rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .geo-lightbox-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 2rem;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #ffffff;
+    font-size: 2.2rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .geo-lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.08);
+  }
+
+  @media (max-width: 768px) {
+    .geo-header {
+      padding: 1.4rem;
+    }
+    .geo-main-title {
+      font-size: 1.7rem;
+    }
+    .geo-card-section {
+      padding: 1.4rem;
+    }
+    .steps-grid, .landforms-grid, .extremes-grid {
+      grid-template-columns: 1fr;
+    }
+    .hh-stats-row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
