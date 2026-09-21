@@ -1,0 +1,1187 @@
+---
+import Base from '../layouts/Base.astro'
+import { fileURLToPath } from 'node:url'
+import { loadAll } from '../lib/load.js'
+import { yearOf } from '../lib/date.js'
+
+const dataDir = fileURLToPath(new URL('../../data', import.meta.url))
+const data = loadAll(dataDir)
+
+const figureGroups = data.figureGroups ?? []
+const figures = data.figures ?? []
+const legends = data.legends ?? []
+const detailIds = new Set((data.figureDetails ?? []).map((d) => d.id))
+
+const base = import.meta.env.BASE_URL
+
+// 构建人物快速查找映射
+const allFiguresById = new Map()
+
+// 历代天团名士权威朝代映射（涵盖四大名医、诸子百家、战国四公子、汉初三杰、建安七子、唐宋明清文人书画等）
+const dynastyNameMap = {
+  // 上古创世始祖
+  'sanhuang-fuxi': '上古传说',
+  'sanhuang-shennong': '上古传说',
+  'sanhuang-nuwa': '上古传说',
+  'wudi-huangdi': '上古传说',
+  'wudi-zhuanxu': '上古传说',
+  'wudi-diku': '上古传说',
+  'wudi-yao': '上古传说',
+  'wudi-shun': '上古传说',
+
+  // 战国四公子
+  'mengchangjun': '战国',
+  'pingyuanjun': '战国',
+  'xinlingjun': '战国',
+  'chunshenjun': '战国',
+
+  // 诸子百家巨擘
+  'laozi': '春秋',
+  'kongzi': '春秋',
+  'sunwu': '春秋',
+  'mozi': '战国',
+  'zhuangzi': '战国',
+  'mengzi': '战国',
+  'xunzi': '战国',
+  'hanfei': '战国',
+
+  // 汉初三杰
+  'zhangliang': '西汉',
+  'xiaohe': '西汉',
+  'hanxin': '西汉',
+
+  // 三曹
+  'caocao': '东汉末 / 曹魏',
+  'caopi': '三国曹魏',
+  'caozhi': '三国曹魏',
+
+  // 建安七子
+  'kongrong': '东汉末年',
+  'chenlin': '东汉末年',
+  'wangcan': '东汉末年',
+  'xugan': '东汉末年',
+  'ruanyu': '东汉末年',
+  'yingyang': '东汉末年',
+  'liuzhen': '东汉末年',
+
+  // 竹林七贤
+  'jikang': '三国曹魏',
+  'ruanji': '三国曹魏',
+  'shantao': '曹魏 / 西晋',
+  'xiangxiu': '曹魏 / 西晋',
+  'liuling': '西晋',
+  'wangrong': '西晋',
+  'ruanxian': '曹魏 / 西晋',
+
+  // 初唐四杰
+  'wangbo': '初唐',
+  'yangjiong': '初唐',
+  'luzhaolin': '初唐',
+  'luobinwang': '初唐',
+
+  // 李杜 & 小李杜
+  'libai': '盛唐',
+  'dufu': '盛唐',
+  'lishangyin': '晚唐',
+  'dumu': '晚唐',
+
+  // 唐宋八大家
+  'hanyu': '中唐',
+  'liuzongyuan': '中唐',
+  'ouyangxiu': '北宋',
+  'suxun': '北宋',
+  'sushi': '北宋',
+  'suzhe': '北宋',
+  'wanganshi': '北宋',
+  'zenggong': '北宋',
+
+  // 苏门四学士
+  'huangtingjian': '北宋',
+  'qinguan': '北宋',
+  'chaobuzhi': '北宋',
+  'zhanglei': '北宋',
+
+  // 楷书四大家
+  'ouyangxun': '隋末唐初',
+  'yanzhenqing': '盛唐',
+  'liugongquan': '中晚唐',
+  'zhaomengfu': '元代',
+
+  // 宋四家
+  'mifu': '北宋',
+  'caixiang': '北宋',
+
+  // 吴门四家
+  'shenzhou': '明代',
+  'wenzhengming': '明代',
+  'tangyin': '明代',
+  'qiuying': '明代',
+
+  // 扬州八怪
+  'zhengxie': '清代',
+  'jinnong': '清代',
+  'huangshen': '清代',
+  'lishan': '清代',
+  'lifangying': '清代',
+  'wangshishen': '清代',
+  'luopin': '清代',
+  'gaoxiang': '清代',
+
+  // 古代四大名医
+  'bianque': '战国',
+  'huatuo': '东汉',
+  'zhangzhongjing': '东汉',
+  'lishizhen': '明代',
+
+  // 晚清四大名臣
+  'zengguofan': '晚清',
+  'zuozongtang': '晚清',
+  'lihongzhang': '晚清',
+  'zhangzhidong': '晚清',
+}
+
+for (const l of legends) {
+  allFiguresById.set(l.id, {
+    id: l.id,
+    name: l.name,
+    dynasty: dynastyNameMap[l.id] || '上古传说',
+    lifespan: '传说时代',
+    hasDetail: false,
+    isLegend: true,
+  })
+}
+
+for (const f of figures) {
+  const birth = f.birth ? yearOf(f.birth) : null
+  const death = f.death ? yearOf(f.death) : null
+  const lifespan =
+    birth != null && death != null
+      ? `${birth < 0 ? `前${-birth}` : birth}–${death < 0 ? `前${-death}` : death}`
+      : [f.birth_note, f.death_note].filter(Boolean).join('，') || '生卒待考'
+
+  allFiguresById.set(f.id, {
+    id: f.id,
+    name: f.name,
+    dynasty: dynastyNameMap[f.id] || '朝代待考',
+    lifespan,
+    hasDetail: detailIds.has(f.id) && f.has_detail === true,
+    isLegend: false,
+  })
+}
+
+// 组装丰富属性的天团数据
+const enrichedGroups = figureGroups.map((g) => {
+  const members = (g.figures ?? []).map((ref) => {
+    const fig = allFiguresById.get(ref.id)
+    return {
+      id: ref.id,
+      name: fig ? fig.name : ref.id,
+      dynasty: fig ? fig.dynasty : '',
+      roleInGroup: ref.role_in_group ?? '',
+      lifespan: fig ? fig.lifespan : '',
+      hasDetail: fig ? fig.hasDetail : false,
+      isLegend: fig ? fig.isLegend : false,
+    }
+  })
+
+  // 子阵容划分（特别针对三皇五帝、唐宋八大家等结构分明的天团）
+  let subgroups = []
+  let badgeCountText = `${members.length} 人成团`
+
+  if (g.id === 'sanhuang-wudi') {
+    const sanhuangIds = new Set(['sanhuang-fuxi', 'sanhuang-shennong', 'sanhuang-nuwa'])
+    const wudiIds = new Set(['wudi-huangdi', 'wudi-zhuanxu', 'wudi-diku', 'wudi-yao', 'wudi-shun'])
+    subgroups = [
+      {
+        id: 'sanhuang',
+        title: '🜂 三皇 · 开天创世与人文先祖',
+        badge: '3人',
+        desc: '伏羲画卦结网、神农尝百草兴农医、女娲抟土造人炼石补天，开辟华夏文明之黎明。',
+        members: members.filter((m) => sanhuangIds.has(m.id)),
+        variant: 'sanhuang',
+      },
+      {
+        id: 'wudi',
+        title: '👑 五帝 · 华夏共祖与德治禅让圣王',
+        badge: '5人',
+        desc: '黄帝定邦立制垂衣裳、颛顼绝地天通、帝喾顺天成纪、尧舜德化天下敬授民时。',
+        members: members.filter((m) => wudiIds.has(m.id)),
+        variant: 'wudi',
+      },
+    ]
+    badgeCountText = '三皇 (3) · 五帝 (5)'
+  } else if (g.id === 'tangsong-badajia') {
+    const tangIds = new Set(['hanyu', 'liuzongyuan'])
+    subgroups = [
+      {
+        id: 'tang',
+        title: '📜 唐代散文宗师 · 古文运动开山先驱',
+        badge: '2位',
+        desc: '韩愈文起八代之衰、柳宗元雄深雅健，冲破六朝骈俪绮靡之风，倡导“文以载道”。',
+        members: members.filter((m) => tangIds.has(m.id)),
+        variant: 'tang',
+      },
+      {
+        id: 'song',
+        title: '🏛️ 宋代散文宗师 · 北宋诗文革新领袖',
+        badge: '6位',
+        desc: '欧阳修一代文宗提携天下贤士，三苏父子汪洋旷达，王安石严谨峭拔，曾巩纯正古雅。',
+        members: members.filter((m) => !tangIds.has(m.id)),
+        variant: 'song',
+      },
+    ]
+    badgeCountText = '唐代 (2) · 宋代 (6)'
+  } else {
+    subgroups = [
+      {
+        id: 'default',
+        title: '核心阵容席位',
+        badge: `${members.length} 人`,
+        desc: '',
+        members,
+        variant: 'default',
+      },
+    ]
+  }
+
+  const searchIndex = [
+    g.name,
+    g.category,
+    g.period,
+    g.summary,
+    badgeCountText,
+    ...subgroups.map((s) => `${s.title} ${s.desc}`),
+    ...(g.tags ?? []),
+    ...members.map((m) => `${m.name} ${m.roleInGroup}`),
+  ]
+    .join(' ')
+    .toLowerCase()
+
+  return {
+    ...g,
+    members,
+    subgroups,
+    badgeCountText,
+    searchIndex,
+  }
+})
+
+// 分类汇总
+const categories = ['全部', ...new Set(figureGroups.map((g) => g.category))]
+const totalMembers = new Set(figureGroups.flatMap((g) => (g.figures ?? []).map((f) => f.id))).size
+
+const title = '华夏历史天团 · 经典并称全景谱系 | 十丘'
+const desc = `收录华夏 ${figureGroups.length} 组经典名家天团（含三皇五帝、战国四公子、汉初三杰、竹林七贤、唐宋八大家等共 ${totalMembers} 位巨擘），全景呈现成团定位、时代羁绊与代表巨作。`
+---
+
+<Base title={title} description={desc} wide={true}>
+  <main class="groups-page">
+    {/* 顶部导航与返回 */}
+    <div class="groups-topbar">
+      <a href={base} class="back-link">← 返回【十丘】知识总门户</a>
+      <div class="topbar-links">
+        <a href={`${base}figures/`} class="topbar-link">千古风流 · 人物总览</a>
+        <a href={`${base}timeline/`} class="topbar-link">上下五千年 · 历史长卷</a>
+      </div>
+    </div>
+
+    {/* Hero 视觉区 */}
+    <header class="groups-hero">
+      <div class="hero-kicker">华夏文史特别专题 · 经典并称谱系</div>
+      <h1 class="hero-title">
+        <span class="hero-icon">🌟</span> 华夏历史天团
+      </h1>
+      <p class="hero-subtitle">
+        从创世始祖到唐宋八大家 · 历代巨擘天团、成团定位与历史羁绊全景长卷
+      </p>
+
+      {/* 统计指标徽章 */}
+      <div class="hero-stats">
+        <div class="stat-badge">
+          <span class="stat-num">{figureGroups.length}</span>
+          <span class="stat-label">组经典天团</span>
+        </div>
+        <div class="stat-divider">·</div>
+        <div class="stat-badge">
+          <span class="stat-num">{totalMembers}</span>
+          <span class="stat-label">位先贤巨擘</span>
+        </div>
+        <div class="stat-divider">·</div>
+        <div class="stat-badge">
+          <span class="stat-num">5000</span>
+          <span class="stat-label">年文明纵深</span>
+        </div>
+      </div>
+    </header>
+
+    {/* 筛选与搜索工具条 */}
+    <section class="filter-section" aria-label="天团筛选与检索">
+      <div class="filter-controls">
+        {/* 赛道分类筛选 */}
+        <div class="category-pills" role="tablist" aria-label="赛道分类">
+          {categories.map((cat, idx) => (
+            <button
+              type="button"
+              class={`cat-pill ${idx === 0 ? 'is-active' : ''}`}
+              data-cat={cat}
+              role="tab"
+              aria-selected={idx === 0 ? 'true' : 'false'}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* 实时搜索框 */}
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input
+            type="search"
+            id="group-search"
+            placeholder="搜索天团（如八大家、三皇五帝）、成员（如苏轼、韩信）、标签..."
+            autocomplete="off"
+            aria-label="搜索天团或成员"
+          />
+        </div>
+      </div>
+
+      <div class="filter-status">
+        <span id="result-count">共收录 {figureGroups.length} 组经典天团</span>
+      </div>
+    </section>
+
+    {/* 天团长卷货架 */}
+    <section class="groups-grid" id="groups-grid" aria-label="天团列表">
+      {enrichedGroups.map((g) => (
+        <article
+          class="group-card"
+          id={`group-${g.id}`}
+          data-id={g.id}
+          data-category={g.category}
+          data-search={g.searchIndex}
+        >
+          {/* 卡片头部 */}
+          <header class="group-card-header">
+            <div class="group-title-row">
+              <h2 class="group-name">{g.name}</h2>
+              <div class="group-badges">
+                <span class="badge badge-period">{g.period}</span>
+                <span class="badge badge-cat">{g.category}</span>
+                <span class="badge badge-count">{g.badgeCountText}</span>
+              </div>
+            </div>
+
+            {/* 成团标签 */}
+            {g.tags && g.tags.length > 0 && (
+              <div class="group-tags">
+                {g.tags.map((t) => (
+                  <span class="group-tag">#{t}</span>
+                ))}
+              </div>
+            )}
+          </header>
+
+          {/* 成团立意与历史简介 */}
+          <p class="group-summary">{g.summary}</p>
+
+          {/* 成员阵容席位（支持三皇与五帝、唐代与宋代等独立子阵容） */}
+          <div class="group-subgroups-container">
+            {g.subgroups.map((sub) => (
+              <div class={`subgroup-block subgroup-${sub.variant}`}>
+                <div class="subgroup-header">
+                  <div class="subgroup-title-row">
+                    <span class="subgroup-title">{sub.title}</span>
+                    <span class={`subgroup-badge badge-${sub.variant}`}>{sub.badge}</span>
+                  </div>
+                  {sub.desc && <p class="subgroup-desc">{sub.desc}</p>}
+                </div>
+
+                <div class="members-grid">
+                  {sub.members.map((m) => (
+                    <div class={`member-card ${m.hasDetail ? 'has-detail' : ''}`}>
+                      <div class="member-top">
+                        <div class="member-avatar">
+                          {m.name.slice(0, 1)}
+                        </div>
+                        <div class="member-meta">
+                          <div class="member-name-row">
+                            {m.hasDetail ? (
+                              <a href={`${base}figure/${m.id}/`} class="member-link" title="点击查看全景个人详卷">
+                                {m.name}
+                                <span class="link-arrow">↗</span>
+                              </a>
+                            ) : (
+                              <span class="member-name">{m.name}</span>
+                            )}
+                            {m.isLegend && <span class="legend-chip">传说</span>}
+                          </div>
+                          <div class="member-time-row">
+                            {m.dynasty && <span class="member-dynasty-tag">{m.dynasty}</span>}
+                            <span class="member-lifespan">{m.lifespan}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {m.roleInGroup && (
+                        <div class="member-role" title={m.roleInGroup}>
+                          {m.roleInGroup}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* 特殊关联：三皇五帝上古传说详卷跳转 */}
+          {g.id === 'sanhuang-wudi' && (
+            <div class="group-extra-action">
+              <a href={`${base}legend/sanhuang-wudi/`} class="btn-legend-detail">
+                📖 深入探索【三皇五帝 · 上古传说与文献异说】考据详卷 ➔
+              </a>
+            </div>
+          )}
+        </article>
+      ))}
+
+      {/* 无结果空状态 */}
+      <div class="empty-state" id="empty-state" hidden>
+        <p class="empty-icon">🍃</p>
+        <p class="empty-text">未找到匹配的华夏历史天团</p>
+        <p class="empty-hint">请尝试更换搜索词或切换赛道分类</p>
+      </div>
+    </section>
+
+    {/* 页脚说明 */}
+    <footer class="groups-footer">
+      <p>
+        【十丘】历史天团专题以结构化 YAML 数据维护并经严格历史考据校验。涵盖上古创世、战国纷争、开国元勋、魏晋风度、唐宋文宗与明清墨客。
+      </p>
+      <p class="footer-sub">
+        并称阵容既收录真实并肩同盟（如竹林七贤、江南才子），亦收录后世文史定格之经典合辑（如唐宋八大家、汉初三杰）。
+      </p>
+    </footer>
+  </main>
+</Base>
+
+<style>
+  :root {
+    --color-primary: #8b261e;
+    --color-primary-dark: #6e1c15;
+    --color-primary-light: #fbeeed;
+    --color-accent: #c59b27;
+    --color-accent-soft: #fcf6e8;
+    --color-bg-page: #faf7f2;
+    --color-card-bg: #ffffff;
+    --color-text-main: #2b2b2b;
+    --color-text-muted: #666059;
+    --color-border: #e8e1d7;
+    --color-border-light: #f2ede4;
+  }
+
+  .groups-page {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem 4rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    color: var(--color-text-main);
+  }
+
+  /* 顶部导航 */
+  .groups-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 2rem;
+  }
+
+  .back-link,
+  .topbar-link {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.9rem;
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.15s ease, transform 0.15s ease;
+  }
+
+  .back-link:hover,
+  .topbar-link:hover {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+  }
+
+  .topbar-links {
+    display: flex;
+    gap: 1.25rem;
+  }
+
+  /* Hero 区域 */
+  .groups-hero {
+    text-align: center;
+    padding: 2.5rem 1rem 2rem;
+    background: radial-gradient(circle at center, #ffffff 0%, #f7f2ea 100%);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+  }
+
+  .hero-kicker {
+    display: inline-block;
+    font-size: 0.825rem;
+    letter-spacing: 0.12em;
+    color: var(--color-primary);
+    background: var(--color-primary-light);
+    padding: 0.25rem 0.85rem;
+    border-radius: 20px;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+
+  .hero-title {
+    font-family: "LXGW WenKai Screen", "Noto Serif SC", "Source Han Serif SC", STSong, "Songti SC", serif;
+    font-size: clamp(2rem, 4vw, 2.75rem);
+    font-weight: 800;
+    color: #1a1a1a;
+    margin: 0.25rem 0 0.75rem;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .hero-icon {
+    font-size: 0.9em;
+  }
+
+  .hero-subtitle {
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    max-width: 680px;
+    margin: 0 auto 1.75rem;
+    line-height: 1.6;
+  }
+
+  .hero-stats {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.25rem;
+    background: #ffffff;
+    padding: 0.6rem 1.5rem;
+    border-radius: 30px;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  .stat-badge {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+  }
+
+  .stat-num {
+    font-family: "LXGW WenKai Screen", "Noto Serif SC", serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: var(--color-primary);
+  }
+
+  .stat-label {
+    font-size: 0.825rem;
+    color: var(--color-text-muted);
+  }
+
+  .stat-divider {
+    color: #ccc;
+  }
+
+  /* 筛选控制区 */
+  .filter-section {
+    margin-bottom: 2rem;
+  }
+
+  .filter-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    background: #ffffff;
+    padding: 0.85rem 1.25rem;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+  }
+
+  .category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .cat-pill {
+    background: #f4ede4;
+    border: 1px solid transparent;
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .cat-pill:hover {
+    background: #ebe0d3;
+    color: var(--color-text-main);
+  }
+
+  .cat-pill.is-active {
+    background: var(--color-primary);
+    color: #ffffff;
+    border-color: var(--color-primary-dark);
+    box-shadow: 0 2px 6px rgba(139, 38, 30, 0.25);
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    background: #f8f6f2;
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    padding: 0.35rem 0.85rem;
+    min-width: 280px;
+    flex: 1;
+    max-width: 400px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+
+  .search-box:focus-within {
+    border-color: var(--color-primary);
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(139, 38, 30, 0.1);
+  }
+
+  .search-icon {
+    font-size: 0.9rem;
+    color: #888;
+    margin-right: 0.4rem;
+  }
+
+  .search-box input {
+    border: none;
+    background: transparent;
+    font-size: 0.875rem;
+    color: var(--color-text-main);
+    width: 100%;
+    outline: none;
+  }
+
+  .filter-status {
+    margin-top: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    padding: 0 0.5rem;
+  }
+
+  /* 天团卡片流与网格 */
+  .groups-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .group-card {
+    background: var(--color-card-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 16px;
+    padding: 1.75rem;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .group-card:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  }
+
+  .group-card-header {
+    border-bottom: 1px dashed var(--color-border-light);
+    padding-bottom: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .group-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .group-name {
+    font-family: "LXGW WenKai Screen", "Noto Serif SC", serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0;
+    letter-spacing: 0.02em;
+  }
+
+  .group-badges {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+
+  .badge-period {
+    background: #ece7de;
+    color: #4a453d;
+  }
+
+  .badge-cat {
+    background: var(--color-accent-soft);
+    color: #8c6a08;
+    border: 1px solid #e8d7a7;
+  }
+
+  .badge-count {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+    border: 1px solid #f2c7c4;
+  }
+
+  .group-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .group-tag {
+    font-size: 0.775rem;
+    color: #7a7065;
+    background: #f8f6f2;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+  }
+
+  .group-summary {
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.7;
+    margin: 0 0 1.5rem;
+  }
+
+  /* 成员阵容席位与子阵容分块 */
+  .group-subgroups-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .subgroup-block {
+    background: #faf8f5;
+    border: 1px solid var(--color-border-light);
+    border-radius: 12px;
+    padding: 1.25rem;
+    transition: all 0.15s ease;
+  }
+
+  .subgroup-sanhuang {
+    background: linear-gradient(180deg, #fdf8f6 0%, #faf8f5 100%);
+    border-left: 4px solid #b83b2e;
+  }
+
+  .subgroup-wudi {
+    background: linear-gradient(180deg, #fcf9f2 0%, #faf8f5 100%);
+    border-left: 4px solid #c59b27;
+  }
+
+  .subgroup-tang {
+    background: linear-gradient(180deg, #f7f9fc 0%, #faf8f5 100%);
+    border-left: 4px solid #2b5c8f;
+  }
+
+  .subgroup-song {
+    background: linear-gradient(180deg, #f5f9f6 0%, #faf8f5 100%);
+    border-left: 4px solid #2d6a4f;
+  }
+
+  .subgroup-header {
+    margin-bottom: 0.95rem;
+  }
+
+  .subgroup-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .subgroup-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: 0.03em;
+  }
+
+  .subgroup-sanhuang .subgroup-title {
+    color: #9c2e22;
+  }
+
+  .subgroup-wudi .subgroup-title {
+    color: #8c6a08;
+  }
+
+  .subgroup-tang .subgroup-title {
+    color: #2b5c8f;
+  }
+
+  .subgroup-song .subgroup-title {
+    color: #2d6a4f;
+  }
+
+  .subgroup-badge {
+    font-size: 0.75rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: 12px;
+    font-weight: 600;
+    background: #eae5dc;
+    color: #555;
+  }
+
+  .badge-sanhuang {
+    background: #faeae7;
+    color: #a33b2e;
+    border: 1px solid #f2c7c2;
+  }
+
+  .badge-wudi {
+    background: #fdf5e0;
+    color: #8c6a08;
+    border: 1px solid #e8d7a7;
+  }
+
+  .badge-tang {
+    background: #edf3f9;
+    color: #2b5c8f;
+    border: 1px solid #cadbed;
+  }
+
+  .badge-song {
+    background: #edf7f1;
+    color: #2d6a4f;
+    border: 1px solid #c8e6d5;
+  }
+
+  .subgroup-desc {
+    font-size: 0.825rem;
+    color: var(--color-text-muted);
+    margin: 0.35rem 0 0;
+    line-height: 1.5;
+  }
+
+  .members-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 0.85rem;
+  }
+
+  .member-card {
+    background: #ffffff;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    transition: all 0.15s ease;
+  }
+
+  .member-card:hover {
+    border-color: #d1c5b4;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  .member-card.has-detail {
+    border-left: 3px solid var(--color-primary);
+  }
+
+  .member-top {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .member-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8b261e 0%, #ba4539 100%);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: "LXGW WenKai Screen", "Noto Serif SC", serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+  }
+
+  .member-meta {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .member-name-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .member-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #1a1a1a;
+  }
+
+  .member-link {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--color-primary);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.15rem;
+  }
+
+  .member-link:hover {
+    color: var(--color-primary-dark);
+    text-decoration: underline;
+  }
+
+  .link-arrow {
+    font-size: 0.75rem;
+    color: var(--color-accent);
+  }
+
+  .legend-chip {
+    font-size: 0.7rem;
+    padding: 0.1rem 0.35rem;
+    background: #eef4ed;
+    color: #2e6930;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  .member-time-row {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.2rem;
+    flex-wrap: wrap;
+  }
+
+  .member-dynasty-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #7c2d12;
+    background: #ffedd5;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    border: 1px solid #fed7aa;
+    line-height: 1.2;
+    display: inline-block;
+    letter-spacing: 0.02em;
+  }
+
+  .member-lifespan {
+    font-size: 0.75rem;
+    color: #64748b;
+  }
+
+  .member-role {
+    font-size: 0.825rem;
+    color: #555;
+    background: #fbf9f6;
+    padding: 0.35rem 0.55rem;
+    border-radius: 6px;
+    line-height: 1.45;
+    border: 1px solid #f0eae0;
+  }
+
+  /* 特殊三皇五帝跳转入口 */
+  .group-extra-action {
+    margin-top: 1.25rem;
+    text-align: right;
+  }
+
+  .btn-legend-detail {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.875rem;
+    color: var(--color-primary);
+    background: var(--color-primary-light);
+    border: 1px solid #f0d5d3;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
+  }
+
+  .btn-legend-detail:hover {
+    background: #f5dcda;
+    color: var(--color-primary-dark);
+    transform: translateX(2px);
+  }
+
+  /* 空状态 */
+  .empty-state {
+    text-align: center;
+    padding: 4rem 1rem;
+    background: #ffffff;
+    border: 1px dashed var(--color-border);
+    border-radius: 16px;
+  }
+
+  .empty-icon {
+    font-size: 2.5rem;
+    margin: 0 0 0.5rem;
+  }
+
+  .empty-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--color-text-main);
+    margin: 0 0 0.25rem;
+  }
+
+  .empty-hint {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  /* 页脚说明 */
+  .groups-footer {
+    margin-top: 4rem;
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    line-height: 1.8;
+  }
+
+  .footer-sub {
+    margin-top: 0.4rem;
+    color: #8c8275;
+  }
+
+  @media (max-width: 768px) {
+    .groups-hero {
+      padding: 2rem 0.75rem;
+    }
+
+    .hero-stats {
+      flex-direction: column;
+      gap: 0.5rem;
+      border-radius: 16px;
+    }
+
+    .stat-divider {
+      display: none;
+    }
+
+    .filter-controls {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .search-box {
+      max-width: 100%;
+    }
+
+    .members-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  // 纯客户端极速筛选与检索
+  const searchInput = document.getElementById('group-search') as HTMLInputElement | null
+  const catPills = [...document.querySelectorAll('.cat-pill')] as HTMLButtonElement[]
+  const cards = [...document.querySelectorAll('.group-card')] as HTMLElement[]
+  const countEl = document.getElementById('result-count')
+  const emptyEl = document.getElementById('empty-state')
+
+  let currentCategory = '全部'
+  let currentKeyword = ''
+
+  function applyFilter() {
+    let visibleCount = 0
+
+    cards.forEach((card) => {
+      const cat = card.dataset.category || ''
+      const searchIndex = card.dataset.search || ''
+
+      const matchesCat = currentCategory === '全部' || cat === currentCategory
+      const matchesKeyword = !currentKeyword || searchIndex.includes(currentKeyword)
+
+      const isVisible = matchesCat && matchesKeyword
+      card.hidden = !isVisible
+
+      if (isVisible) {
+        visibleCount++
+      }
+    })
+
+    if (countEl) {
+      countEl.textContent = `展示 ${visibleCount} 组天团${currentCategory !== '全部' ? `（${currentCategory}赛道）` : ''}`
+    }
+
+    if (emptyEl) {
+      emptyEl.hidden = visibleCount > 0
+    }
+  }
+
+  // 赛道切换点击监听
+  catPills.forEach((pill) => {
+    pill.addEventListener('click', () => {
+      catPills.forEach((p) => {
+        p.classList.remove('is-active')
+        p.setAttribute('aria-selected', 'false')
+      })
+      pill.classList.add('is-active')
+      pill.setAttribute('aria-selected', 'true')
+      currentCategory = pill.dataset.cat || '全部'
+      applyFilter()
+    })
+  })
+
+  // 搜索输入监听
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      currentKeyword = (e.target as HTMLInputElement).value.trim().toLowerCase()
+      applyFilter()
+    })
+  }
+</script>
