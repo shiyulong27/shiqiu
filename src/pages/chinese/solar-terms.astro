@@ -1,0 +1,1713 @@
+---
+import Base from '../../layouts/Base.astro'
+import '../../styles/learning.css'
+import {
+  solarTermsData,
+  solarTermsSong,
+  seasonsList,
+  solarTermsQuizCards
+} from '../../data/solarTermsData.js'
+
+const base = import.meta.env.BASE_URL
+---
+
+<Base title="中华二十四节气与七十二物候 · 天文罗盘与自然时令长卷 · 十丘" wide={true}>
+  <main class="learn-page solar-terms-page">
+    {/* 顶部面包屑与全站导航 */}
+    <header class="learn-header" style="margin-bottom: 1.25rem;">
+      <div class="learn-header-top">
+        <nav class="learn-breadcrumb">
+          <a href={base}>🏠 知识总门户</a>
+          <span>/</span>
+          <a href={`${base}chinese/`}>📖 语文</a>
+          <span>/</span>
+          <strong style="color: #16a34a;">🌾 二十四节气与七十二物候</strong>
+        </nav>
+        <div class="learn-subject-switcher">
+          <a href={base} class="subject-chip chip-home">🏠 门户首页</a>
+          <a href={`${base}chinese/`} class="subject-chip chip-chinese">📖 语文</a>
+          <a href={`${base}chinese/poems/`} class="subject-chip" style="background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3;">🎙️ 古诗点读台</a>
+          <a href={`${base}chinese/solar-terms/`} class="subject-chip active" style="background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0;">🌾 二十四节气</a>
+          <a href={`${base}geography/explore/`} class="subject-chip" style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a;">🧭 地理通识长卷</a>
+          <a href={`${base}math/`} class="subject-chip chip-math">📐 数学</a>
+          <a href={`${base}english/`} class="subject-chip chip-english">🔤 英语</a>
+        </div>
+      </div>
+
+      <div class="header-main-row">
+        <div>
+          <h1 class="learn-title" style="margin-bottom: 0.25rem;">
+            🌾 中 华 二 十 四 节 气 · 七 十 二 物 候 探 索 长 卷
+          </h1>
+          <p class="learn-subtitle" style="margin: 0;">
+            春生夏长 · 秋收冬藏 · 太阳黄经天文罗盘 · 动植物时令物候 · 统编节气歌点读 · 课本古诗山河联动
+          </p>
+        </div>
+
+        <div class="header-action-btns">
+          <button id="btn-current-term" class="st-header-btn btn-curr-term" title="跳转至当前日期的当时节气">
+            🧭 定位今日节气：<span id="header-today-term-name">秋分</span>
+          </button>
+          <button id="btn-open-song" class="st-header-btn btn-song" title="打开统编教材必背《二十四节气歌》点读台">
+            🎵 节气歌点读台
+          </button>
+          <button id="btn-open-quiz" class="st-header-btn btn-quiz" title="趣味节气物候小挑战">
+            🧩 节气物候大挑战
+          </button>
+        </div>
+      </div>
+
+      {/* 实时节气速览高光横幅 */}
+      <div class="current-season-banner" id="current-season-banner">
+        <div class="curr-banner-left">
+          <span class="curr-banner-tag">🌟 当前农历与自然时令</span>
+          <div class="curr-banner-title">
+            <span id="curr-term-icon" style="font-size: 1.8rem;">⚖️</span>
+            <div>
+              <strong id="curr-term-title" style="font-size: 1.25rem; color: #1e293b;">当前节气：秋分</strong>
+              <span id="curr-term-tagline" style="font-size: 0.85rem; color: #64748b; margin-left: 0.5rem;">“昼夜平分，中国农民丰收节”</span>
+            </div>
+          </div>
+        </div>
+        <div class="curr-banner-right">
+          <span class="curr-date-text" id="curr-banner-date-text">太阳黄经 180° · 昼夜平分</span>
+          <span class="curr-countdown-tag" id="curr-countdown-tag">🍁 丰收金秋时节</span>
+        </div>
+      </div>
+    </header>
+
+    {/* 控制过滤栏：四季胶囊 + 全文搜索 */}
+    <section class="st-filter-bar">
+      <div class="season-tabs-list" id="season-tabs">
+        {seasonsList.map((s, idx) => (
+          <button
+            class={`season-tab-pill ${idx === 0 ? 'active' : ''}`}
+            data-season={s}
+          >
+            {s} <span class="pill-count">({s === '全部节气' ? solarTermsData.length : solarTermsData.filter(t => s.includes(t.seasonName.slice(0, 1))).length})</span>
+          </button>
+        ))}
+      </div>
+
+      <div class="st-search-box">
+        <input
+          type="text"
+          id="st-search-input"
+          placeholder="🔍 搜索节气、三候动物、美食、古诗名句..."
+        />
+        <button id="btn-st-search-clear" style="display:none;">✕</button>
+      </div>
+    </section>
+
+    {/* 主工作区：左侧 360° 天文节气大罗盘与微卡列表，右侧节气物候深度百科长卷 */}
+    <div class="st-stage-layout">
+      {/* 左侧：天文节气罗盘与节气选择器 */}
+      <div class="st-left-col">
+        {/* 360° 天文节气交互罗盘 */}
+        <div class="st-wheel-card">
+          <div class="wheel-card-header">
+            <span style="font-weight: bold; color: #1e293b;">🎡 太阳黄经 360° 天文节气罗盘</span>
+            <span style="font-size: 0.78rem; color: #64748b;">点击环形节点即可旋转对齐</span>
+          </div>
+
+          <div class="wheel-dial-wrapper">
+            <div class="wheel-dial" id="solar-terms-dial">
+              {/* 四季环底色指示 */}
+              <div class="dial-quadrant quad-spring" title="春生 (315° ~ 30°)"></div>
+              <div class="dial-quadrant quad-summer" title="夏长 (45° ~ 120°)"></div>
+              <div class="dial-quadrant quad-autumn" title="秋收 (135° ~ 210°)"></div>
+              <div class="dial-quadrant quad-winter" title="冬藏 (225° ~ 300°)"></div>
+
+              {/* 24 个节气节点按角度环形排布 */}
+              {solarTermsData.map((term, idx) => {
+                // 黄经 0 度对应春分，以顺时针从春分(顶部或右侧)均匀分布
+                const angle = (idx * 15); // 0, 15, 30 ... 345
+                return (
+                  <button
+                    class={`dial-node-btn season-${term.season} ${idx === 0 ? 'active' : ''}`}
+                    data-id={term.id}
+                    data-name={term.name}
+                    data-angle={angle}
+                    data-order={term.order}
+                    title={`${term.name} (${term.pinyin}) · 太阳黄经 ${term.solarLongitude}°`}
+                    onclick={`window.switchSolarTerm('${term.id}')`}
+                  >
+                    <span class="node-icon">{term.icon}</span>
+                    <span class="node-name">{term.name}</span>
+                  </button>
+                )
+              })}
+
+              {/* 罗盘正中心展示徽章 */}
+              <div class="dial-center-badge" id="dial-center-badge">
+                <span class="center-term-icon" id="center-icon">🌱</span>
+                <strong class="center-term-name" id="center-name">立春</strong>
+                <span class="center-term-pinyin" id="center-pinyin">lì chūn</span>
+                <span class="center-term-lon" id="center-lon">黄经 315°</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 下部：24 节气快速速查抽屉 */}
+        <div class="st-terms-drawer">
+          <div class="drawer-header">
+            <span style="font-weight: bold; color: #1e293b;">📜 二十四节气名录 (<span id="visible-terms-count">24</span>)</span>
+            <span style="font-size: 0.78rem; color: #64748b;">点击卡片即时切换</span>
+          </div>
+          <div class="terms-cards-grid" id="terms-cards-container">
+            {solarTermsData.map((t, idx) => (
+              <div
+                class={`term-mini-card season-${t.season} ${idx === 0 ? 'active' : ''}`}
+                data-id={t.id}
+                data-name={t.name}
+                data-season={t.season}
+                data-season-name={t.seasonName}
+                data-search={`${t.name} ${t.pinyin} ${t.tagline} ${t.astronomy} ${t.pentads.map(p => p.name + ' ' + p.creature).join(' ')} ${t.foods.join(' ')} ${t.customs.join(' ')} ${t.poem.title} ${t.poem.quote}`}
+                onclick={`window.switchSolarTerm('${t.id}')`}
+              >
+                <div class="card-seal" style={`background: ${t.color};`}>{t.name[0]}</div>
+                <div class="card-info">
+                  <div class="card-name-row">
+                    <strong class="card-name">{t.name}</strong>
+                    <span class="card-pinyin">{t.pinyin}</span>
+                    <span class={`card-season-badge badge-${t.season}`}>{t.seasonName}</span>
+                  </div>
+                  <div class="card-date-row">
+                    <span>{t.dateRange}</span> · <span>黄经 {t.solarLongitude}°</span>
+                  </div>
+                </div>
+                <span class="card-icon">{t.icon}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* 右侧：沉浸式节气物候深度百科长卷 */}
+      <section class="st-right-col" id="term-detail-sheet">
+        {/* 顶部宏大节气牌匾 */}
+        <div class="term-banner" id="term-banner">
+          <div class="banner-top-row">
+            <div class="banner-seal-box">
+              <div class="seal-stamp" id="term-seal">春</div>
+              <div>
+                <div class="banner-title-group">
+                  <h2 class="banner-term-name" id="term-name">立春</h2>
+                  <span class="banner-pinyin-badge" id="term-pinyin">lì chūn</span>
+                  <span class="banner-season-badge" id="term-season-badge">🌱 春季第一节</span>
+                  <button class="btn-voice-speak" id="btn-speak-term" title="朗读此节气名称与标语">
+                    🔊 听发音
+                  </button>
+                </div>
+                <div class="banner-tagline" id="term-tagline">“东风解冻，万物始生”</div>
+              </div>
+            </div>
+
+            <div class="banner-astronomy-meta">
+              <div class="meta-item">
+                <span class="meta-label">太阳黄经</span>
+                <strong class="meta-val" id="term-longitude">315°</strong>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">公历交节</span>
+                <strong class="meta-val" id="term-dates">2月3日~5日</strong>
+              </div>
+            </div>
+          </div>
+
+          <p class="banner-astronomy-desc" id="term-astronomy-desc">
+            太阳到达黄经 315°，春季伊始。北斗星斗柄指向东北方（艮位）。白昼渐长，大地回春。
+          </p>
+        </div>
+
+        {/* 七十二物候专属图文展台 */}
+        <div class="st-section-deck">
+          <div class="deck-header-row">
+            <h3 class="section-deck-title">🦋 传统七十二物候 · 节气三候</h3>
+            <span class="deck-header-hint">古人以五日为一候，三候为一气，细致观察动植物与天象之变</span>
+          </div>
+          <div class="pentads-cards-grid" id="term-pentads-grid">
+            {/* JS 动态注入三候卡片 */}
+          </div>
+        </div>
+
+        {/* 传统民俗与节令美食 */}
+        <div class="st-section-deck">
+          <h3 class="section-deck-title">🏮 传统节气民俗与时令美食</h3>
+          <div class="customs-foods-grid">
+            <div class="customs-card">
+              <div class="card-subtitle-bar">
+                <span>🎭 传统岁时民俗活动</span>
+              </div>
+              <ul class="customs-list" id="term-customs-list">
+                {/* 动态注入 */}
+              </ul>
+            </div>
+
+            <div class="foods-card">
+              <div class="card-subtitle-bar">
+                <span>🍲 节令代表美食与风味</span>
+              </div>
+              <div class="foods-tags-wrap" id="term-foods-wrap">
+                {/* 动态注入 */}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 农事智慧与古诗名篇联动 */}
+        <div class="st-section-deck">
+          <h3 class="section-deck-title">📜 农事谚语与课本古诗名篇联动</h3>
+          <div class="culture-deck-grid">
+            <div class="farming-box">
+              <div class="culture-box-label">🌾 农事智慧与农谚</div>
+              <p class="farming-text" id="term-farming-text">
+                “立春一日，百草回芽”、“立春一年端，种地早打算”，农民伯伯开始备耕育苗。
+              </p>
+            </div>
+
+            <div class="poem-box">
+              <div class="culture-box-label">📖 课本必背古诗名篇联动</div>
+              <div class="poem-card" id="term-poem-card">
+                <div class="poem-title-row">
+                  <span id="poem-title">《春日》</span>
+                  <span id="poem-author" style="color: #64748b; font-size: 0.85rem;">〔宋·朱熹〕</span>
+                </div>
+                <div class="poem-quote" id="poem-quote">“等闲识得东风面，万紫千红总是春。”</div>
+                <a class="poem-jump-btn" id="poem-jump-link" href={`${base}chinese/poems/`}>
+                  🎙️ 直达古诗点读台朗诵 ➔
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 儿童趣味冷知识卡片 */}
+        <div class="st-section-deck">
+          <div class="funfact-card">
+            <div class="funfact-head">💡 你知道吗？（乐乐与月亮的趣味自然课）</div>
+            <p class="funfact-text" id="term-funfact-text">
+              立春这天，很多小朋友会尝试“立蛋”游戏，因为立春时地轴与公转轨道相对平衡，鸡蛋更容易竖立起来哦！
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    {/* 统编《二十四节气歌》点读台模态 */}
+    <div id="song-modal" class="modal-backdrop" style="display:none;">
+      <div class="modal-card song-modal-card">
+        <div class="modal-head">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span style="font-size: 1.6rem;">🎵</span>
+            <div>
+              <h3 style="margin: 0; font-size: 1.15rem; color: #1e293b;">统编二年级下册《二十四节气歌》点读台</h3>
+              <span style="font-size: 0.78rem; color: #64748b;">带调拼音 · 韵律停顿 · 逐句朗读 · 口诀记忆</span>
+            </div>
+          </div>
+          <button class="modal-close" onclick="window.closeSongModal()">✕</button>
+        </div>
+        <div class="song-modal-body">
+          <div class="song-lines-list">
+            {solarTermsSong.lines.map((line, idx) => (
+              <div class={`song-line-card season-${line.season}`} onclick={`window.speakSentence('${line.text}')`}>
+                <div class="line-pinyin">{line.pinyin}</div>
+                <div class="line-text">
+                  <span>{line.text}</span>
+                  <button class="btn-line-speak" title="点击朗读此句">🔊 朗读</button>
+                </div>
+                <div class="line-terms-chips">
+                  {line.terms.map(t => (
+                    <span class="term-tag-chip">{t}</span>
+                  ))}
+                </div>
+                <p class="line-explain">{line.explain}</p>
+              </div>
+            ))}
+          </div>
+
+          <div class="mnemonics-box">
+            <div class="mnemonics-title">💡 巧记规律口诀（农历与公历规律）</div>
+            <ul class="mnemonics-list">
+              {solarTermsSong.mnemonics.map(m => (
+                <li>{m}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* 节气物候趣味大挑战模态 */}
+    <div id="quiz-modal" class="modal-backdrop" style="display:none;">
+      <div class="modal-card quiz-modal-card">
+        <div class="modal-head">
+          <div>
+            <h3 style="display: flex; align-items: center; gap: 0.4rem; margin: 0;">
+              <span>🧩 节气物候趣味大挑战</span>
+              <span class="quiz-badge">⭐ 亲子益智版</span>
+            </h3>
+            <span style="font-size: 0.78rem; color: #64748b;">测测你对二十四节气、时令物候与节令美食有多了解！</span>
+          </div>
+          <button class="modal-close" onclick="window.closeQuizModal()">✕</button>
+        </div>
+        <div id="quiz-container">
+          <div class="quiz-round-indicator">
+            <span id="quiz-round-txt">第 1 / 5 题</span>
+            <span id="quiz-score-txt">得分: 0 分</span>
+          </div>
+          <div class="quiz-card-body">
+            <h4 class="quiz-question-title" id="quiz-q-title">正在加载题目...</h4>
+            <div class="quiz-options-grid" id="quiz-options">
+              {/* 动态注入 4 个选项 */}
+            </div>
+            <div id="quiz-feedback" class="quiz-feedback" style="display:none;"></div>
+          </div>
+          <div class="quiz-footer">
+            <button id="btn-next-quiz" class="btn-quiz-next" style="display:none;" onclick="window.nextQuizRound()">下一题 ➔</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Base>
+
+<style>
+  /* 基础版面 */
+  .solar-terms-page {
+    max-width: 1480px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem 3rem;
+  }
+  .header-main-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+  .header-action-btns {
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .st-header-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1.15rem;
+    color: #fff;
+    border: none;
+    border-radius: 9999px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .st-header-btn:hover {
+    transform: translateY(-2px);
+  }
+  .st-header-btn.btn-curr-term {
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.25);
+  }
+  .st-header-btn.btn-song {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.25);
+  }
+  .st-header-btn.btn-quiz {
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+    box-shadow: 0 4px 6px -1px rgba(124, 58, 237, 0.25);
+  }
+
+  /* 当前节气速览横幅 */
+  .current-season-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 1px solid #86efac;
+    border-radius: 1rem;
+    padding: 0.75rem 1.25rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .curr-banner-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .curr-banner-tag {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #15803d;
+  }
+  .curr-banner-title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .curr-banner-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .curr-date-text {
+    font-size: 0.85rem;
+    color: #166534;
+    font-weight: 600;
+  }
+  .curr-countdown-tag {
+    background: #15803d;
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  /* 过滤栏 */
+  .st-filter-bar {
+    background: #fff;
+    border: 1px solid #bbf7d0;
+    border-radius: 1rem;
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .season-tabs-list {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .season-tab-pill {
+    padding: 0.4rem 0.9rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .season-tab-pill:hover {
+    background: #f0fdf4;
+    border-color: #86efac;
+    color: #15803d;
+  }
+  .season-tab-pill.active {
+    background: linear-gradient(135deg, #15803d 0%, #166534 100%);
+    color: #fff;
+    border-color: #15803d;
+    box-shadow: 0 2px 4px rgba(21, 128, 61, 0.25);
+  }
+  .season-tab-pill .pill-count {
+    font-size: 0.75rem;
+    opacity: 0.85;
+  }
+  .st-search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .st-search-box input {
+    width: 280px;
+    padding: 0.45rem 2rem 0.45rem 0.85rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    outline: none;
+    transition: all 0.2s;
+  }
+  .st-search-box input:focus {
+    border-color: #15803d;
+    box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.15);
+  }
+  .st-search-box button {
+    position: absolute;
+    right: 0.6rem;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+
+  /* 主舞台左右两列 */
+  .st-stage-layout {
+    display: grid;
+    grid-template-columns: 480px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  @media (max-width: 1080px) {
+    .st-stage-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* 左侧：天文转盘与列表 */
+  .st-left-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .st-wheel-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  }
+  .wheel-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+  .wheel-dial-wrapper {
+    position: relative;
+    width: 100%;
+    height: 440px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fafaf9;
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+  .wheel-dial {
+    position: relative;
+    width: 380px;
+    height: 380px;
+    border-radius: 50%;
+    border: 3px dashed #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  /* 四象限底色 */
+  .dial-quadrant {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    opacity: 0.08;
+  }
+  .quad-spring {
+    top: 0;
+    right: 0;
+    background: #22c55e;
+    border-top-right-radius: 100%;
+  }
+  .quad-summer {
+    bottom: 0;
+    right: 0;
+    background: #ef4444;
+    border-bottom-right-radius: 100%;
+  }
+  .quad-autumn {
+    bottom: 0;
+    left: 0;
+    background: #f59e0b;
+    border-bottom-left-radius: 100%;
+  }
+  .quad-winter {
+    top: 0;
+    left: 0;
+    background: #0284c7;
+    border-top-left-radius: 100%;
+  }
+
+  /* 罗盘上的 24 个节气节点 */
+  .dial-node-btn {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #fff;
+    border: 2px solid #94a3b8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.68rem;
+    font-weight: 800;
+    padding: 0;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transform-origin: center center;
+  }
+  .dial-node-btn .node-icon {
+    font-size: 0.75rem;
+    line-height: 1;
+  }
+  .dial-node-btn .node-name {
+    display: none;
+  }
+  .dial-node-btn:hover {
+    transform: scale(1.3) !important;
+    z-index: 10;
+  }
+  .dial-node-btn.season-spring {
+    border-color: #22c55e;
+    color: #15803d;
+  }
+  .dial-node-btn.season-summer {
+    border-color: #f97316;
+    color: #c2410c;
+  }
+  .dial-node-btn.season-autumn {
+    border-color: #eab308;
+    color: #a16207;
+  }
+  .dial-node-btn.season-winter {
+    border-color: #38bdf8;
+    color: #0369a1;
+  }
+  .dial-node-btn.active {
+    transform: scale(1.4) !important;
+    background: #15803d;
+    border-color: #fde047;
+    color: #fff;
+    z-index: 20;
+    box-shadow: 0 0 12px rgba(34, 197, 94, 0.6);
+  }
+  .dial-node-btn.season-summer.active {
+    background: #ea580c;
+    box-shadow: 0 0 12px rgba(234, 88, 12, 0.6);
+  }
+  .dial-node-btn.season-autumn.active {
+    background: #d97706;
+    box-shadow: 0 0 12px rgba(217, 119, 6, 0.6);
+  }
+  .dial-node-btn.season-winter.active {
+    background: #0284c7;
+    box-shadow: 0 0 12px rgba(2, 132, 199, 0.6);
+  }
+
+  /* 罗盘正中心展示徽章 */
+  .dial-center-badge {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: #fff;
+    border: 4px solid #bbf7d0;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    text-align: center;
+  }
+  .center-term-icon {
+    font-size: 2.2rem;
+    line-height: 1.1;
+  }
+  .center-term-name {
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #1e293b;
+    margin-top: 2px;
+  }
+  .center-term-pinyin {
+    font-size: 0.75rem;
+    color: #64748b;
+  }
+  .center-term-lon {
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: #f0fdf4;
+    color: #15803d;
+    padding: 1px 6px;
+    border-radius: 9999px;
+    margin-top: 3px;
+  }
+
+  /* 下部节气列表抽屉 */
+  .st-terms-drawer {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  }
+  .drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+  .terms-cards-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 480px;
+    overflow-y: auto;
+    padding-right: 0.3rem;
+  }
+  .term-mini-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.55rem 0.85rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .term-mini-card:hover {
+    background: #f0fdf4;
+    border-color: #86efac;
+    transform: translateX(3px);
+  }
+  .term-mini-card.active {
+    background: #f0fdf4;
+    border: 2px solid #16a34a;
+    box-shadow: 0 2px 6px rgba(22, 163, 74, 0.15);
+  }
+  .card-seal {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  .card-info {
+    flex: 1;
+    overflow: hidden;
+  }
+  .card-name-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .card-name {
+    font-size: 0.95rem;
+    color: #1e293b;
+  }
+  .card-pinyin {
+    font-size: 0.78rem;
+    color: #64748b;
+  }
+  .card-season-badge {
+    font-size: 0.68rem;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+  .badge-spring { background: #dcfce7; color: #15803d; }
+  .badge-summer { background: #ffedd5; color: #c2410c; }
+  .badge-autumn { background: #fef9c3; color: #a16207; }
+  .badge-winter { background: #e0f2fe; color: #0369a1; }
+  .card-date-row {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-top: 2px;
+  }
+  .card-icon {
+    font-size: 1.25rem;
+  }
+
+  /* 右侧详情长卷 */
+  .st-right-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  /* 顶部横幅 */
+  .term-banner {
+    background: #fff;
+    border: 1px solid #bbf7d0;
+    border-radius: 1.25rem;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  }
+  .banner-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  .banner-seal-box {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .seal-stamp {
+    width: 58px;
+    height: 58px;
+    border-radius: 14px;
+    background: #16a34a;
+    color: #fff;
+    font-size: 1.8rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+  }
+  .banner-title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+  .banner-term-name {
+    margin: 0;
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: #1e293b;
+  }
+  .banner-pinyin-badge {
+    font-size: 0.95rem;
+    color: #64748b;
+    font-weight: 600;
+  }
+  .banner-season-badge {
+    font-size: 0.75rem;
+    background: #dcfce7;
+    color: #15803d;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-weight: 700;
+  }
+  .btn-voice-speak {
+    padding: 2px 10px;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-voice-speak:hover {
+    background: #e2e8f0;
+    color: #1e293b;
+  }
+  .banner-tagline {
+    font-size: 1.05rem;
+    color: #16a34a;
+    font-weight: 700;
+    margin-top: 0.3rem;
+  }
+  .banner-astronomy-meta {
+    display: flex;
+    gap: 1.25rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 0.6rem 1rem;
+  }
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .meta-label {
+    font-size: 0.7rem;
+    color: #64748b;
+  }
+  .meta-val {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #1e293b;
+  }
+  .banner-astronomy-desc {
+    font-size: 0.9rem;
+    color: #475569;
+    line-height: 1.6;
+    margin: 0;
+    background: #f8fafc;
+    border-radius: 0.5rem;
+    padding: 0.75rem 1rem;
+  }
+
+  /* 通用模块区 */
+  .st-section-deck {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  }
+  .deck-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+  }
+  .section-deck-title {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #1e293b;
+  }
+  .deck-header-hint {
+    font-size: 0.78rem;
+    color: #64748b;
+  }
+
+  /* 七十二物候三候卡片 */
+  .pentads-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+  }
+  @media (max-width: 768px) {
+    .pentads-cards-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .pentad-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    transition: all 0.2s;
+  }
+  .pentad-card:hover {
+    background: #f0fdf4;
+    border-color: #86efac;
+    transform: translateY(-2px);
+  }
+  .pentad-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .pentad-icon {
+    font-size: 1.4rem;
+  }
+  .pentad-name {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #15803d;
+  }
+  .pentad-desc {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.5;
+  }
+
+  /* 民俗与美食 */
+  .customs-foods-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  @media (max-width: 640px) {
+    .customs-foods-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .customs-card, .foods-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 0.85rem;
+  }
+  .card-subtitle-bar {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 0.6rem;
+  }
+  .customs-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.6;
+  }
+  .foods-tags-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .food-tag-chip {
+    padding: 0.35rem 0.75rem;
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    border-radius: 9999px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #334155;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+
+  /* 农谚与古诗 */
+  .culture-deck-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 1rem;
+  }
+  @media (max-width: 768px) {
+    .culture-deck-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .farming-box, .poem-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 0.85rem;
+  }
+  .culture-box-label {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 0.5rem;
+  }
+  .farming-text {
+    margin: 0;
+    font-size: 0.88rem;
+    color: #475569;
+    line-height: 1.6;
+    font-style: italic;
+  }
+  .poem-card {
+    background: #fff;
+    border: 1px solid #fed7aa;
+    border-left: 4px solid #ea580c;
+    border-radius: 0.5rem;
+    padding: 0.75rem 0.9rem;
+  }
+  .poem-title-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #1e293b;
+  }
+  .poem-quote {
+    font-family: 'Kaiti', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #c2410c;
+    margin: 0.4rem 0;
+  }
+  .poem-jump-btn {
+    display: inline-block;
+    font-size: 0.78rem;
+    color: #0284c7;
+    text-decoration: none;
+    font-weight: 700;
+  }
+  .poem-jump-btn:hover {
+    text-decoration: underline;
+  }
+
+  /* 冷知识卡片 */
+  .funfact-card {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border: 1px solid #fde68a;
+    border-radius: 0.75rem;
+    padding: 0.85rem 1rem;
+  }
+  .funfact-head {
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: #b45309;
+    margin-bottom: 0.3rem;
+  }
+  .funfact-text {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #78350f;
+    line-height: 1.6;
+  }
+
+  /* 模态弹窗 */
+  .modal-backdrop {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+  .modal-card {
+    background: #fff;
+    border-radius: 1.25rem;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+  }
+  .modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 0.75rem;
+  }
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.25rem;
+    color: #64748b;
+    cursor: pointer;
+  }
+
+  /* 节气歌弹窗 */
+  .song-modal-card {
+    max-width: 640px;
+  }
+  .song-modal-body {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .song-lines-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .song-line-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .song-line-card:hover {
+    background: #f0fdf4;
+    border-color: #86efac;
+  }
+  .line-pinyin {
+    font-size: 0.8rem;
+    color: #64748b;
+  }
+  .line-text {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #1e293b;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 2px 0 6px;
+  }
+  .btn-line-speak {
+    background: #e2e8f0;
+    border: none;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    cursor: pointer;
+  }
+  .line-terms-chips {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+  .term-tag-chip {
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: #e0f2fe;
+    color: #0369a1;
+  }
+  .line-explain {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #64748b;
+  }
+  .mnemonics-box {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+  }
+  .mnemonics-title {
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #b45309;
+    margin-bottom: 0.3rem;
+  }
+  .mnemonics-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    font-size: 0.85rem;
+    color: #78350f;
+    line-height: 1.6;
+  }
+
+  /* 问答挑战弹窗 */
+  .quiz-modal-card {
+    max-width: 580px;
+  }
+  .quiz-round-indicator {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #64748b;
+    margin-top: 1rem;
+  }
+  .quiz-card-body {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .quiz-question-title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #1e293b;
+    line-height: 1.5;
+  }
+  .quiz-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+  }
+  @media (max-width: 500px) {
+    .quiz-options-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .st-quiz-btn {
+    padding: 0.75rem 1rem;
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #334155;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .st-quiz-btn:hover {
+    background: #f0fdf4;
+    border-color: #86efac;
+    color: #15803d;
+  }
+  .st-quiz-btn.correct {
+    background: #dcfce7;
+    border-color: #22c55e;
+    color: #15803d;
+  }
+  .st-quiz-btn.wrong {
+    background: #fee2e2;
+    border-color: #ef4444;
+    color: #b91c1c;
+  }
+  .quiz-feedback {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.88rem;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+  .quiz-feedback.correct {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+  }
+  .quiz-feedback.wrong {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+  }
+  .btn-quiz-next {
+    margin-top: 1rem;
+    padding: 0.65rem 1.5rem;
+    background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+    color: #fff;
+    border: none;
+    border-radius: 9999px;
+    font-size: 0.95rem;
+    font-weight: 800;
+    cursor: pointer;
+    width: 100%;
+  }
+  .quiz-badge {
+    background: #fef3c7;
+    color: #b45309;
+    font-size: 0.75rem;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    border: 1px solid #fde68a;
+  }
+</style>
+
+<script>
+  import { solarTermsData, solarTermsSong, solarTermsQuizCards } from '../../data/solarTermsData.js'
+
+  // 全局响应式状态
+  let currentTermId = 'lichun'
+  let currentSeasonFilter = '全部节气'
+  let dialAngle = 0
+
+  // 1. 初始化排布 360° 天文罗盘节点
+  function positionDialNodes() {
+    const dial = document.getElementById('solar-terms-dial')
+    if (!dial) return
+
+    const nodes = document.querySelectorAll('.dial-node-btn')
+    const radius = 160 // 罗盘半径像素
+
+    nodes.forEach((node, idx) => {
+      // 24 个节气均匀分布，黄经 0 度(春分)排在正东(0度)或正北(-90度)
+      // 我们从立春 (315度) 开始顺时针排布
+      const deg = idx * 15 - 90 // -90 deg 让第 0 个节点 (立春) 偏向顶角
+      const rad = (deg * Math.PI) / 180
+      const x = Math.round(190 + radius * Math.cos(rad) - 16)
+      const y = Math.round(190 + radius * Math.sin(rad) - 16)
+
+      const el = node as HTMLElement
+      el.style.left = `${x}px`
+      el.style.top = `${y}px`
+    })
+  }
+
+  // 2. 切换当前节气
+  ;(window as any).switchSolarTerm = function(id: string) {
+    currentTermId = id
+    const term = solarTermsData.find(t => t.id === id) || solarTermsData[0]
+
+    // 高亮罗盘节点
+    document.querySelectorAll('.dial-node-btn').forEach(btn => {
+      if (btn.getAttribute('data-id') === id) {
+        btn.classList.add('active')
+      } else {
+        btn.classList.remove('active')
+      }
+    })
+
+    // 高亮抽屉列表项
+    document.querySelectorAll('.term-mini-card').forEach(card => {
+      if (card.getAttribute('data-id') === id) {
+        card.classList.add('active')
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      } else {
+        card.classList.remove('active')
+      }
+    })
+
+    // 更新罗盘中心展示
+    document.getElementById('center-icon')!.innerText = term.icon
+    document.getElementById('center-name')!.innerText = term.name
+    document.getElementById('center-pinyin')!.innerText = term.pinyin
+    document.getElementById('center-lon')!.innerText = `黄经 ${term.solarLongitude}°`
+
+    // 渲染右侧详情大长卷
+    renderTermDetail(term)
+  }
+
+  // 3. 渲染右侧深度通识长卷
+  function renderTermDetail(t: any) {
+    document.getElementById('term-seal')!.innerText = t.name[0]
+    document.getElementById('term-seal')!.style.background = t.color
+    document.getElementById('term-name')!.innerText = t.name
+    document.getElementById('term-pinyin')!.innerText = t.pinyin
+    document.getElementById('term-season-badge')!.innerText = `${t.seasonName}第 ${t.seasonOrder} 节`
+    document.getElementById('term-tagline')!.innerText = `“${t.tagline}”`
+
+    document.getElementById('term-longitude')!.innerText = `${t.solarLongitude}°`
+    document.getElementById('term-dates')!.innerText = t.dateRange.replace('每年公历', '').trim()
+    document.getElementById('term-astronomy-desc')!.innerText = t.astronomy
+
+    // 渲染三候卡片
+    const pentadsGrid = document.getElementById('term-pentads-grid')!
+    pentadsGrid.innerHTML = t.pentads.map((p: any) => `
+      <div class="pentad-card">
+        <div class="pentad-head">
+          <span class="pentad-icon">${p.icon}</span>
+          <strong class="pentad-name">${p.name}</strong>
+        </div>
+        <p class="pentad-desc">${p.creature}</p>
+      </div>
+    `).join('')
+
+    // 渲染民俗列表
+    const customsList = document.getElementById('term-customs-list')!
+    customsList.innerHTML = t.customs.map((c: string) => `
+      <li>${c}</li>
+    `).join('')
+
+    // 渲染美食标签
+    const foodsWrap = document.getElementById('term-foods-wrap')!
+    foodsWrap.innerHTML = t.foods.map((f: string) => `
+      <span class="food-tag-chip">🍲 ${f}</span>
+    `).join('')
+
+    // 农谚与古诗
+    document.getElementById('term-farming-text')!.innerText = t.farming
+    document.getElementById('poem-title')!.innerText = `《${t.poem.title}》`
+    document.getElementById('poem-author')!.innerText = `〔${t.poem.author}〕`
+    document.getElementById('poem-quote')!.innerText = `“${t.poem.quote}”`
+
+    // 冷知识
+    document.getElementById('term-funfact-text')!.innerText = t.funFact
+  }
+
+  // 4. 自动判定当前真实日期的时令节气
+  function detectCurrentSolarTerm() {
+    const now = new Date()
+    const month = now.getMonth() + 1 // 1-12
+    const day = now.getDate()
+
+    // 根据月日匹配最近节气
+    let matched = solarTermsData[0]
+    for (let i = 0; i < solarTermsData.length; i++) {
+      const t = solarTermsData[i]
+      if (month === t.approxMonth && Math.abs(day - t.approxDay) <= 7) {
+        matched = t
+        break
+      }
+    }
+
+    // 更新顶部横幅
+    const headerTodayTag = document.getElementById('header-today-term-name')
+    if (headerTodayTag) headerTodayTag.innerText = matched.name
+
+    const bannerIcon = document.getElementById('curr-term-icon')
+    if (bannerIcon) bannerIcon.innerText = matched.icon
+
+    const bannerTitle = document.getElementById('curr-term-title')
+    if (bannerTitle) bannerTitle.innerText = `当前节气：${matched.name} (${matched.seasonName})`
+
+    const bannerTagline = document.getElementById('curr-term-tagline')
+    if (bannerTagline) bannerTagline.innerText = `“${matched.tagline}”`
+
+    const bannerDateText = document.getElementById('curr-banner-date-text')
+    if (bannerDateText) bannerDateText.innerText = `太阳黄经 ${matched.solarLongitude}° · ${matched.dateRange}`
+
+    return matched.id
+  }
+
+  // 5. 语音发音
+  ;(window as any).speakSentence = function(text: string) {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel()
+      const u = new SpeechSynthesisUtterance(text)
+      u.lang = 'zh-CN'
+      u.rate = 0.85
+      window.speechSynthesis.speak(u)
+    }
+  }
+
+  // 6. 筛选过滤节气
+  function filterTerms() {
+    const searchText = (document.getElementById('st-search-input') as HTMLInputElement).value.trim().toLowerCase()
+    let visibleCount = 0
+    let firstVisibleId: string | null = null
+
+    document.querySelectorAll('.term-mini-card').forEach(card => {
+      const seasonName = card.getAttribute('data-season-name') || ''
+      const searchData = (card.getAttribute('data-search') || '').toLowerCase()
+      const id = card.getAttribute('data-id')!
+
+      const matchSeason = currentSeasonFilter === '全部节气' || currentSeasonFilter.includes(seasonName.slice(0, 1))
+      const matchSearch = !searchText || searchData.includes(searchText)
+
+      if (matchSeason && matchSearch) {
+        (card as HTMLElement).style.display = 'flex'
+        visibleCount++
+        if (!firstVisibleId) firstVisibleId = id
+      } else {
+        (card as HTMLElement).style.display = 'none'
+      }
+    })
+
+    document.getElementById('visible-terms-count')!.innerText = String(visibleCount)
+
+    if (firstVisibleId && !document.querySelector(`.term-mini-card[data-id="${currentTermId}"]:not([style*="display: none"])`)) {
+      (window as any).switchSolarTerm(firstVisibleId)
+    }
+  }
+
+  // ── 节气歌模态 ──
+  const btnOpenSong = document.getElementById('btn-open-song')
+  const songModal = document.getElementById('song-modal')
+  btnOpenSong?.addEventListener('click', () => {
+    songModal!.style.display = 'flex'
+  })
+  ;(window as any).closeSongModal = function() {
+    songModal!.style.display = 'none'
+  }
+
+  // ── 节气问答挑战 ──
+  const btnOpenQuiz = document.getElementById('btn-open-quiz')
+  const quizModal = document.getElementById('quiz-modal')
+  let quizIndex = 0
+  let quizScore = 0
+
+  btnOpenQuiz?.addEventListener('click', () => {
+    quizIndex = 0
+    quizScore = 0
+    renderCurrentQuiz()
+    quizModal!.style.display = 'flex'
+  })
+
+  ;(window as any).closeQuizModal = function() {
+    quizModal!.style.display = 'none'
+  }
+
+  function renderCurrentQuiz() {
+    const q = solarTermsQuizCards[quizIndex]
+    document.getElementById('quiz-round-txt')!.innerText = `第 ${quizIndex + 1} / ${solarTermsQuizCards.length} 题`
+    document.getElementById('quiz-score-txt')!.innerText = `得分: ${quizScore * 20} 分`
+    document.getElementById('quiz-q-title')!.innerText = q.question
+    document.getElementById('quiz-feedback')!.style.display = 'none'
+    document.getElementById('btn-next-quiz')!.style.display = 'none'
+
+    const optContainer = document.getElementById('quiz-options')!
+    optContainer.innerHTML = q.options.map(opt => `
+      <button class="st-quiz-btn" onclick="window.checkQuizAnswer('${opt}')">
+        ${opt}
+      </button>
+    `).join('')
+  }
+
+  ;(window as any).checkQuizAnswer = function(chosen: string) {
+    const q = solarTermsQuizCards[quizIndex]
+    const isRight = chosen === q.answer
+    if (isRight) quizScore++
+
+    document.querySelectorAll('.st-quiz-btn').forEach((btn: any) => {
+      btn.disabled = true
+      if (btn.innerText.trim() === q.answer) btn.classList.add('correct')
+      else if (btn.innerText.trim() === chosen && !isRight) btn.classList.add('wrong')
+    })
+
+    const fb = document.getElementById('quiz-feedback')!
+    fb.style.display = 'block'
+    if (isRight) {
+      fb.className = 'quiz-feedback correct'
+      fb.innerHTML = `🎉 恭喜答对！${q.explain}`
+    } else {
+      fb.className = 'quiz-feedback wrong'
+      fb.innerHTML = `💡 差点就对啦！正确答案是【${q.answer}】。${q.explain}`
+    }
+
+    const nextBtn = document.getElementById('btn-next-quiz')!
+    nextBtn.style.display = 'block'
+    if (quizIndex === solarTermsQuizCards.length - 1) {
+      nextBtn.innerText = `查看挑战战果 🏆`
+    } else {
+      nextBtn.innerText = `下一题 ➔`
+    }
+  }
+
+  ;(window as any).nextQuizRound = function() {
+    quizIndex++
+    if (quizIndex < solarTermsQuizCards.length) {
+      renderCurrentQuiz()
+    } else {
+      // 挑战完成
+      const container = document.getElementById('quiz-container')!
+      let honor = '🌟 时令物候小探险家'
+      if (quizScore === 5) honor = '👑 二十四节气物候大宗师 (满分卓越)'
+      else if (quizScore >= 3) honor = '🚀 自然节令通识小达人'
+
+      container.innerHTML = `
+        <div style="text-align:center;padding:1.5rem 0;">
+          <div style="font-size:3rem;margin-bottom:0.5rem;">🎉</div>
+          <h4 style="font-size:1.35rem;font-weight:900;color:#1e293b;margin:0 0 0.5rem;">挑战完成！</h4>
+          <p style="font-size:1.1rem;color:#15803d;font-weight:bold;">乐乐与月亮总共答对 ${quizScore} / ${solarTermsQuizCards.length} 题！(总分: ${quizScore * 20} 分)</p>
+          <div style="display:inline-block;background:#f0fdf4;border:1px solid #bbf7d0;padding:0.4rem 1rem;border-radius:9999px;font-size:0.9rem;font-weight:800;color:#15803d;margin:0.75rem 0;">
+            ${honor}
+          </div>
+          <p style="font-size:0.85rem;color:#64748b;">通晓四时流转，自然物候常识又进步了一大截！</p>
+          <div style="display:flex;gap:0.75rem;justify-content:center;margin-top:1.25rem;">
+            <button class="btn-quiz-next" style="width:auto;padding:0.6rem 1.5rem;" onclick="window.closeQuizModal()">完成挑战 🌾</button>
+          </div>
+        </div>
+      `
+    }
+  }
+
+  // 页面加载启动
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. 初始化排布罗盘节点
+    positionDialNodes()
+
+    // 2. 检测并定位当前节气
+    const detectedId = detectCurrentSolarTerm()
+    ;(window as any).switchSolarTerm(detectedId || 'lichun')
+
+    // 3. 今日节气按钮监听
+    document.getElementById('btn-current-term')?.addEventListener('click', () => {
+      const todayId = detectCurrentSolarTerm()
+      ;(window as any).switchSolarTerm(todayId)
+    })
+
+    // 4. 朗读节气按钮
+    document.getElementById('btn-speak-term')?.addEventListener('click', () => {
+      const term = solarTermsData.find(t => t.id === currentTermId)
+      if (term) {
+        ;(window as any).speakSentence(`${term.name}，${term.pinyin}。${term.tagline}`)
+      }
+    })
+
+    // 5. 四季胶囊切换
+    document.querySelectorAll('.season-tab-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.season-tab-pill').forEach(p => p.classList.remove('active'))
+        pill.classList.add('active')
+        currentSeasonFilter = pill.getAttribute('data-season') || '全部节气'
+        filterTerms()
+      })
+    })
+
+    // 6. 搜索输入
+    const searchInput = document.getElementById('st-search-input') as HTMLInputElement
+    const searchClear = document.getElementById('btn-st-search-clear')!
+
+    searchInput.addEventListener('input', () => {
+      searchClear.style.display = searchInput.value ? 'inline-block' : 'none'
+      filterTerms()
+    })
+
+    searchClear.addEventListener('click', () => {
+      searchInput.value = ''
+      searchClear.style.display = 'none'
+      filterTerms()
+    })
+  })
+</script>
