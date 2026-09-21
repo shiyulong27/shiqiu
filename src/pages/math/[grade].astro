@@ -1,0 +1,466 @@
+---
+import Base from '../../layouts/Base.astro'
+import '../../styles/learning.css'
+import { gradesList, curriculumData } from '../../data/mathCurriculum.js'
+
+export function getStaticPaths() {
+  return gradesList.map((g) => ({
+    params: { grade: g.id },
+    props: {
+      currentGrade: curriculumData[g.id],
+      allGrades: gradesList
+    }
+  }))
+}
+
+const { currentGrade, allGrades } = Astro.props
+const base = import.meta.env.BASE_URL
+---
+
+<Base title={`小学${currentGrade.name}数学 · 全景知识、数学思想与可拖拽思维导图 · 十丘`} wide={true}>
+  <div class="learn-container">
+    {/* 顶部统一导航 */}
+    <header class="learn-header">
+      <div class="learn-nav-bar">
+        <nav class="learn-breadcrumbs">
+          <a href={base}>🏛️ 十丘门户</a>
+          <span>/</span>
+          <a href={`${base}math/`}>📐 数学启蒙乐园</a>
+          <span>/</span>
+          <strong style={`color: ${currentGrade.themeColor};`}>🌱 小学{currentGrade.name}全景思维导图</strong>
+        </nav>
+        <div class="learn-subject-switcher">
+          <a href={base} class="subject-chip chip-home">🏠 门户首页</a>
+          <a href={`${base}chinese/`} class="subject-chip chip-chinese">📖 语文</a>
+          <a href={`${base}math/`} class="subject-chip chip-math active">📐 数学</a>
+          <a href={`${base}english/`} class="subject-chip chip-english">🔤 英语</a>
+        </div>
+      </div>
+    </header>
+
+    {/* 年级切换标签栏 (1~6年级全量一键无缝直达) */}
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; padding: 0.75rem 1.25rem; background: #fff; border: 1px solid #e2e8f0; border-radius: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+      <div style="display: flex; align-items: center; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.25rem;">
+        <span style="font-size: 0.85rem; font-weight: 600; color: #64748b; white-space: nowrap;">学段全景直达:</span>
+        {allGrades.map((g) => {
+          const isActive = g.id === currentGrade.id
+          return (
+            <a
+              href={`${base}math/${g.id}/`}
+              style={
+                isActive
+                  ? `padding: 0.4rem 0.85rem; background: ${currentGrade.themeColor}; color: #fff; border-radius: 0.6rem; font-size: 0.85rem; font-weight: bold; text-decoration: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1);`
+                  : 'padding: 0.4rem 0.85rem; background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; border-radius: 0.6rem; font-size: 0.85rem; text-decoration: none; transition: all 0.2s;'
+              }
+            >
+              {g.name}
+            </a>
+          )
+        })}
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <button id="tab-btn-map" class="view-tab-btn active" style={`padding: 0.4rem 0.9rem; border-radius: 0.6rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: 1px solid ${currentGrade.themeColor}; background: #ecfdf5; color: ${currentGrade.themeColor};`}>
+          🗺️ 动态交互脑图
+        </button>
+        <button id="tab-btn-words" class="view-tab-btn" style="padding: 0.4rem 0.9rem; border-radius: 0.6rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: 1px solid #cbd5e1; background: #fff; color: #475569;">
+          📜 学段核心清单与数学思想大典
+        </button>
+      </div>
+    </div>
+
+    {/* 年级学段概览横幅 */}
+    <div style={`background: linear-gradient(135deg, #ffffff 0%, #ecfdf5 100%); border: 1px solid #e2e8f0; border-left: 5px solid ${currentGrade.themeColor}; border-radius: 1rem; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.03);`}>
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+            <span style={`font-size: 0.75rem; font-weight: bold; padding: 0.2rem 0.6rem; border-radius: 9999px; background: #d1fae5; color: ${currentGrade.themeColor}; border: 1px solid #a7f3d0;`}>
+              {currentGrade.stage}
+            </span>
+            <span style="font-size: 0.75rem; color: #64748b;">统编版义务教育数学新课标 (2022年版)</span>
+          </div>
+          <h1 style="font-size: 1.35rem; font-weight: bold; color: #0f172a; margin: 0;">
+            小学{currentGrade.name}数学 · 全景知识架构与数学思想导图
+          </h1>
+          <p style="font-size: 0.85rem; color: #64748b; margin: 0.35rem 0 0 0; line-height: 1.5;">
+            {currentGrade.summary}
+          </p>
+        </div>
+
+        {/* 4 大核心 KPI 快速看板 */}
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; min-width: 320px;">
+          <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 0.5rem 0.75rem; text-align: center;">
+            <div style="font-size: 0.7rem; color: #94a3b8;">知识谱系</div>
+            <div style={`font-size: 0.95rem; font-weight: bold; color: ${currentGrade.themeColor}; margin-top: 2px;`}>{currentGrade.kpiStats.concepts}</div>
+          </div>
+          <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 0.5rem 0.75rem; text-align: center;">
+            <div style="font-size: 0.7rem; color: #94a3b8;">核心思想</div>
+            <div style="font-size: 0.95rem; font-weight: bold; color: #0284c7; margin-top: 2px;">{currentGrade.kpiStats.thinking}</div>
+          </div>
+          <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 0.5rem 0.75rem; text-align: center;">
+            <div style="font-size: 0.7rem; color: #94a3b8;">思维模型</div>
+            <div style="font-size: 0.95rem; font-weight: bold; color: #8b5cf6; margin-top: 2px;">{currentGrade.kpiStats.models}</div>
+          </div>
+          <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 0.5rem 0.75rem; text-align: center;">
+            <div style="font-size: 0.7rem; color: #94a3b8;">学段标尺</div>
+            <div style="font-size: 0.95rem; font-weight: bold; color: #d97706; margin-top: 2px;">{currentGrade.kpiStats.benchmark}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* VIEW 1: 动态思维导图画布视图 */}
+    <div id="view-mindmap-wrapper" style="position: relative; background: #fff; border: 1px solid #e2e8f0; border-radius: 1.25rem; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 2.5rem;">
+      {/* 导图操作工具条 */}
+      <div style="position: absolute; top: 1rem; left: 1rem; z-index: 10; display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); padding: 0.4rem 0.75rem; border: 1px solid #e2e8f0; border-radius: 0.75rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <button id="btn-zoom-in" title="放大" style="border: none; background: #f1f5f9; padding: 0.35rem 0.65rem; border-radius: 0.4rem; cursor: pointer; font-size: 0.85rem; font-weight: bold;">🔍+ 放大</button>
+        <button id="btn-zoom-out" title="缩小" style="border: none; background: #f1f5f9; padding: 0.35rem 0.65rem; border-radius: 0.4rem; cursor: pointer; font-size: 0.85rem; font-weight: bold;">🔍- 缩小</button>
+        <button id="btn-reset" title="复位居中" style="border: none; background: #f1f5f9; padding: 0.35rem 0.65rem; border-radius: 0.4rem; cursor: pointer; font-size: 0.85rem; font-weight: bold;">🎯 居中</button>
+        <span style="color: #cbd5e1;">|</span>
+        <button id="btn-expand-all" style={`border: none; background: #ecfdf5; color: ${currentGrade.themeColor}; padding: 0.35rem 0.65rem; border-radius: 0.4rem; cursor: pointer; font-size: 0.85rem; font-weight: 600;`}>📂 展开全部</button>
+        <button id="btn-collapse-all" style="border: none; background: #f1f5f9; color: #475569; padding: 0.35rem 0.65rem; border-radius: 0.4rem; cursor: pointer; font-size: 0.85rem;">📁 收起至二级</button>
+      </div>
+
+      <div style="position: absolute; bottom: 1rem; right: 1rem; z-index: 10; font-size: 0.75rem; color: #94a3b8; background: rgba(255,255,255,0.9); padding: 0.25rem 0.65rem; border-radius: 0.5rem; border: 1px solid #e2e8f0;">
+        💡 提示：按住鼠标左键可自由拖动平移 · 滚轮缩放 · 点击节点圆圈展开/折叠
+      </div>
+
+      {/* ECharts 挂载节点 */}
+      <div
+        id="mindmap-container"
+        style="width: 100%; height: 860px;"
+      ></div>
+      <script type="application/json" id="mindmap-tree-data" set:html={JSON.stringify(currentGrade.mindmapTree)}></script>
+    </div>
+
+    {/* VIEW 2: 学段核心清单与数学思想大典 */}
+    <div id="view-words-wrapper" style="display: none; margin-bottom: 2.5rem;">
+      <div style={`background: #fff; border: 2px solid ${currentGrade.themeColor}; border-radius: 1.25rem; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);`}>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h2 style={`font-size: 1.25rem; font-weight: bold; color: ${currentGrade.themeColor}; margin: 0 0 0.25rem 0;`}>
+              小学{currentGrade.name}数学 · 核心思想与课标达标大典
+            </h2>
+            <p style="font-size: 0.85rem; color: #64748b; margin: 0;">
+              包含核心数学思想、画图建模方法、除法专题深度辨析、必背公式公理与新课标考评标尺
+            </p>
+          </div>
+          <span style={`background: ${currentGrade.themeColor}; color: #fff; padding: 0.35rem 0.85rem; border-radius: 9999px; font-size: 0.8rem; font-weight: bold;`}>
+            {currentGrade.badge}
+          </span>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          {/* 1. 核心数学思想与思维模型导引 */}
+          {currentGrade.thoughtGuide && (
+            <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 1rem; padding: 1.25rem;">
+              <h3 style="font-size: 1.05rem; font-weight: bold; color: #166534; margin: 0 0 0.75rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                <span>💡</span> {currentGrade.thoughtGuide.title}
+              </h3>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+                {currentGrade.thoughtGuide.points.map((p) => (
+                  <div style="background: #fff; border: 1px solid #dcfce7; border-radius: 0.75rem; padding: 1rem; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                    <strong style="color: #15803d; font-size: 0.95rem; display: block; margin-bottom: 0.35rem;">
+                      {p.title}
+                    </strong>
+                    <p style="color: #334155; font-size: 0.85rem; line-height: 1.6; margin: 0;">
+                      {p.desc}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 2. 除法专题权威深度解析卡片 */}
+          {currentGrade.divisionSpecial && (
+            <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 1rem; padding: 1.25rem;">
+              <h3 style="font-size: 1.05rem; font-weight: bold; color: #991b1b; margin: 0 0 0.25rem 0; display: flex; align-items: center; gap: 0.5rem;">
+                <span>➗</span> {currentGrade.divisionSpecial.title}
+              </h3>
+              <p style="font-size: 0.82rem; color: #b91c1c; margin: 0 0 0.85rem 0;">
+                {currentGrade.divisionSpecial.desc}
+              </p>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.85rem;">
+                {currentGrade.divisionSpecial.items.map((it) => (
+                  <div style="background: #fff; border: 1px solid #fee2e2; border-left: 4px solid #ef4444; border-radius: 0.6rem; padding: 0.85rem 1rem;">
+                    <div style="font-weight: bold; color: #b91c1c; font-size: 0.9rem; margin-bottom: 0.25rem;">
+                      {it.term}
+                    </div>
+                    <div style="font-size: 0.83rem; color: #475569; line-height: 1.55; white-space: pre-line;">
+                      {it.detail}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 3. 核心公理与公式定律清单列表 */}
+          {currentGrade.tables?.map((tbl) => (
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 1.25rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <h3 style="font-size: 1.05rem; font-weight: bold; color: #1e293b; margin: 0;">
+                  {tbl.title}
+                </h3>
+                <span style="font-size: 0.75rem; color: #94a3b8;">📐 数学核心定律与算理规范</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 0.85rem;">
+                {tbl.list?.map((item) => (
+                  <div
+                    class="math-formula-card"
+                    style="background: #fff; border: 1px solid #e2e8f0; border-left: 4px solid #059669; border-radius: 0.6rem; padding: 0.75rem 1rem; font-size: 0.85rem; color: #334155; line-height: 1.6; transition: all 0.2s;"
+                  >
+                    <div>{item}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          {/* 4. 课标能力进阶考评标准 */}
+          <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 1.25rem;">
+            <h3 style="font-size: 1.05rem; font-weight: bold; color: #1e293b; margin: 0 0 0.75rem 0;">
+              🎯 {currentGrade.name}数学学段质量监测考评标准
+            </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; font-size: 0.85rem;">
+              <div style="background: #fff; padding: 1rem; border-radius: 0.75rem; border: 1px solid #e2e8f0;">
+                <strong style="color: #059669; display: block; margin-bottom: 0.25rem;">① 运算准确度与数感核心</strong>
+                <p style="color: #64748b; margin: 0;">达到“{currentGrade.kpiStats.benchmark}”，口算心算精准脱口而出，彻底掌握算理与运算定律法则。</p>
+              </div>
+              <div style="background: #fff; padding: 1rem; border-radius: 0.75rem; border: 1px solid #e2e8f0;">
+                <strong style="color: #0284c7; display: block; margin-bottom: 0.25rem;">② 建模解题与画图能力</strong>
+                <p style="color: #64748b; margin: 0;">掌握“{currentGrade.kpiStats.models}”，能主动用画图（线段图/几何拼摆/坐标点阵）抽象复杂数量关系。</p>
+              </div>
+              <div style="background: #fff; padding: 1rem; border-radius: 0.75rem; border: 1px solid #e2e8f0;">
+                <strong style="color: #8b5cf6; display: block; margin-bottom: 0.25rem;">③ 数学思想与逻辑推理</strong>
+                <p style="color: #64748b; margin: 0;">融会贯通“{currentGrade.kpiStats.thinking}”，感悟等式平衡与转化化归的数学本质魅力。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</Base>
+
+{/* 客户端脚本：初始化 ECharts 树图、处理拖拽缩放与视图切换 */}
+<script>
+  import * as echarts from 'echarts'
+
+  let chartInstance = null
+
+  function initMindmap() {
+    const container = document.getElementById('mindmap-container')
+    const dataEl = document.getElementById('mindmap-tree-data')
+    if (!container) return null
+
+    let rawData = null
+    if (dataEl && dataEl.textContent) {
+      try {
+        rawData = JSON.parse(dataEl.textContent)
+      } catch (err) {
+        console.error('Failed to parse tree data from script tag:', err)
+      }
+    }
+    if (!rawData && container.dataset.tree) {
+      try {
+        rawData = JSON.parse(container.dataset.tree)
+      } catch (err) {
+        console.error('Failed to parse tree data from dataset:', err)
+      }
+    }
+
+    if (!rawData) {
+      container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#ef4444;font-size:0.95rem;">脑图数据加载失败，请刷新重试。</div>'
+      return null
+    }
+
+    // 格式化与样式增强：为非叶子节点赋予胶囊徽章并固定靠左对齐，彻底消除折叠/展开重叠
+    function enrichTreeData(node, depth = 0) {
+      if (node.children && node.children.length > 0) {
+        if (!node.label) node.label = {}
+        if (depth >= 2) {
+          node.label = {
+            position: 'left',
+            align: 'right',
+            fontSize: 12,
+            fontWeight: '600',
+            color: '#1e293b',
+            backgroundColor: '#f8fafc',
+            borderColor: '#cbd5e1',
+            borderWidth: 1,
+            borderRadius: 6,
+            padding: [3, 8],
+            ...node.label
+          }
+        } else {
+          if (!node.label.position) {
+            node.label.position = 'left'
+            node.label.align = 'right'
+          }
+        }
+        node.children.forEach(c => enrichTreeData(c, depth + 1))
+      }
+    }
+    enrichTreeData(rawData, 0)
+
+    try {
+      const chart = echarts.init(container)
+
+      // 递归设置树的折叠/展开状态
+      function setTreeCollapseByDepth(node, targetDepth, currentDepth = 0) {
+        if (node.children && node.children.length > 0) {
+          node.collapsed = (currentDepth >= targetDepth)
+          node.children.forEach(c => setTreeCollapseByDepth(c, targetDepth, currentDepth + 1))
+        }
+      }
+
+      function getOption(depth = 2) {
+        const treeDataCopy = JSON.parse(JSON.stringify(rawData))
+        setTreeCollapseByDepth(treeDataCopy, depth, 0)
+
+        return {
+          tooltip: {
+            trigger: 'item',
+            triggerOn: 'mousemove',
+            formatter: function (params) {
+              return `<div style="font-weight: bold; margin-bottom: 4px;">${params.name.replace(/\n/g, ' ')}</div><div style="font-size: 12px; color: #64748b;">点击圆圈可展开/收起分支 · 按住鼠标左键可自由拖动平移</div>`
+            }
+          },
+          series: [
+            {
+              type: 'tree',
+              data: [treeDataCopy],
+              top: '6%',
+              left: '16%',
+              bottom: '6%',
+              right: '25%',
+              symbolSize: 7,
+              roam: true, // 核心：支持鼠标自由平移拖拽与滚轮缩放
+              edgeShape: 'curve',
+              edgeForkPosition: '60%',
+              itemStyle: {
+                borderWidth: 1.5
+              },
+              lineStyle: {
+                color: '#94a3b8',
+                width: 1.5,
+                curveness: 0.5
+              },
+              label: {
+                position: 'left',
+                verticalAlign: 'middle',
+                align: 'right',
+                fontSize: 12,
+                color: '#334155'
+              },
+              leaves: {
+                label: {
+                  position: 'right',
+                  verticalAlign: 'middle',
+                  align: 'left',
+                  fontSize: 12,
+                  color: '#334155'
+                }
+              },
+              emphasis: {
+                focus: 'descendant'
+              },
+              expandAndCollapse: true,
+              animationDuration: 400,
+              animationDurationUpdate: 500
+            }
+          ]
+        }
+      }
+
+      chart.setOption(getOption(2))
+
+      // 窗口自适应
+      window.addEventListener('resize', () => {
+        chart.resize()
+      })
+
+      // 缩放与复位控制按钮
+      document.getElementById('btn-zoom-in')?.addEventListener('click', () => {
+        const opt = chart.getOption()
+        chart.setOption({
+          series: [{ zoom: (opt.series[0].zoom || 1) * 1.25 }]
+        })
+      })
+
+      document.getElementById('btn-zoom-out')?.addEventListener('click', () => {
+        const opt = chart.getOption()
+        chart.setOption({
+          series: [{ zoom: (opt.series[0].zoom || 1) * 0.8 }]
+        })
+      })
+
+      document.getElementById('btn-reset')?.addEventListener('click', () => {
+        chart.setOption(getOption(2))
+      })
+
+      document.getElementById('btn-expand-all')?.addEventListener('click', () => {
+        chart.setOption(getOption(5))
+      })
+
+      document.getElementById('btn-collapse-all')?.addEventListener('click', () => {
+        chart.setOption(getOption(2))
+      })
+
+      return chart
+    } catch (e) {
+      console.error('初始化脑图失败:', e)
+      container.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#ef4444;">ECharts 初始化失败: ${e.message}</div>`
+      return null
+    }
+  }
+
+  chartInstance = initMindmap()
+  if (typeof window !== 'undefined') {
+    window.__echarts_chart = chartInstance
+    window.echarts = echarts
+  }
+
+  // 视图切换：动态思维导图 vs 核心清单
+  const tabBtnMap = document.getElementById('tab-btn-map')
+  const tabBtnWords = document.getElementById('tab-btn-words')
+  const viewMap = document.getElementById('view-mindmap-wrapper')
+  const viewWords = document.getElementById('view-words-wrapper')
+
+  tabBtnMap?.addEventListener('click', () => {
+    tabBtnMap.style.background = '#ecfdf5'
+    tabBtnMap.style.color = '#059669'
+    tabBtnMap.style.borderColor = '#059669'
+
+    tabBtnWords.style.background = '#fff'
+    tabBtnWords.style.color = '#475569'
+    tabBtnWords.style.borderColor = '#cbd5e1'
+
+    if (viewMap) viewMap.style.display = 'block'
+    if (viewWords) viewWords.style.display = 'none'
+    if (chartInstance) chartInstance.resize()
+  })
+
+  tabBtnWords?.addEventListener('click', () => {
+    tabBtnWords.style.background = '#ecfdf5'
+    tabBtnWords.style.color = '#059669'
+    tabBtnWords.style.borderColor = '#059669'
+
+    tabBtnMap.style.background = '#fff'
+    tabBtnMap.style.color = '#475569'
+    tabBtnMap.style.borderColor = '#cbd5e1'
+
+    if (viewMap) viewMap.style.display = 'none'
+    if (viewWords) viewWords.style.display = 'block'
+  })
+</script>
+
+<style>
+  .math-formula-card:hover {
+    border-color: #059669 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+  }
+</style>

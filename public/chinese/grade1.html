@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小学一年级语文全景架构与会写100字组词宝典</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(150, 150, 150, 0.3); border-radius: 9999px; }
+    .tian-zi-ge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--border, #cbd5e1);
+      position: relative;
+      font-family: serif, "Kaiti", "STKaiti", cursive;
+      font-size: 20px;
+      font-weight: bold;
+      background-image: linear-gradient(to right, transparent 49%, rgba(200,200,200,0.3) 49%, rgba(200,200,200,0.3) 51%, transparent 51%),
+                        linear-gradient(to bottom, transparent 49%, rgba(200,200,200,0.3) 49%, rgba(200,200,200,0.3) 51%, transparent 51%);
+    }
+  </style>
+</head>
+<body class="bg-transparent text-[var(--foreground)] antialiased p-3 md:p-6 font-sans select-none">
+
+  <!-- Header Section -->
+  <header class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 mb-6 shadow-sm">
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/20">统编版新课标</span>
+          <span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">全量100字带组词</span>
+          <span class="text-xs text-[var(--muted-foreground)]">一年级上册</span>
+        </div>
+        <h1 class="text-xl md:text-2xl font-bold tracking-tight text-[var(--foreground)] flex items-center gap-2">
+          <span>🌱</span> 小学一年级语文 · 全景架构 & 100字全量组词宝典
+        </h1>
+        <p class="text-xs md:text-sm text-[var(--muted-foreground)] mt-1">
+          母体字根 + 统编高频组词清单 · 期末看拼音写词语 100% 覆盖
+        </p>
+      </div>
+
+      <!-- Quick KPI Stats Bar -->
+      <div class="grid grid-cols-4 gap-2 text-center shrink-0">
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl px-3 py-2">
+          <div class="text-[10px] text-[var(--muted-foreground)]">拼音部件</div>
+          <div class="text-base font-bold text-amber-500">63<span class="text-xs font-normal">个</span></div>
+        </div>
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl px-3 py-2">
+          <div class="text-[10px] text-[var(--muted-foreground)]">写字/组词</div>
+          <div class="text-base font-bold text-emerald-500">100<span class="text-xs font-normal">字/260词</span></div>
+        </div>
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl px-3 py-2">
+          <div class="text-[10px] text-[var(--muted-foreground)]">认字储备</div>
+          <div class="text-base font-bold text-teal-500">300<span class="text-xs font-normal">字</span></div>
+        </div>
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl px-3 py-2">
+          <div class="text-[10px] text-[var(--muted-foreground)]">必背古诗</div>
+          <div class="text-base font-bold text-purple-500">10<span class="text-xs font-normal">首</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Buttons -->
+    <div class="flex items-center gap-2 mt-4 pt-3 border-t border-[var(--border)] overflow-x-auto text-xs pb-1">
+      <span class="text-[var(--muted-foreground)] whitespace-nowrap">快速直达:</span>
+      <button onclick="filterBranch('all')" id="btn-all" class="px-3 py-1 rounded-lg font-medium bg-[var(--primary)] text-[var(--primary-foreground)] transition-all">全景总览</button>
+      <button onclick="filterBranch('words100')" id="btn-words100" class="px-3 py-1 rounded-lg font-medium bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 font-bold transition-all">🌟 100写字带组词表</button>
+      <button onclick="filterBranch('words300')" id="btn-words300" class="px-3 py-1 rounded-lg font-medium bg-teal-500/10 border border-teal-500/30 text-teal-600 dark:text-teal-400 font-bold transition-all">🔍 300识字构字图谱</button>
+      <button onclick="filterBranch('pinyin')" id="btn-pinyin" class="px-3 py-1 rounded-lg font-medium bg-[var(--background)] border border-[var(--border)] hover:border-amber-500 text-amber-600 dark:text-amber-400 transition-all">🔤 拼音深度细分</button>
+      <button onclick="filterBranch('hanzi')" id="btn-hanzi" class="px-3 py-1 rounded-lg font-medium bg-[var(--background)] border border-[var(--border)] hover:border-emerald-500 text-emerald-600 dark:text-emerald-400 transition-all">✍️ 笔顺偏旁法则</button>
+      <button onclick="filterBranch('chengyu')" id="btn-chengyu" class="px-3 py-1 rounded-lg font-medium bg-[var(--background)] border border-[var(--border)] hover:border-blue-500 text-blue-600 dark:text-blue-400 transition-all">📚 词汇成语叠词</button>
+      <button onclick="filterBranch('gushi')" id="btn-gushi" class="px-3 py-1 rounded-lg font-medium bg-[var(--background)] border border-[var(--border)] hover:border-purple-500 text-purple-600 dark:text-purple-400 transition-all">📖 10首必背古诗</button>
+      <button onclick="filterBranch('biaochi')" id="btn-biaochi" class="px-3 py-1 rounded-lg font-medium bg-[var(--background)] border border-[var(--border)] hover:border-rose-500 text-rose-600 dark:text-rose-400 transition-all">🎯 期末考评标尺</button>
+    </div>
+  </header>
+
+  <!-- Main Content Space -->
+  <div class="space-y-6">
+
+    <!-- 100个会写字全量带组词全景盘 (五大字族卡片式) -->
+    <section id="branch-words100" class="branch-card bg-[var(--card)] border-2 border-emerald-500/40 rounded-2xl p-5 shadow-md relative overflow-hidden">
+      <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold flex items-center justify-center text-lg">
+            ✍️
+          </div>
+          <div>
+            <h2 class="text-base md:text-lg font-bold text-[var(--foreground)] flex items-center gap-2">
+              <span>一上《写字表》100 字全量带组词全景宝典</span>
+              <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold">四会字 · 100% 笔画笔顺与组词通关</span>
+            </h2>
+            <p class="text-xs text-[var(--muted-foreground)]">期末“看拼音写汉字/比一比再组词”核心字库，每个字精配 2~3 个统编课标高频口语与书面词组</p>
+          </div>
+        </div>
+        <span class="text-xs px-3 py-1 bg-emerald-500 text-white rounded-full font-semibold">精准 100 字 + 260+ 组词</span>
+      </div>
+
+      <!-- 5 大字族带组词网格卡片 -->
+      <div class="space-y-4">
+        
+        <!-- 字族1：数字、方位与时间 (17字) -->
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-4">
+          <div class="flex items-center justify-between mb-3 border-b border-[var(--border)] pb-2">
+            <span class="font-bold text-sm text-emerald-600 dark:text-emerald-400">① 数字、方位与时间 (17字) —— 跨学科数学与时空概念</span>
+            <span class="text-[10px] px-2 py-0.5 bg-emerald-500/10 text-emerald-600 rounded">17 字全部配词</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-xs">
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">一</span>
+              <div><div class="font-semibold text-emerald-500">yī</div><div class="text-[11px] text-[var(--muted-foreground)]">一天、一人、一个</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">二</span>
+              <div><div class="font-semibold text-emerald-500">èr</div><div class="text-[11px] text-[var(--muted-foreground)]">二人、二十、二月</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">三</span>
+              <div><div class="font-semibold text-emerald-500">sān</div><div class="text-[11px] text-[var(--muted-foreground)]">三天、三个、三月</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">四</span>
+              <div><div class="font-semibold text-emerald-500">sì</div><div class="text-[11px] text-[var(--muted-foreground)]">四年、四个、四方</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">五</span>
+              <div><div class="font-semibold text-emerald-500">wǔ</div><div class="text-[11px] text-[var(--muted-foreground)]">五天、五个、五月</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">八</span>
+              <div><div class="font-semibold text-emerald-500">bā</div><div class="text-[11px] text-[var(--muted-foreground)]">八个、八天、八方</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">十</span>
+              <div><div class="font-semibold text-emerald-500">shí</div><div class="text-[11px] text-[var(--muted-foreground)]">十天、十年、十个</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">上</span>
+              <div><div class="font-semibold text-emerald-500">shàng</div><div class="text-[11px] text-[var(--muted-foreground)]">上下、上学、头上</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">下</span>
+              <div><div class="font-semibold text-emerald-500">xià</div><div class="text-[11px] text-[var(--muted-foreground)]">下雨、上下、下山</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">中</span>
+              <div><div class="font-semibold text-emerald-500">zhōng</div><div class="text-[11px] text-[var(--muted-foreground)]">中间、心中、中国人</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">东</span>
+              <div><div class="font-semibold text-emerald-500">dōng</div><div class="text-[11px] text-[var(--muted-foreground)]">东西、东边、东方</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">西</span>
+              <div><div class="font-semibold text-emerald-500">xī</div><div class="text-[11px] text-[var(--muted-foreground)]">东西、西瓜、西方</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">后</span>
+              <div><div class="font-semibold text-emerald-500">hòu</div><div class="text-[11px] text-[var(--muted-foreground)]">后来、后天、后面</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">里</span>
+              <div><div class="font-semibold text-emerald-500">lǐ</div><div class="text-[11px] text-[var(--muted-foreground)]">手里、心里、里面</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">半</span>
+              <div><div class="font-semibold text-emerald-500">bàn</div><div class="text-[11px] text-[var(--muted-foreground)]">半天、一半、半个</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">早</span>
+              <div><div class="font-semibold text-emerald-500">zǎo</div><div class="text-[11px] text-[var(--muted-foreground)]">早上、早日、早晨</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">月</span>
+              <div><div class="font-semibold text-emerald-500">yuè</div><div class="text-[11px] text-[var(--muted-foreground)]">月儿、月亮、日月</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 字族2：自然天地与农耕物象 (17字) -->
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-4">
+          <div class="flex items-center justify-between mb-3 border-b border-[var(--border)] pb-2">
+            <span class="font-bold text-sm text-emerald-600 dark:text-emerald-400">② 自然天地与农耕 (17字) —— 象形造字之源，偏旁部首之母</span>
+            <span class="text-[10px] px-2 py-0.5 bg-emerald-500/10 text-emerald-600 rounded">17 字全部配词</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-xs">
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">天</span>
+              <div><div class="font-semibold text-emerald-500">tiān</div><div class="text-[11px] text-[var(--muted-foreground)]">白天、蓝天、天空</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">地</span>
+              <div><div class="font-semibold text-emerald-500">dì</div><div class="text-[11px] text-[var(--muted-foreground)]">土地、地上、天地</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">日</span>
+              <div><div class="font-semibold text-emerald-500">rì</div><div class="text-[11px] text-[var(--muted-foreground)]">日子、今日、日光</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">云</span>
+              <div><div class="font-semibold text-emerald-500">yún</div><div class="text-[11px] text-[var(--muted-foreground)]">白云、乌云、云朵</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">山</span>
+              <div><div class="font-semibold text-emerald-500">shān</div><div class="text-[11px] text-[var(--muted-foreground)]">大山、上山、山林</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">田</span>
+              <div><div class="font-semibold text-emerald-500">tián</div><div class="text-[11px] text-[var(--muted-foreground)]">水田、田地、种田</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">禾</span>
+              <div><div class="font-semibold text-emerald-500">hé</div><div class="text-[11px] text-[var(--muted-foreground)]">禾苗、禾田</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">火</span>
+              <div><div class="font-semibold text-emerald-500">huǒ</div><div class="text-[11px] text-[var(--muted-foreground)]">大火、火山、水火</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">水</span>
+              <div><div class="font-semibold text-emerald-500">shuǐ</div><div class="text-[11px] text-[var(--muted-foreground)]">雨水、开水、水果</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">雨</span>
+              <div><div class="font-semibold text-emerald-500">yǔ</div><div class="text-[11px] text-[var(--muted-foreground)]">下雨、雨衣、大雨</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">土</span>
+              <div><div class="font-semibold text-emerald-500">tǔ</div><div class="text-[11px] text-[var(--muted-foreground)]">水土、泥土、土地</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">木</span>
+              <div><div class="font-semibold text-emerald-500">mù</div><div class="text-[11px] text-[var(--muted-foreground)]">木头、树木、草木</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">林</span>
+              <div><div class="font-semibold text-emerald-500">lín</div><div class="text-[11px] text-[var(--muted-foreground)]">树林、林子、山林</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">石</span>
+              <div><div class="font-semibold text-emerald-500">shí</div><div class="text-[11px] text-[var(--muted-foreground)]">石头、石子、石山</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">风</span>
+              <div><div class="font-semibold text-emerald-500">fēng</div><div class="text-[11px] text-[var(--muted-foreground)]">大风、春风、东风</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">白</span>
+              <div><div class="font-semibold text-emerald-500">bái</div><div class="text-[11px] text-[var(--muted-foreground)]">白云、白天、雪白</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">果</span>
+              <div><div class="font-semibold text-emerald-500">guǒ</div><div class="text-[11px] text-[var(--muted-foreground)]">苹果、水果、果子</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 字族3：人伦关系、身体器官与代词 (18字) -->
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-4">
+          <div class="flex items-center justify-between mb-3 border-b border-[var(--border)] pb-2">
+            <span class="font-bold text-sm text-emerald-600 dark:text-emerald-400">③ 人伦关系、身体与代词 (18字) —— 自我关照与家庭社会交往</span>
+            <span class="text-[10px] px-2 py-0.5 bg-emerald-500/10 text-emerald-600 rounded">18 字全部配词</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-xs">
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">人</span>
+              <div><div class="font-semibold text-emerald-500">rén</div><div class="text-[11px] text-[var(--muted-foreground)]">大人、人们、好人</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">你</span>
+              <div><div class="font-semibold text-emerald-500">nǐ</div><div class="text-[11px] text-[var(--muted-foreground)]">你好、你们、你的</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">我</span>
+              <div><div class="font-semibold text-emerald-500">wǒ</div><div class="text-[11px] text-[var(--muted-foreground)]">我们、我的、自我</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">他</span>
+              <div><div class="font-semibold text-emerald-500">tā</div><div class="text-[11px] text-[var(--muted-foreground)]">他们、他人、他的</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">们</span>
+              <div><div class="font-semibold text-emerald-500">men</div><div class="text-[11px] text-[var(--muted-foreground)]">我们、你们、他们</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">儿</span>
+              <div><div class="font-semibold text-emerald-500">ér</div><div class="text-[11px] text-[var(--muted-foreground)]">儿子、月儿、鸟儿</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">女</span>
+              <div><div class="font-semibold text-emerald-500">nǚ</div><div class="text-[11px] text-[var(--muted-foreground)]">女人、女孩、女儿</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">子</span>
+              <div><div class="font-semibold text-emerald-500">zǐ</div><div class="text-[11px] text-[var(--muted-foreground)]">日子、儿子、叶子</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">头</span>
+              <div><div class="font-semibold text-emerald-500">tóu</div><div class="text-[11px] text-[var(--muted-foreground)]">头上、低头、木头</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">目</span>
+              <div><div class="font-semibold text-emerald-500">mù</div><div class="text-[11px] text-[var(--muted-foreground)]">目光、耳目、双目</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">耳</span>
+              <div><div class="font-semibold text-emerald-500">ěr</div><div class="text-[11px] text-[var(--muted-foreground)]">耳朵、木耳、耳目</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">手</span>
+              <div><div class="font-semibold text-emerald-500">shǒu</div><div class="text-[11px] text-[var(--muted-foreground)]">双手、小手、拉手</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">口</span>
+              <div><div class="font-semibold text-emerald-500">kǒu</div><div class="text-[11px] text-[var(--muted-foreground)]">门口、人口、开口</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">心</span>
+              <div><div class="font-semibold text-emerald-500">xīn</div><div class="text-[11px] text-[var(--muted-foreground)]">心里、小心、开心</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">力</span>
+              <div><div class="font-semibold text-emerald-500">lì</div><div class="text-[11px] text-[var(--muted-foreground)]">力气、出力、用力</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">自</span>
+              <div><div class="font-semibold text-emerald-500">zì</div><div class="text-[11px] text-[var(--muted-foreground)]">自己、自立、自学</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">己</span>
+              <div><div class="font-semibold text-emerald-500">jǐ</div><div class="text-[11px] text-[var(--muted-foreground)]">自己、知己</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">同</span>
+              <div><div class="font-semibold text-emerald-500">tóng</div><div class="text-[11px] text-[var(--muted-foreground)]">同学、同心、共同</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 字族4：动物飞禽与日常用具 (16字) -->
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-4">
+          <div class="flex items-center justify-between mb-3 border-b border-[var(--border)] pb-2">
+            <span class="font-bold text-sm text-emerald-600 dark:text-emerald-400">④ 动物用具与物象 (16字) —— 身边的生活用具与童趣生灵</span>
+            <span class="text-[10px] px-2 py-0.5 bg-emerald-500/10 text-emerald-600 rounded">16 字全部配词</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-xs">
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">牛</span>
+              <div><div class="font-semibold text-emerald-500">niú</div><div class="text-[11px] text-[var(--muted-foreground)]">小牛、黄牛、水牛</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">羊</span>
+              <div><div class="font-semibold text-emerald-500">yáng</div><div class="text-[11px] text-[var(--muted-foreground)]">小羊、山羊、羊毛</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">马</span>
+              <div><div class="font-semibold text-emerald-500">mǎ</div><div class="text-[11px] text-[var(--muted-foreground)]">小马、木马、马车</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">鸟</span>
+              <div><div class="font-semibold text-emerald-500">niǎo</div><div class="text-[11px] text-[var(--muted-foreground)]">小鸟、飞鸟、鸟儿</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">虫</span>
+              <div><div class="font-semibold text-emerald-500">chóng</div><div class="text-[11px] text-[var(--muted-foreground)]">小虫、虫子、飞虫</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">鱼</span>
+              <div><div class="font-semibold text-emerald-500">yú</div><div class="text-[11px] text-[var(--muted-foreground)]">小鱼、金鱼、草鱼</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">书</span>
+              <div><div class="font-semibold text-emerald-500">shū</div><div class="text-[11px] text-[var(--muted-foreground)]">书本、看书、读书</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">本</span>
+              <div><div class="font-semibold text-emerald-500">běn</div><div class="text-[11px] text-[var(--muted-foreground)]">书本、课本、日记本</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">刀</span>
+              <div><div class="font-semibold text-emerald-500">dāo</div><div class="text-[11px] text-[var(--muted-foreground)]">小刀、菜刀、刀刃</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">尺</span>
+              <div><div class="font-semibold text-emerald-500">chǐ</div><div class="text-[11px] text-[var(--muted-foreground)]">尺子、皮尺、直尺</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">门</span>
+              <div><div class="font-semibold text-emerald-500">mén</div><div class="text-[11px] text-[var(--muted-foreground)]">开门、门口、大门</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">衣</span>
+              <div><div class="font-semibold text-emerald-500">yī</div><div class="text-[11px] text-[var(--muted-foreground)]">雨衣、大衣、上衣</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">巴</span>
+              <div><div class="font-semibold text-emerald-500">bā</div><div class="text-[11px] text-[var(--muted-foreground)]">尾巴、下巴、中巴</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">把</span>
+              <div><div class="font-semibold text-emerald-500">bǎ</div><div class="text-[11px] text-[var(--muted-foreground)]">一把尺、把手、火把</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">皮</span>
+              <div><div class="font-semibold text-emerald-500">pí</div><div class="text-[11px] text-[var(--muted-foreground)]">牛皮、羊皮、果皮</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">竹</span>
+              <div><div class="font-semibold text-emerald-500">zhú</div><div class="text-[11px] text-[var(--muted-foreground)]">竹子、竹林、竹叶</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 字族5：状态动作与常用虚词 (32字) -->
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-4">
+          <div class="flex items-center justify-between mb-3 border-b border-[var(--border)] pb-2">
+            <span class="font-bold text-sm text-emerald-600 dark:text-emerald-400">⑤ 状态描写、动作行为与连接虚词 (32字) —— 造句看图写话最核心支撑</span>
+            <span class="text-[10px] px-2 py-0.5 bg-emerald-500/10 text-emerald-600 rounded">32 字全部配词</span>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 text-xs">
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">大</span>
+              <div><div class="font-semibold text-emerald-500">dà</div><div class="text-[11px] text-[var(--muted-foreground)]">大人、大山、大雨</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">小</span>
+              <div><div class="font-semibold text-emerald-500">xiǎo</div><div class="text-[11px] text-[var(--muted-foreground)]">小鸟、小手、大小</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">多</span>
+              <div><div class="font-semibold text-emerald-500">duō</div><div class="text-[11px] text-[var(--muted-foreground)]">多少、多年、很多</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">少</span>
+              <div><div class="font-semibold text-emerald-500">shǎo</div><div class="text-[11px] text-[var(--muted-foreground)]">多少、很少、少女</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">开</span>
+              <div><div class="font-semibold text-emerald-500">kāi</div><div class="text-[11px] text-[var(--muted-foreground)]">开门、开心、开学</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">关</span>
+              <div><div class="font-semibold text-emerald-500">guān</div><div class="text-[11px] text-[var(--muted-foreground)]">关门、开关、关心</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">立</span>
+              <div><div class="font-semibold text-emerald-500">lì</div><div class="text-[11px] text-[var(--muted-foreground)]">立正、起立、自立</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">正</span>
+              <div><div class="font-semibold text-emerald-500">zhèng</div><div class="text-[11px] text-[var(--muted-foreground)]">立正、正好、公正</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">出</span>
+              <div><div class="font-semibold text-emerald-500">chū</div><div class="text-[11px] text-[var(--muted-foreground)]">出来、出门、出口</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">入</span>
+              <div><div class="font-semibold text-emerald-500">rù</div><div class="text-[11px] text-[var(--muted-foreground)]">入口、出入、入门</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">来</span>
+              <div><div class="font-semibold text-emerald-500">lái</div><div class="text-[11px] text-[var(--muted-foreground)]">来到、后来、来去</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">去</span>
+              <div><div class="font-semibold text-emerald-500">qù</div><div class="text-[11px] text-[var(--muted-foreground)]">回去、下去、去年</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">在</span>
+              <div><div class="font-semibold text-emerald-500">zài</div><div class="text-[11px] text-[var(--muted-foreground)]">现在、在家、正在</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">有</span>
+              <div><div class="font-semibold text-emerald-500">yǒu</div><div class="text-[11px] text-[var(--muted-foreground)]">有人、有用、具有</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">是</span>
+              <div><div class="font-semibold text-emerald-500">shì</div><div class="text-[11px] text-[var(--muted-foreground)]">可是、不是、若是</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">好</span>
+              <div><div class="font-semibold text-emerald-500">hǎo</div><div class="text-[11px] text-[var(--muted-foreground)]">好人、你好、好看</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">长</span>
+              <div><div class="font-semibold text-emerald-500">cháng</div><div class="text-[11px] text-[var(--muted-foreground)]">长江、长处、长大(zhǎng)</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">比</span>
+              <div><div class="font-semibold text-emerald-500">bǐ</div><div class="text-[11px] text-[var(--muted-foreground)]">比如、对比、比赛</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">个</span>
+              <div><div class="font-semibold text-emerald-500">gè</div><div class="text-[11px] text-[var(--muted-foreground)]">个人、个子、一个个</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">从</span>
+              <div><div class="font-semibold text-emerald-500">cóng</div><div class="text-[11px] text-[var(--muted-foreground)]">从小、从前、跟从</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">才</span>
+              <div><div class="font-semibold text-emerald-500">cái</div><div class="text-[11px] text-[var(--muted-foreground)]">刚才、天才、口才</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">明</span>
+              <div><div class="font-semibold text-emerald-500">míng</div><div class="text-[11px] text-[var(--muted-foreground)]">明天、明白、明月</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">学</span>
+              <div><div class="font-semibold text-emerald-500">xué</div><div class="text-[11px] text-[var(--muted-foreground)]">学习、同学、学校</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">的</span>
+              <div><div class="font-semibold text-emerald-500">de</div><div class="text-[11px] text-[var(--muted-foreground)]">好的、我的、是的</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">又</span>
+              <div><div class="font-semibold text-emerald-500">yòu</div><div class="text-[11px] text-[var(--muted-foreground)]">又大又圆、又是、又来</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">和</span>
+              <div><div class="font-semibold text-emerald-500">hé</div><div class="text-[11px] text-[var(--muted-foreground)]">和平、和好、暖和</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">可</span>
+              <div><div class="font-semibold text-emerald-500">kě</div><div class="text-[11px] text-[var(--muted-foreground)]">可是、可爱、可以</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">不</span>
+              <div><div class="font-semibold text-emerald-500">bù</div><div class="text-[11px] text-[var(--muted-foreground)]">不是、不用、不对</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">问</span>
+              <div><div class="font-semibold text-emerald-500">wèn</div><div class="text-[11px] text-[var(--muted-foreground)]">问好、问路、学问</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">见</span>
+              <div><div class="font-semibold text-emerald-500">jiàn</div><div class="text-[11px] text-[var(--muted-foreground)]">看见、少见、见面</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">回</span>
+              <div><div class="font-semibold text-emerald-500">huí</div><div class="text-[11px] text-[var(--muted-foreground)]">回家、回去、回来</div></div>
+            </div>
+            <div class="p-2 rounded bg-[var(--card)] border border-[var(--border)] flex items-center gap-2">
+              <span class="tian-zi-ge rounded text-emerald-600 shrink-0">了</span>
+              <div><div class="font-semibold text-emerald-500">le</div><div class="text-[11px] text-[var(--muted-foreground)]">好了、来了、走了</div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 300个识字表核心造字逻辑解构 -->
+    <section id="branch-words300" class="branch-card bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm relative overflow-hidden">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-teal-500/15 border border-teal-500/30 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold text-lg shadow-sm">
+          🔍
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-base md:text-lg font-bold text-[var(--foreground)]">一上《识字表》300 字核心构字与识记图谱</h2>
+            <span class="text-xs px-2 py-0.5 rounded bg-teal-500/10 text-teal-600 dark:text-teal-400 font-semibold">多认少写 · 见字知义不默写</span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)]">按四大造字规律归类，告别枯燥死记</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-2">
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
+          <span class="text-teal-600 dark:text-teal-400 font-bold text-xs block mb-1">① 象形描摹族</span>
+          <p class="text-[11px] text-[var(--muted-foreground)] mb-2">看图会意自然认出：</p>
+          <div class="bg-[var(--card)] p-2 rounded text-[11px] space-y-1 font-mono">
+            <div><span class="font-bold text-teal-500">日 月 水 火 山 石 田 禾</span></div>
+            <div><span class="font-bold text-teal-500">雨 竹 网 羊 鸟 兔 鱼 鹿</span></div>
+          </div>
+        </div>
+
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
+          <span class="text-teal-600 dark:text-teal-400 font-bold text-xs block mb-1">② 会意合成族</span>
+          <p class="text-[11px] text-[var(--muted-foreground)] mb-2">两字相合表新义：</p>
+          <div class="bg-[var(--card)] p-2 rounded text-[11px] space-y-1">
+            <div>• 人+木 = <span class="font-bold text-teal-500">休</span> / 日+月 = <span class="font-bold text-teal-500">明</span></div>
+            <div>• 小+土 = <span class="font-bold text-teal-500">尘</span> / 双木 = <span class="font-bold text-teal-500">林</span></div>
+            <div>• 二人 = <span class="font-bold text-teal-500">从</span> / 三人 = <span class="font-bold text-teal-500">众</span></div>
+          </div>
+        </div>
+
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
+          <span class="text-teal-600 dark:text-teal-400 font-bold text-xs block mb-1">③ 偏旁表意归类</span>
+          <p class="text-[11px] text-[var(--muted-foreground)] mb-2">形旁表意带出一串字：</p>
+          <div class="bg-[var(--card)] p-2 rounded text-[11px] space-y-1">
+            <div>• <span class="font-bold text-teal-500">反犬旁(犭):</span> 猫、狗、猴、狮</div>
+            <div>• <span class="font-bold text-teal-500">鸟字旁(鸟):</span> 鸭、鹅、鸦、鹰</div>
+            <div>• <span class="font-bold text-teal-500">三点水(氵):</span> 江、河、湖、海</div>
+          </div>
+        </div>
+
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
+          <span class="text-teal-600 dark:text-teal-400 font-bold text-xs block mb-1">④ 反义对仗与生活场景</span>
+          <p class="text-[11px] text-[var(--muted-foreground)] mb-2">随文朗读自然积累：</p>
+          <div class="bg-[var(--card)] p-2 rounded text-[11px] space-y-1">
+            <div>• <span class="font-bold text-teal-500">对仗:</span> 大小、多少、黑白、早晚</div>
+            <div>• <span class="font-bold text-teal-500">学习用品:</span> 铅笔、橡皮、尺子、本子</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 1. 拼音系统 -->
+    <section id="branch-pinyin" class="branch-card bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm relative overflow-hidden">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-500 flex items-center justify-center font-bold text-lg shadow-sm">
+          🔤
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-base md:text-lg font-bold text-[var(--foreground)]">拼音大厦：63部件 + 26字母 + 音序查字法</h2>
+            <span class="text-xs px-2 py-0.5 rounded bg-amber-500/10 text-amber-600 dark:text-amber-400 font-semibold">一上全面通关</span>
+          </div>
+          <p class="text-xs text-[var(--muted-foreground)]">包含声母发音部位细分与韵母五类深度解构</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-2">
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
+          <span class="font-semibold text-xs text-amber-600 dark:text-amber-400 block mb-2">声母 (23个) 按发音部位</span>
+          <div class="text-[11px] leading-relaxed text-[var(--foreground)] bg-[var(--card)]/60 rounded-lg p-2.5 border border-[var(--border)] space-y-1">
+            <div><span class="font-bold text-amber-500">双唇/唇齿:</span> b · p · m · f</div>
+            <div><span class="font-bold text-amber-500">舌尖中音:</span> d · t · n · l (n/l辨析)</div>
+            <div><span class="font-bold text-amber-500">舌根音:</span> g · k · h</div>
+            <div><span class="font-bold text-amber-500">舌面前音:</span> j · q · x (遇ü去两点)</div>
+            <div><span class="font-bold text-amber-500">平舌音(3):</span> z · c · s</div>
+            <div><span class="font-bold text-amber-500">翘舌音(4):</span> zh · ch · sh · r</div>
+            <div><span class="font-bold text-amber-500">零声母/介母:</span> y · w</div>
+          </div>
+        </div>
+
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
+          <span class="font-semibold text-xs text-amber-600 dark:text-amber-400 block mb-2">韵母 (24个) 五类细分</span>
+          <div class="text-[11px] leading-relaxed text-[var(--foreground)] bg-[var(--card)]/60 rounded-lg p-2.5 border border-[var(--border)] space-y-1">
+            <div><span class="font-bold text-amber-500">单韵母(6):</span> a o e i u ü</div>
+            <div><span class="font-bold text-amber-500">复韵母(8):</span> ai ei ui ao ou iu ie üe</div>
+            <div><span class="font-bold text-amber-500">特殊元音(1):</span> er (卷舌独用)</div>
+            <div><span class="font-bold text-amber-500">前鼻(5):</span> an en in un ün (-n)</div>
+            <div><span class="font-bold text-amber-500">后鼻(4):</span> ang eng ing ong (-ng)</div>
+          </div>
+        </div>
+
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
+          <span class="font-semibold text-xs text-amber-600 dark:text-amber-400 block mb-2">整体认读音节 (16个)</span>
+          <div class="font-mono text-xs leading-relaxed text-[var(--foreground)] bg-[var(--card)]/60 rounded-lg p-2.5 border border-[var(--border)]">
+            zhi · chi · shi · ri<br>
+            zi · ci · si<br>
+            yi · wu · yu<br>
+            ye · yue · yuan<br>
+            yin · yun · ying
+          </div>
+        </div>
+
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
+          <span class="font-semibold text-xs text-amber-600 dark:text-amber-400 block mb-2">拼读口诀 & 查字典</span>
+          <div class="text-[11px] leading-relaxed text-[var(--foreground)] bg-[var(--card)]/60 rounded-lg p-2 border border-[var(--border)] space-y-1.5">
+            <div><span class="font-bold text-amber-500">标调口诀:</span> 有a不放过，没a找oe，iu并列标在后</div>
+            <div><span class="font-bold text-amber-500">小ü规则:</span> 小ü小ü有礼貌，见了jqx就脱帽</div>
+            <div><span class="font-bold text-amber-500">音序法:</span> 大写字母(音序) → 找音节 → 翻页码</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. 汉字笔顺偏旁 -->
+    <section id="branch-hanzi" class="branch-card bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm relative overflow-hidden">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-500 flex items-center justify-center font-bold text-lg shadow-sm">
+          ✍️
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-base md:text-lg font-bold text-[var(--foreground)]">笔顺偏旁：28种笔画 · 7大黄金笔顺 · 30+偏旁表意</h2>
+            <span class="text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold">书写根基规范</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-4">
+          <span class="font-semibold text-xs text-emerald-600 dark:text-emerald-400 block mb-2">7大黄金笔顺原则与例字</span>
+          <div class="grid grid-cols-2 gap-2 text-[11px]">
+            <div class="bg-[var(--card)] p-2 rounded border border-[var(--border)]">① 先横后竖：<span class="font-bold text-emerald-500">十、木、下</span></div>
+            <div class="bg-[var(--card)] p-2 rounded border border-[var(--border)]">② 先撇后捺：<span class="font-bold text-emerald-500">人、八、天</span></div>
+            <div class="bg-[var(--card)] p-2 rounded border border-[var(--border)]">③ 从上到下：<span class="font-bold text-emerald-500">二、三、花</span></div>
+            <div class="bg-[var(--card)] p-2 rounded border border-[var(--border)]">④ 从左到右：<span class="font-bold text-emerald-500">儿、林、好</span></div>
+            <div class="bg-[var(--card)] p-2 rounded border border-[var(--border)]">⑤ 从外到内：<span class="font-bold text-emerald-500">月、同、问</span></div>
+            <div class="bg-[var(--card)] p-2 rounded border border-[var(--border)]">⑥ 先里头后封口：<span class="font-bold text-emerald-500">日、田、回、国</span></div>
+            <div class="bg-[var(--card)] p-2 rounded border border-[var(--border)] col-span-2">⑦ 先中间后两边：<span class="font-bold text-emerald-500">小、水、山</span></div>
+          </div>
+        </div>
+
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-4">
+          <span class="font-semibold text-xs text-emerald-600 dark:text-emerald-400 block mb-2">核心偏旁意符四类归纳</span>
+          <div class="space-y-1.5 text-[11px]">
+            <div class="bg-[var(--card)] p-2 rounded border border-[var(--border)]">
+              <span class="font-bold text-emerald-500">人体器官：</span>口(嘴巴) · 目(眼睛) · 扌(手部动作) · 足(脚步奔跑) · 月(肉体器官)
+            </div>
+            <div class="bg-[var(--card)] p-2 rounded border border-[var(--border)]">
+              <span class="font-bold text-emerald-500">自然动植：</span>艹(草本花卉) · 木(林木树木) · 氵(江河流水) · 虫(昆虫爬行) · 犭(野兽哺乳)
+            </div>
+            <div class="bg-[var(--card)] p-2 rounded border border-[var(--border)]">
+              <span class="font-bold text-emerald-500">日常人文：</span>讠(语言说话) · 饣(饮食粮谷) · 纟(丝线色彩) · 辶(走动距离)
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 词汇与成语 -->
+    <section id="branch-chengyu" class="branch-card bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm relative overflow-hidden">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-blue-500/15 border border-blue-500/30 text-blue-500 flex items-center justify-center font-bold text-lg shadow-sm">
+          📚
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-base md:text-lg font-bold text-[var(--foreground)]">词汇与成语：四季景象 · 叠词句式 · 40+成语</h2>
+            <span class="text-xs px-2 py-0.5 rounded bg-blue-500/10 text-blue-600 dark:text-blue-400 font-semibold">看图写话储备</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
+          <span class="font-semibold text-xs text-blue-600 dark:text-blue-400 block mb-2">春季高频8成语（一下第一单元）</span>
+          <div class="grid grid-cols-2 gap-1 text-[11px] bg-[var(--card)] p-2.5 rounded border border-[var(--border)]">
+            <span>春回大地</span><span>万物复苏</span>
+            <span>柳绿花红</span><span>莺歌燕舞</span>
+            <span>冰雪融化</span><span>泉水叮咚</span>
+            <span>百花齐放</span><span>百鸟争鸣</span>
+          </div>
+        </div>
+
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
+          <span class="font-semibold text-xs text-blue-600 dark:text-blue-400 block mb-2">生活情态成语</span>
+          <div class="grid grid-cols-2 gap-1 text-[11px] bg-[var(--card)] p-2.5 rounded border border-[var(--border)]">
+            <span>欢声笑语</span><span>自言自语</span>
+            <span>东张西望</span><span>七上八下</span>
+            <span>鸟语花香</span><span>和风细雨</span>
+            <span>古往今来</span><span>四面八方</span>
+          </div>
+        </div>
+
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
+          <span class="font-semibold text-xs text-blue-600 dark:text-blue-400 block mb-2">叠词与造句骨架</span>
+          <div class="space-y-1 text-[11px] bg-[var(--card)] p-2.5 rounded border border-[var(--border)]">
+            <div><span class="font-bold text-blue-500">ABB:</span> 绿油油 · 胖乎乎 · 笑嘻嘻</div>
+            <div><span class="font-bold text-blue-500">AABB:</span> 高高兴兴 · 红红火火 · 干干净净</div>
+            <div><span class="font-bold text-blue-500">ABAB:</span> 雪白雪白 · 碧绿碧绿 · 火红火红</div>
+            <div class="pt-1 border-t border-[var(--border)] text-[10px] text-[var(--muted-foreground)]">
+              四要素句型：谁 + 在什么地方 + 干什么
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. 课文篇目与古诗 -->
+    <section id="branch-gushi" class="branch-card bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm relative overflow-hidden">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-purple-500/15 border border-purple-500/30 text-purple-500 flex items-center justify-center font-bold text-lg shadow-sm">
+          📖
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-base md:text-lg font-bold text-[var(--foreground)]">篇目故事：10首必背古诗 · 经典寓言科普童话</h2>
+            <span class="text-xs px-2 py-0.5 rounded bg-purple-500/10 text-purple-600 dark:text-purple-400 font-semibold">100% 诗文默背考核</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-4">
+          <span class="font-semibold text-xs text-purple-600 dark:text-purple-400 block mb-2">必背古诗十首逐篇清单</span>
+          <div class="space-y-2 text-xs">
+            <div class="bg-[var(--card)] p-2 rounded border border-[var(--border)]">
+              <span class="font-bold text-purple-500 block mb-1">【一上 4首】</span>
+              <ul class="text-[11px] space-y-0.5 text-[var(--foreground)]">
+                <li>1. 《咏鹅》· 骆宾王 (鹅鹅鹅，曲项向天歌)</li>
+                <li>2. 《江南》· 汉乐府 (江南可采莲，莲叶何田田)</li>
+                <li>3. 《悯农·其二》· 李绅 (谁知盘中餐，粒粒皆辛苦)</li>
+                <li>4. 《古朗月行·节选》· 李白 (小时不识月，呼作白玉盘)</li>
+              </ul>
+            </div>
+            <div class="bg-[var(--card)] p-2 rounded border border-[var(--border)]">
+              <span class="font-bold text-purple-500 block mb-1">【一下 6首】</span>
+              <ul class="text-[11px] space-y-0.5 text-[var(--foreground)]">
+                <li>5. 《春晓》· 孟浩然 · 6. 《赠汪伦》· 李白</li>
+                <li>7. 《静夜思》· 李白 · 8. 《寻隐者不遇》· 贾岛</li>
+                <li>9. 《池上》· 白居易 · 10. 《小池》· 杨万里</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-4">
+          <span class="font-semibold text-xs text-purple-600 dark:text-purple-400 block mb-2">经典体裁与故事</span>
+          <div class="space-y-2 text-xs">
+            <div class="bg-[var(--card)] p-2 rounded border border-[var(--border)]">
+              <span class="font-bold text-purple-500 block">🦅 启智寓言：</span>
+              <p class="text-[11px] text-[var(--muted-foreground)]">《乌鸦喝水》（动脑难题）、《小猴子下山》（有始有终不三心二意）</p>
+            </div>
+            <div class="bg-[var(--card)] p-2 rounded border border-[var(--border)]">
+              <span class="font-bold text-purple-500 block">🦎 自然科普：</span>
+              <p class="text-[11px] text-[var(--muted-foreground)]">《小壁虎借尾巴》（尾巴再生与平衡）、《棉花姑娘》（七星瓢虫除害）</p>
+            </div>
+            <div class="bg-[var(--card)] p-2 rounded border border-[var(--border)]">
+              <span class="font-bold text-purple-500 block">🏠 习惯德育：</span>
+              <p class="text-[11px] text-[var(--muted-foreground)]">《文具的家》（自理收拾）、《吃水不忘挖井人》（感恩红色传统）</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. 达标标尺 -->
+    <section id="branch-biaochi" class="branch-card bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 shadow-sm relative overflow-hidden">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-rose-500/15 border border-rose-500/30 text-rose-500 flex items-center justify-center font-bold text-lg shadow-sm">
+          🎯
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h2 class="text-base md:text-lg font-bold text-[var(--foreground)]">能力标尺：看图写话 · 显性信息提取 · 标点符号</h2>
+            <span class="text-xs px-2 py-0.5 rounded bg-rose-500/10 text-rose-600 dark:text-rose-400 font-semibold">考核评价红线</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
+          <span class="font-bold text-xs text-rose-500 block mb-1">① 识写姿势标尺</span>
+          <p class="text-[11px] text-[var(--muted-foreground)]">握笔“一指两指捏，三指四指托”；坐姿“一拳一尺一寸”。田字格字字端正居中，笔画合规。</p>
+        </div>
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
+          <span class="font-bold text-xs text-rose-500 block mb-1">② 阅读提取标尺</span>
+          <p class="text-[11px] text-[var(--muted-foreground)]">数清自然段（空两格），能在100~200字短文中直接用铅笔圈画出“谁、在哪儿、干什么”的直接答案。</p>
+        </div>
+        <div class="bg-[var(--background)] border border-[var(--border)] rounded-xl p-3.5">
+          <span class="font-bold text-xs text-rose-500 block mb-1">③ 看图写话实战标尺</span>
+          <p class="text-[11px] text-[var(--muted-foreground)]">看懂单幅或连环图，写出 <span class="font-bold text-rose-500">1~3 句通顺连贯的话</span>。必备四要素（时间/地点/人物/事件），规范用逗号句号叹号，生字注拼音。</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="mt-8 text-center text-xs text-[var(--muted-foreground)]">
+    十丘教育知识体系库 · 小学语文系列（一年级） · 依据统编版语文教材及课程标准编制
+  </footer>
+
+  <script>
+    function filterBranch(branch) {
+      const branches = ['words100', 'words300', 'pinyin', 'hanzi', 'chengyu', 'gushi', 'biaochi'];
+      const buttons = ['all', 'words100', 'words300', 'pinyin', 'hanzi', 'chengyu', 'gushi', 'biaochi'];
+
+      buttons.forEach(b => {
+        const btn = document.getElementById('btn-' + b);
+        if (btn) {
+          if (b === branch) {
+            btn.className = 'px-3 py-1 rounded-lg font-medium bg-[var(--primary)] text-[var(--primary-foreground)] transition-all';
+          } else {
+            btn.className = 'px-3 py-1 rounded-lg font-medium bg-[var(--background)] border border-[var(--border)] text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition-all';
+          }
+        }
+      });
+
+      branches.forEach(b => {
+        const el = document.getElementById('branch-' + b);
+        if (el) {
+          if (branch === 'all' || branch === b) {
+            el.style.display = 'block';
+          } else {
+            el.style.display = 'none';
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

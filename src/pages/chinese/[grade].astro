@@ -1,0 +1,577 @@
+---
+import Base from '../../layouts/Base.astro'
+import '../../styles/learning.css'
+import { gradesList, curriculumData } from '../../data/chineseCurriculum.js'
+
+export function getStaticPaths() {
+  return gradesList.map((g) => ({
+    params: { grade: g.id },
+    props: {
+      currentGrade: curriculumData[g.id],
+      allGrades: gradesList
+    }
+  }))
+}
+
+const { currentGrade, allGrades } = Astro.props
+const base = import.meta.env.BASE_URL
+
+// 一年级 100 个写字表全量数据（供 grade1 特色字盘使用）
+const words100Data = [
+  {
+    category: '① 数字、方位与时间 (17字)',
+    desc: '跨学科数学与时空方位概念，基础笔顺法则之源',
+    words: [
+      { char: '一', py: 'yī', words: ['一天', '一人', '一个'] },
+      { char: '二', py: 'èr', words: ['二人', '二十', '二月'] },
+      { char: '三', py: 'sān', words: ['三天', '三个', '三月'] },
+      { char: '四', py: 'sì', words: ['四年', '四个', '四方'] },
+      { char: '五', py: 'wǔ', words: ['五天', '五个', '五月'] },
+      { char: '八', py: 'bā', words: ['八个', '八天', '八方'] },
+      { char: '十', py: 'shí', words: ['十天', '十年', '十个'] },
+      { char: '上', py: 'shàng', words: ['上下', '上学', '头上'] },
+      { char: '下', py: 'xià', words: ['下雨', '上下', '下山'] },
+      { char: '中', py: 'zhōng', words: ['中间', '心中', '中国人'] },
+      { char: '东', py: 'dōng', words: ['东西', '东边', '东方'] },
+      { char: '西', py: 'xī', words: ['西瓜', '东西', '西方'] },
+      { char: '后', py: 'hòu', words: ['后来', '后天', '后面'] },
+      { char: '里', py: 'lǐ', words: ['手里', '心里', '里面'] },
+      { char: '半', py: 'bàn', words: ['半天', '一半', '半个'] },
+      { char: '早', py: 'zǎo', words: ['早上', '早日', '早晨'] },
+      { char: '月', py: 'yuè', words: ['月儿', '月亮', '日月'] }
+    ]
+  },
+  {
+    category: '② 自然天地与农耕 (17字)',
+    desc: '象形造字之源，偏旁部首之一级母体',
+    words: [
+      { char: '天', py: 'tiān', words: ['白天', '蓝天', '天空'] },
+      { char: '地', py: 'dì', words: ['土地', '地上', '天地'] },
+      { char: '日', py: 'rì', words: ['日子', '今日', '日光'] },
+      { char: '云', py: 'yún', words: ['白云', '乌云', '云朵'] },
+      { char: '山', py: 'shān', words: ['大山', '上山', '山林'] },
+      { char: '田', py: 'tián', words: ['水田', '田地', '种田'] },
+      { char: '禾', py: 'hé', words: ['禾苗', '禾田'] },
+      { char: '火', py: 'huǒ', words: ['大火', '火山', '水火'] },
+      { char: '水', py: 'shuǐ', words: ['雨水', '开水', '水果'] },
+      { char: '雨', py: 'yǔ', words: ['下雨', '雨衣', '大雨'] },
+      { char: '土', py: 'tǔ', words: ['水土', '泥土', '土地'] },
+      { char: '木', py: 'mù', words: ['木头', '树木', '草木'] },
+      { char: '林', py: 'lín', words: ['树林', '林子', '山林'] },
+      { char: '石', py: 'shí', words: ['石头', '石子', '石山'] },
+      { char: '风', py: 'fēng', words: ['大风', '春风', '东风'] },
+      { char: '白', py: 'bái', words: ['白云', '白天', '雪白'] },
+      { char: '果', py: 'guǒ', words: ['苹果', '水果', '果子'] }
+    ]
+  },
+  {
+    category: '③ 人伦身体与代词 (18字)',
+    desc: '自我认知、亲缘称谓与集体人际交往',
+    words: [
+      { char: '人', py: 'rén', words: ['大人', '人们', '好人'] },
+      { char: '你', py: 'nǐ', words: ['你好', '你们', '你的'] },
+      { char: '我', py: 'wǒ', words: ['我们', '我的', '自我'] },
+      { char: '他', py: 'tā', words: ['他们', '他人', '他的'] },
+      { char: '们', py: 'men', words: ['我们', '你们', '他们'] },
+      { char: '儿', py: 'ér', words: ['儿子', '月儿', '鸟儿'] },
+      { char: '女', py: 'nǚ', words: ['女人', '女孩', '女儿'] },
+      { char: '子', py: 'zǐ', words: ['日子', '儿子', '叶子'] },
+      { char: '头', py: 'tóu', words: ['头上', '低头', '木头'] },
+      { char: '目', py: 'mù', words: ['目光', '耳目', '双目'] },
+      { char: '耳', py: 'ěr', words: ['耳朵', '木耳', '耳目'] },
+      { char: '手', py: 'shǒu', words: ['双手', '小手', '拉手'] },
+      { char: '口', py: 'kǒu', words: ['门口', '人口', '开口'] },
+      { char: '心', py: 'xīn', words: ['心里', '小心', '开心'] },
+      { char: '力', py: 'lì', words: ['力气', '出力', '用力'] },
+      { char: '自', py: 'zì', words: ['自己', '自立', '自学'] },
+      { char: '己', py: 'jǐ', words: ['自己', '知己'] },
+      { char: '同', py: 'tóng', words: ['同学', '同心', '共同'] }
+    ]
+  },
+  {
+    category: '④ 动物物象与用具 (16字)',
+    desc: '生活器物具名与童趣自然生物',
+    words: [
+      { char: '牛', py: 'niú', words: ['小牛', '黄牛', '水牛'] },
+      { char: '羊', py: 'yáng', words: ['小羊', '山羊', '羊毛'] },
+      { char: '马', py: 'mǎ', words: ['小马', '木马', '马车'] },
+      { char: '鸟', py: 'niǎo', words: ['小鸟', '飞鸟', '鸟儿'] },
+      { char: '虫', py: 'chóng', words: ['小虫', '虫子', '飞虫'] },
+      { char: '鱼', py: 'yú', words: ['小鱼', '金鱼', '草鱼'] },
+      { char: '书', py: 'shū', words: ['书本', '看书', '读书'] },
+      { char: '本', py: 'běn', words: ['书本', '课本', '日记本'] },
+      { char: '刀', py: 'dāo', words: ['小刀', '菜刀', '刀刃'] },
+      { char: '尺', py: 'chǐ', words: ['尺子', '皮尺', '直尺'] },
+      { char: '门', py: 'mén', words: ['开门', '门口', '大门'] },
+      { char: '衣', py: 'yī', words: ['雨衣', '大衣', '上衣'] },
+      { char: '巴', py: 'bā', words: ['尾巴', '下巴', '中巴'] },
+      { char: '把', py: 'bǎ', words: ['一把尺', '把手', '火把'] },
+      { char: '皮', py: 'pí', words: ['牛皮', '羊皮', '果皮'] },
+      { char: '竹', py: 'zhú', words: ['竹子', '竹林', '竹叶'] }
+    ]
+  },
+  {
+    category: '⑤ 状态动作与常用虚词 (32字)',
+    desc: '造句骨架、反义字对与看图写话关键纽带',
+    words: [
+      { char: '大', py: 'dà', words: ['大人', '大山', '大雨'] },
+      { char: '小', py: 'xiǎo', words: ['小鸟', '小手', '大小'] },
+      { char: '多', py: 'duō', words: ['多少', '多年', '很多'] },
+      { char: '少', py: 'shǎo', words: ['多少', '很少', '少年'] },
+      { char: '开', py: 'kāi', words: ['开门', '开心', '开学'] },
+      { char: '关', py: 'guān', words: ['关门', '开关', '关心'] },
+      { char: '立', py: 'lì', words: ['立正', '起立', '自立'] },
+      { char: '正', py: 'zhèng', words: ['立正', '正好', '公正'] },
+      { char: '出', py: 'chū', words: ['出来', '出门', '出口'] },
+      { char: '入', py: 'rù', words: ['入口', '出入', '入门'] },
+      { char: '来', py: 'lái', words: ['来到', '后来', '来去'] },
+      { char: '去', py: 'qù', words: ['回去', '下去', '去年'] },
+      { char: '在', py: 'zài', words: ['现在', '在家', '正在'] },
+      { char: '有', py: 'yǒu', words: ['有人', '有用', '具有'] },
+      { char: '是', py: 'shì', words: ['可是', '不是', '若是'] },
+      { char: '好', py: 'hǎo', words: ['好人', '你好', '好看'] },
+      { char: '长', py: 'cháng', words: ['长江', '长处', '长大(zhǎng)'] },
+      { char: '比', py: 'bǐ', words: ['比如', '对比', '比赛'] },
+      { char: '个', py: 'gè', words: ['个人', '个子', '一个个'] },
+      { char: '从', py: 'cóng', words: ['从小', '从前', '跟从'] },
+      { char: '才', py: 'cái', words: ['刚才', '天才', '口才'] },
+      { char: '明', py: 'míng', words: ['明天', '明白', '明月'] },
+      { char: '学', py: 'xué', words: ['学习', '同学', '学校'] },
+      { char: '的', py: 'de', words: ['好的', '我的', '是的'] },
+      { char: '又', py: 'yòu', words: ['又大又圆', '又是', '又来'] },
+      { char: '和', py: 'hé', words: ['和平', '和好', '我和你'] },
+      { char: '可', py: 'kě', words: ['可是', '可爱', '可以'] },
+      { char: '不', py: 'bù', words: ['不是', '不用', '不对'] },
+      { char: '问', py: 'wèn', words: ['问好', '问路', '学问'] },
+      { char: '见', py: 'jiàn', words: ['看见', '少见', '见面'] },
+      { char: '回', py: 'huí', words: ['回家', '回去', '回来'] },
+      { char: '了', py: 'le', words: ['好了', '来了', '走了'] }
+    ]
+  }
+]
+---
+
+<Base title={`小学${currentGrade.name}语文 · 全景知识与能力可拖拽思维导图 · 十丘`} wide={true}>
+  <div class="learn-container">
+    {/* 顶部统一导航 */}
+    <header class="learn-header">
+      <div class="learn-nav-bar">
+        <nav class="learn-breadcrumbs">
+          <a href={base}>🏛️ 十丘门户</a>
+          <span>/</span>
+          <a href={`${base}chinese/`}>📖 语文启蒙中心</a>
+          <span>/</span>
+          <strong style={`color: ${currentGrade.themeColor};`}>🌱 小学{currentGrade.name}全景思维导图</strong>
+        </nav>
+        <div class="learn-subject-switcher">
+          <a href={base} class="subject-chip chip-home">🏠 门户首页</a>
+          <a href={`${base}chinese/`} class="subject-chip chip-chinese active">📖 语文</a>
+          <a href={`${base}math/`} class="subject-chip chip-math">📐 数学</a>
+          <a href={`${base}english/`} class="subject-chip chip-english">🔤 英语</a>
+        </div>
+      </div>
+    </header>
+
+    {/* 年级切换标签栏 (1~6年级全量一键无缝直达) */}
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem; padding: 0.75rem 1.25rem; background: #fff; border: 1px solid #e2e8f0; border-radius: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+      <div style="display: flex; align-items: center; gap: 0.5rem; overflow-x: auto; padding-bottom: 0.25rem;">
+        <span style="font-size: 0.85rem; font-weight: 600; color: #64748b; white-space: nowrap;">学段全景直达:</span>
+        {allGrades.map((g) => {
+          const isActive = g.id === currentGrade.id
+          return (
+            <a
+              href={`${base}chinese/${g.id}/`}
+              style={
+                isActive
+                  ? `padding: 0.4rem 0.85rem; background: ${currentGrade.themeColor}; color: #fff; border-radius: 0.6rem; font-size: 0.85rem; font-weight: bold; text-decoration: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1);`
+                  : 'padding: 0.4rem 0.85rem; background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; border-radius: 0.6rem; font-size: 0.85rem; text-decoration: none; transition: all 0.2s;'
+              }
+            >
+              {g.name}
+            </a>
+          )
+        })}
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 0.5rem;">
+        <button id="tab-btn-map" class="view-tab-btn active" style={`padding: 0.4rem 0.9rem; border-radius: 0.6rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: 1px solid ${currentGrade.themeColor}; background: #f0fdf4; color: ${currentGrade.themeColor};`}>
+          🗺️ 动态交互脑图
+        </button>
+        <button id="tab-btn-words" class="view-tab-btn" style="padding: 0.4rem 0.9rem; border-radius: 0.6rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: 1px solid #cbd5e1; background: #fff; color: #475569;">
+          📜 学段核心清单与考评
+        </button>
+      </div>
+    </div>
+
+    {/* 年级学段概览横幅 */}
+    <div style={`background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border: 1px solid #e2e8f0; border-left: 5px solid ${currentGrade.themeColor}; border-radius: 1rem; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.03);`}>
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+            <span style={`font-size: 0.75rem; font-weight: bold; padding: 0.2rem 0.6rem; border-radius: 9999px; background: #f1f5f9; color: ${currentGrade.themeColor}; border: 1px solid #cbd5e1;`}>
+              {currentGrade.stage}
+            </span>
+            <span style="font-size: 0.75rem; color: #64748b;">统编版新课标</span>
+          </div>
+          <h1 style="font-size: 1.35rem; font-weight: bold; color: #0f172a; margin: 0;">
+            小学{currentGrade.name}语文 · 全景知识与能力架构思维导图
+          </h1>
+          <p style="font-size: 0.85rem; color: #64748b; margin: 0.35rem 0 0 0; line-height: 1.5;">
+            {currentGrade.summary}
+          </p>
+        </div>
+
+        {/* 4 大核心 KPI 快速看板 */}
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; min-width: 320px;">
+          <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 0.5rem 0.75rem; text-align: center;">
+            <div style="font-size: 0.7rem; color: #94a3b8;">识字写字</div>
+            <div style={`font-size: 0.95rem; font-weight: bold; color: ${currentGrade.themeColor}; margin-top: 2px;`}>{currentGrade.kpiStats.shizi}</div>
+          </div>
+          <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 0.5rem 0.75rem; text-align: center;">
+            <div style="font-size: 0.7rem; color: #94a3b8;">必背古诗文</div>
+            <div style="font-size: 0.95rem; font-weight: bold; color: #8b5cf6; margin-top: 2px;">{currentGrade.kpiStats.gushi}</div>
+          </div>
+          <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 0.5rem 0.75rem; text-align: center;">
+            <div style="font-size: 0.7rem; color: #94a3b8;">成语/语法</div>
+            <div style="font-size: 0.95rem; font-weight: bold; color: #3b82f6; margin-top: 2px;">{currentGrade.kpiStats.chengyu || currentGrade.kpiStats.xiuci || currentGrade.kpiStats.guanlian || currentGrade.kpiStats.mingzhu}</div>
+          </div>
+          <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 0.75rem; padding: 0.5rem 0.75rem; text-align: center;">
+            <div style="font-size: 0.7rem; color: #94a3b8;">表达/习作</div>
+            <div style="font-size: 0.95rem; font-weight: bold; color: #f43f5e; margin-top: 2px;">{currentGrade.kpiStats.xizuo}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {/* VIEW 1: 动态思维导图画布视图 */}
+    <div id="view-mindmap-wrapper" style="position: relative; background: #fff; border: 1px solid #e2e8f0; border-radius: 1.25rem; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 2.5rem;">
+      {/* 导图操作工具条 */}
+      <div style="position: absolute; top: 1rem; left: 1rem; z-index: 10; display: flex; align-items: center; gap: 0.5rem; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); padding: 0.4rem 0.75rem; border: 1px solid #e2e8f0; border-radius: 0.75rem; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+        <button id="btn-zoom-in" title="放大" style="border: none; background: #f1f5f9; padding: 0.35rem 0.65rem; border-radius: 0.4rem; cursor: pointer; font-size: 0.85rem; font-weight: bold;">🔍+ 放大</button>
+        <button id="btn-zoom-out" title="缩小" style="border: none; background: #f1f5f9; padding: 0.35rem 0.65rem; border-radius: 0.4rem; cursor: pointer; font-size: 0.85rem; font-weight: bold;">🔍- 缩小</button>
+        <button id="btn-reset" title="复位居中" style="border: none; background: #f1f5f9; padding: 0.35rem 0.65rem; border-radius: 0.4rem; cursor: pointer; font-size: 0.85rem; font-weight: bold;">🎯 居中</button>
+        <span style="color: #cbd5e1;">|</span>
+        <button id="btn-expand-all" style={`border: none; background: #f0fdf4; color: ${currentGrade.themeColor}; padding: 0.35rem 0.65rem; border-radius: 0.4rem; cursor: pointer; font-size: 0.85rem; font-weight: 600;`}>📂 展开全部</button>
+        <button id="btn-collapse-all" style="border: none; background: #f8fafc; color: #64748b; padding: 0.35rem 0.65rem; border-radius: 0.4rem; cursor: pointer; font-size: 0.85rem; font-weight: 600;">📁 收起至二级</button>
+      </div>
+
+      {/* 右上角操作提示 */}
+      <div style="position: absolute; top: 1rem; right: 1rem; z-index: 10; font-size: 0.75rem; color: #64748b; background: rgba(255,255,255,0.9); backdrop-filter: blur(4px); padding: 0.4rem 0.75rem; border: 1px solid #e2e8f0; border-radius: 0.5rem;">
+        💡 提示：按住鼠标左键可自由拖动画布 · 滚动鼠标滚轮可缩放 · 点击节点展开/折叠
+      </div>
+
+      {/* ECharts 树图承载 DOM 容器 */}
+      <div
+        id="mindmap-container"
+        style="width: 100%; height: 860px;"
+      ></div>
+      <script type="application/json" id="mindmap-tree-data" set:html={JSON.stringify(currentGrade.mindmapTree)}></script>
+    </div>
+
+    {/* VIEW 2: 学段核心清单与考评大典 */}
+    <div id="view-words-wrapper" style="display: none; margin-bottom: 2.5rem;">
+      <div style={`background: #fff; border: 2px solid ${currentGrade.themeColor}; border-radius: 1.25rem; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);`}>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <h2 style={`font-size: 1.25rem; font-weight: bold; color: ${currentGrade.themeColor}; margin: 0 0 0.25rem 0;`}>
+              小学{currentGrade.name}语文 · 核心清单与课标达标大典
+            </h2>
+            <p style="font-size: 0.85rem; color: #64748b; margin: 0;">
+              包含必背古诗名句、核心字词语法、阅读理解与习作考评标尺
+            </p>
+          </div>
+          <span style={`background: ${currentGrade.themeColor}; color: #fff; padding: 0.35rem 0.85rem; border-radius: 9999px; font-size: 0.8rem; font-weight: bold;`}>
+            {currentGrade.badge}
+          </span>
+        </div>
+
+        {/* 若为一年级，渲染 100 个写字表带组词全景盘 */}
+        {currentGrade.id === 'grade1' ? (
+          <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            {words100Data.map((group) => (
+              <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 1.25rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; border-bottom: 1px solid #e2e8f0; pb-2;">
+                  <div>
+                    <strong style="font-size: 1rem; color: #047857;">{group.category}</strong>
+                    <span style="font-size: 0.8rem; color: #64748b; margin-left: 0.75rem;">{group.desc}</span>
+                  </div>
+                  <span style="font-size: 0.75rem; background: #ecfdf5; color: #059669; padding: 0.2rem 0.5rem; border-radius: 0.4rem; font-weight: 600;">
+                    {group.words.length} 字
+                  </span>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.75rem;">
+                  {group.words.map((item) => (
+                    <div style="background: #fff; border: 1px solid #cbd5e1; border-radius: 0.6rem; padding: 0.6rem; display: flex; align-items: center; gap: 0.75rem; box-shadow: 0 1px 2px rgba(0,0,0,0.02);">
+                      <div style="width: 38px; height: 38px; border: 1px solid #cbd5e1; display: flex; align-items: center; justify-content: center; font-size: 1.35rem; font-weight: bold; color: #047857; font-family: serif, 'Kaiti'; background: linear-gradient(to right, transparent 49%, #e2e8f0 49%, #e2e8f0 51%, transparent 51%), linear-gradient(to bottom, transparent 49%, #e2e8f0 49%, #e2e8f0 51%, transparent 51%);">
+                        {item.char}
+                      </div>
+                      <div>
+                        <div style="font-size: 0.75rem; font-weight: 700; color: #10b981;">{item.py}</div>
+                        <div style="font-size: 0.8rem; color: #334155; margin-top: 0.1rem;">
+                          {item.words.join('、')}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          /* 若为 2~6 年级，渲染必背古诗文清单与考评大典 */
+          <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            {currentGrade.tables?.map((tbl) => (
+              <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 1.25rem;">
+                <h3 style="font-size: 1.05rem; font-weight: bold; color: #1e293b; margin: 0 0 1rem 0;">
+                  {tbl.title}
+                </h3>
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.75rem;">
+                  {tbl.list?.map((item) => (
+                    <div style="background: #fff; border: 1px solid #e2e8f0; border-left: 4px solid #8b5cf6; border-radius: 0.5rem; padding: 0.75rem 1rem; font-size: 0.85rem; color: #334155; line-height: 1.5;">
+                      {item}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            {/* 课标能力进阶标准 */}
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 1rem; padding: 1.25rem;">
+              <h3 style="font-size: 1.05rem; font-weight: bold; color: #1e293b; margin: 0 0 0.75rem 0;">
+                🎯 {currentGrade.name}学段质量监测考评标准
+              </h3>
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1rem; font-size: 0.85rem;">
+                <div style="background: #fff; padding: 1rem; border-radius: 0.75rem; border: 1px solid #e2e8f0;">
+                  <strong style="color: #059669; display: block; margin-bottom: 0.25rem;">① 识字写字要求</strong>
+                  <p style="color: #64748b; margin: 0;">达到 {currentGrade.kpiStats.shizi}，书写端正、卷面整洁，掌握规范查字法。</p>
+                </div>
+                <div style="background: #fff; padding: 1rem; border-radius: 0.75rem; border: 1px solid #e2e8f0;">
+                  <strong style="color: #8b5cf6; display: block; margin-bottom: 0.25rem;">② 古诗文诵读积累</strong>
+                  <p style="color: #64748b; margin: 0;">全量默写背诵 {currentGrade.kpiStats.gushi}，理解名句意境，体悟古人体悟。</p>
+                </div>
+                <div style="background: #fff; padding: 1rem; border-radius: 0.75rem; border: 1px solid #e2e8f0;">
+                  <strong style="color: #f43f5e; display: block; margin-bottom: 0.25rem;">③ 表达与习作水平</strong>
+                  <p style="color: #64748b; margin: 0;">{currentGrade.kpiStats.xizuo}，做到语句通顺、感情真挚、标点符号规范。</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</Base>
+
+{/* 客户端脚本：初始化 ECharts 树图、处理拖拽缩放与视图切换 */}
+<script>
+  import * as echarts from 'echarts'
+
+  let chartInstance = null
+
+  function initMindmap() {
+    const container = document.getElementById('mindmap-container')
+    const dataEl = document.getElementById('mindmap-tree-data')
+    if (!container) return null
+
+    let rawData = null
+    if (dataEl && dataEl.textContent) {
+      try {
+        rawData = JSON.parse(dataEl.textContent)
+      } catch (err) {
+        console.error('Failed to parse tree data from script tag:', err)
+      }
+    }
+    if (!rawData && container.dataset.tree) {
+      try {
+        rawData = JSON.parse(container.dataset.tree)
+      } catch (err) {
+        console.error('Failed to parse tree data from dataset:', err)
+      }
+    }
+
+    if (!rawData) {
+      container.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#ef4444;font-size:0.95rem;">脑图数据加载失败，请刷新重试。</div>'
+      return null
+    }
+
+    // 格式化与样式增强：为非叶子节点赋予胶囊徽章并固定靠左对齐，彻底消除折叠/展开重叠
+    function enrichTreeData(node, depth = 0) {
+      if (node.children && node.children.length > 0) {
+        if (!node.label) node.label = {}
+        if (depth >= 2) {
+          node.label = {
+            position: 'left',
+            align: 'right',
+            fontSize: 12,
+            fontWeight: '600',
+            color: '#1e293b',
+            backgroundColor: '#f8fafc',
+            borderColor: '#cbd5e1',
+            borderWidth: 1,
+            borderRadius: 6,
+            padding: [3, 8],
+            ...node.label
+          }
+        } else {
+          if (!node.label.position) {
+            node.label.position = 'left'
+            node.label.align = 'right'
+          }
+        }
+        node.children.forEach(c => enrichTreeData(c, depth + 1))
+      }
+    }
+    enrichTreeData(rawData, 0)
+
+    try {
+      const chart = echarts.init(container)
+
+      // 递归设置树的折叠/展开状态
+      function setTreeCollapseByDepth(node, targetDepth, currentDepth = 0) {
+        if (node.children && node.children.length > 0) {
+          node.collapsed = (currentDepth >= targetDepth)
+          node.children.forEach(c => setTreeCollapseByDepth(c, targetDepth, currentDepth + 1))
+        }
+      }
+
+      function getOption(depth = 2) {
+        const treeDataCopy = JSON.parse(JSON.stringify(rawData))
+        setTreeCollapseByDepth(treeDataCopy, depth, 0)
+
+        return {
+          tooltip: {
+            trigger: 'item',
+            triggerOn: 'mousemove',
+            formatter: function (params) {
+              return `<div style="font-weight: bold; margin-bottom: 4px;">${params.name.replace(/\n/g, ' ')}</div><div style="font-size: 12px; color: #64748b;">点击圆圈可展开/收起分支 · 按住鼠标左键可自由拖动平移</div>`
+            }
+          },
+          series: [
+            {
+              type: 'tree',
+              data: [treeDataCopy],
+              top: '6%',
+              left: '16%',
+              bottom: '6%',
+              right: '25%',
+              symbolSize: 7,
+              roam: true, // 核心：支持鼠标自由平移拖拽与滚轮缩放
+              edgeShape: 'curve',
+              edgeForkPosition: '60%',
+              itemStyle: {
+                borderWidth: 1.5
+              },
+              lineStyle: {
+                color: '#94a3b8',
+                width: 1.5,
+                curveness: 0.5
+              },
+              label: {
+                position: 'left',
+                verticalAlign: 'middle',
+                align: 'right',
+                fontSize: 12,
+                color: '#334155'
+              },
+              leaves: {
+                label: {
+                  position: 'right',
+                  verticalAlign: 'middle',
+                  align: 'left',
+                  fontSize: 12,
+                  color: '#334155'
+                }
+              },
+              emphasis: {
+                focus: 'descendant'
+              },
+              expandAndCollapse: true,
+              animationDuration: 400,
+              animationDurationUpdate: 500
+            }
+          ]
+        }
+      }
+
+      chart.setOption(getOption(2))
+
+      // 窗口自适应
+      window.addEventListener('resize', () => {
+        chart.resize()
+      })
+
+      // 缩放与复位控制按钮
+      document.getElementById('btn-zoom-in')?.addEventListener('click', () => {
+        const opt = chart.getOption()
+        chart.setOption({
+          series: [{ zoom: (opt.series[0].zoom || 1) * 1.25 }]
+        })
+      })
+
+      document.getElementById('btn-zoom-out')?.addEventListener('click', () => {
+        const opt = chart.getOption()
+        chart.setOption({
+          series: [{ zoom: (opt.series[0].zoom || 1) * 0.8 }]
+        })
+      })
+
+      document.getElementById('btn-reset')?.addEventListener('click', () => {
+        chart.setOption(getOption(2))
+      })
+
+      document.getElementById('btn-expand-all')?.addEventListener('click', () => {
+        chart.setOption(getOption(5))
+      })
+
+      document.getElementById('btn-collapse-all')?.addEventListener('click', () => {
+        chart.setOption(getOption(2))
+      })
+
+      return chart
+    } catch (e) {
+      console.error('初始化脑图失败:', e)
+      container.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#ef4444;">ECharts 初始化失败: ${e.message}</div>`
+      return null
+    }
+  }
+
+  chartInstance = initMindmap()
+  if (typeof window !== 'undefined') {
+    window.__echarts_chart = chartInstance
+    window.echarts = echarts
+  }
+
+  // 视图切换：动态思维导图 vs 核心清单
+  const tabBtnMap = document.getElementById('tab-btn-map')
+  const tabBtnWords = document.getElementById('tab-btn-words')
+  const viewMap = document.getElementById('view-mindmap-wrapper')
+  const viewWords = document.getElementById('view-words-wrapper')
+
+  tabBtnMap?.addEventListener('click', () => {
+    tabBtnMap.style.background = '#f0fdf4'
+    tabBtnMap.style.color = '#059669'
+    tabBtnMap.style.borderColor = '#10b981'
+
+    tabBtnWords.style.background = '#fff'
+    tabBtnWords.style.color = '#475569'
+    tabBtnWords.style.borderColor = '#cbd5e1'
+
+    if (viewMap) viewMap.style.display = 'block'
+    if (viewWords) viewWords.style.display = 'none'
+    if (chartInstance) chartInstance.resize()
+  })
+
+  tabBtnWords?.addEventListener('click', () => {
+    tabBtnWords.style.background = '#f0fdf4'
+    tabBtnWords.style.color = '#059669'
+    tabBtnWords.style.borderColor = '#10b981'
+
+    tabBtnMap.style.background = '#fff'
+    tabBtnMap.style.color = '#475569'
+    tabBtnMap.style.borderColor = '#cbd5e1'
+
+    if (viewMap) viewMap.style.display = 'none'
+    if (viewWords) viewWords.style.display = 'block'
+  })
+</script>

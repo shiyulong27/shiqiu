@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro'
 import '../../styles/learning.css'
+import { gradesList } from '../../data/englishCurriculum.js'
 
 const base = import.meta.env.BASE_URL
 
@@ -97,6 +98,47 @@ const wordCategories = [
         <span class="quick-tip-pill" style="border: 1px solid #fde68a; color: #b45309;">🔤 26个英文字母点读</span>
         <span class="quick-tip-pill" style="border: 1px solid #fde68a; color: #b45309;">🎵 Phonics 自然拼读发音</span>
         <span class="quick-tip-pill" style="border: 1px solid #fde68a; color: #b45309;">🍎 常用萌趣分类单词卡</span>
+      </div>
+    </section>
+
+    {/* 核心特色入口：小学 1~6 年级英语全景知识架构与可拖拽思维导图 */}
+    <section class="learn-section" style="background: #fff; border: 2px solid #fde68a; border-radius: 1.25rem; padding: 1.5rem; margin-bottom: 2.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+            <span style="font-size: 0.75rem; font-weight: bold; padding: 0.2rem 0.6rem; border-radius: 9999px; background: #fffbeb; color: #d97706; border: 1px solid #fde68a;">
+              ⭐ 重点推荐 · 义务教育新课标 (2022年版)
+            </span>
+          </div>
+          <h2 style="font-size: 1.35rem; font-weight: 800; color: #92400e; margin: 0;">
+            🗺️ 小学 1~6 年级英语 · 全景知识与能力架构思维导图
+          </h2>
+          <p style="font-size: 0.85rem; color: #64748b; margin: 0.35rem 0 0 0;">
+            基于 ECharts 交互式脑图引擎，支持鼠标自由平移、滚轮缩放与分支折叠。全景呈现一年级拼读筑基、二年级日常语感、三年级Be动词语法，至四年级进行时、五年级过去将来时、六年级小升初总复习的完整小学英语体系。
+          </p>
+        </div>
+        <a
+          href={`${base}english/grade1/`}
+          style="padding: 0.6rem 1.25rem; background: linear-gradient(135deg, #d97706 0%, #b45309 100%); color: #fff; border-radius: 0.75rem; font-size: 0.9rem; font-weight: bold; text-decoration: none; box-shadow: 0 2px 4px rgba(217,119,6,0.25); display: inline-flex; align-items: center; gap: 0.4rem;"
+        >
+          <span>进入一年级导图</span>
+          <span>→</span>
+        </a>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem;">
+        {gradesList.map((g) => (
+          <a
+            href={`${base}english/${g.id}/`}
+            style={`display: block; padding: 0.85rem 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid ${g.themeColor}; border-radius: 0.75rem; text-decoration: none; transition: all 0.2s;`}
+            onmouseover="this.style.background='#fffbeb'; this.style.borderColor='#fde68a'; this.style.transform='translateY(-2px)'"
+            onmouseout="this.style.background='#f8fafc'; this.style.borderColor='#e2e8f0'; this.style.transform='translateY(0)'"
+          >
+            <div style={`font-size: 0.95rem; font-weight: bold; color: ${g.themeColor};`}>{g.name}</div>
+            <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.2rem; line-height: 1.4;">{g.kpiStats.words}</div>
+            <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 0.15rem;">{g.kpiStats.phonics || g.kpiStats.grammar || g.kpiStats.tense || g.kpiStats.tenses}</div>
+          </a>
+        ))}
       </div>
     </section>
 

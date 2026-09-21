@@ -7,6 +7,48 @@ const base = import.meta.env.BASE_URL
 // 学科启蒙板块
 const subjectModules = [
   {
+    id: 'chinese-curriculum',
+    title: '🌳 语文 · 小学1-6年级全景知识脑图',
+    sub: '新课标统编版 · 可拖拽缩放脑图 · 识3000写2500 · 75+必背诗文',
+    tag: '基础学科 · 语文全景',
+    status: 'ready',
+    link: `${base}chinese/grade1/`,
+    badge: '🌟 1-6年级全景脑图',
+    desc: '基于 ECharts 交互式脑图引擎，支持鼠标自由平移、滚轮缩放与分支折叠。全景呈现一年级拼音筑基、二年级部首写话、三年级修辞起步，至四年级文言启蒙、五年级名著精读、六年级小升初总复习的完整小学语文体系。',
+    cardClass: 'card-chinese',
+    icon: '🗺️',
+    btnText: '🚀 打开 1~6 年级语文脑图 ➔',
+    tags: ['1-6年级直达', '可拖拽脑图', '识3000写2500', '75+必背诗文', '小升初达标']
+  },
+  {
+    id: 'math-curriculum',
+    title: '📐 数学 · 小学1-6年级全景知识与思维导图',
+    sub: '新课标2022版 · 等式方程思想 · 画图建模 · 除法深度辨析 · 割补极限化归',
+    tag: '基础学科 · 数学全景',
+    status: 'ready',
+    link: `${base}math/grade1/`,
+    badge: '🌟 1-6年级全景脑图',
+    desc: '基于 ECharts 交互式脑图引擎，支持鼠标自由平移、滚轮缩放与分支折叠。深度融入等式与方程思想（天平平衡模型）、画图思想（线段图解和差倍/相遇追及）、割补拼摆转化、微积分极限割圆术，以及“除与除以”、等分除/包含除、商不变性质深度辨析。',
+    cardClass: 'card-math',
+    icon: '🗺️',
+    btnText: '🚀 打开 1~6 年级数学脑图 ➔',
+    tags: ['1-6年级直达', '可拖拽脑图', '等式天平', '线段图建模', '除与除以', '割补极限']
+  },
+  {
+    id: 'english-curriculum',
+    title: '🌍 英语 · 小学1-6年级全景知识脑图',
+    sub: '新课标2022版 · 可拖拽缩放脑图 · 词汇/句型/四大时态/读写总复习',
+    tag: '基础学科 · 英语全景',
+    status: 'ready',
+    link: `${base}english/grade1/`,
+    badge: '🌟 1-6年级全景脑图',
+    desc: '基于 ECharts 交互式脑图引擎，支持鼠标自由平移、滚轮缩放与分支折叠。全景呈现一年级拼读筑基、二年级日常语感、三年级Be动词语法，至四年级进行时、五年级过去将来时、六年级小升初四大时态大成与满分读写的完整小学英语体系。',
+    cardClass: 'card-english',
+    icon: '🗺️',
+    btnText: '🚀 打开 1~6 年级英语脑图 ➔',
+    tags: ['1-6年级直达', '可拖拽脑图', '四大时态', '原声点读', '小升初读写']
+  },
+  {
     id: 'chinese',
     title: '📖 语文 · 语言与拼音启蒙',
     sub: '从零开始学拼音 · 象形字识字 · 经典童谣诵读',
@@ -51,6 +93,38 @@ const subjectModules = [
   }
 ]
 
+// 青少成长与美育时光胶囊板块
+const growthModules = [
+  {
+    id: 'growth-guide',
+    title: '📚 青少文育全景进阶指南（一至高三）',
+    sub: '文字铸骨（书籍）· 光影拓界（电影）· 旋律润心（音乐）',
+    tag: '12年美育 · 书影音全景',
+    status: 'ready',
+    link: `${base}growth/guide/`,
+    badge: '🌟 12年体系已上线',
+    desc: '从小学低/中/高段、初中到高中的12年精神书架：覆盖世界殿堂级文学名著、传世经典电影与大师级交响与诗意童谣，附小学一年级10首金曲与赏析。',
+    cardClass: 'card-guide',
+    icon: '📚',
+    btnText: '📖 进入文育精神书架 ➔',
+    tags: ['12年书单', '大师影单', '经典音乐', '五大进阶期', '一年级金曲']
+  },
+  {
+    id: 'growth-questionnaire',
+    title: '📝 成长喜好与心智变化档案（年度问卷）',
+    sub: '72道全景提问 · 多子女手足灵魂题 · 冲突应对场景 · 金钱压岁钱观',
+    tag: '心智档案 · 动态时光胶囊',
+    status: 'ready',
+    link: `${base}growth/questionnaire/`,
+    badge: '🎉 72题全景版已上线',
+    desc: '专为小学一年级男孩及多子女家庭量身定制。涵盖吃喝、玩乐、恐惧(打针/挨打/大人言语恐吓)、一年级特质、手足偏心感受、学校冲突四大实战场景、花钱观与压岁钱管理。支持交互作答、本地暂存与一键打印装订。',
+    cardClass: 'card-questionnaire',
+    icon: '📝',
+    btnText: '✍️ 填写问卷 / 一键打印 ➔',
+    tags: ['72道精选题', '9大维度', '四类冲突应对', '手足与偏心', '压岁钱管理', '一键打印']
+  }
+]
+
 // 原有通识与历史模块
 const modules = [
   {
@@ -64,14 +138,14 @@ const modules = [
     desc: '覆盖先秦至 2026 年中外重大历史事件、朝代演进、文明色带与历史人物，支持多级重要度筛选。',
   },
   {
-    id: 'sanhuang-wudi',
-    title: '🜂 三皇五帝 · 上古传说',
-    sub: '独立于信史纪年的传说时代专题，呈现人物传统、文献异说与历史边界',
-    tag: '历史 / 传说',
+    id: 'groups',
+    title: '🌟 华夏历史天团 · 经典并称',
+    sub: '从三皇五帝到唐宋八大家，历代巨擘天团、成团定位与历史羁绊全景长卷',
+    tag: '历史 / 组合',
     status: 'ready',
-    link: `${base}legend/sanhuang-wudi/`,
-    badge: '专题已上线',
-    desc: '收录伏羲、神农、女娲与五帝，明确区分传说、文献记载和可考历史，不把象征性年代当作确定事实。',
+    link: `${base}groups/`,
+    badge: '🔥 专题已上线',
+    desc: '收录三皇五帝、战国四公子、汉初三杰、竹林七贤、唐宋八大家等 17 组经典天团，全景展现成团定位、时代羁绊与代表巨作。',
   },
   {
     id: 'shanhaijing',
@@ -183,6 +257,42 @@ const modules = [
       </div>
     </section>
 
+    {/* 🌟 核心专区：青少成长与美育时光胶囊 */}
+    <section class="portal-subjects-section" style="margin-top: 2.5rem; margin-bottom: 2.5rem;">
+      <div class="portal-subjects-head">
+        <h2 class="portal-subjects-title">🌱 青少成长与美育时光胶囊</h2>
+        <p class="portal-subjects-desc">12年书影音美育进阶蓝图 · 年度心智喜好动态档案 · 专属儿童采访时光胶囊</p>
+      </div>
+
+      <div class="subjects-cards-grid">
+        {growthModules.map((sub) => (
+          <div class={`subject-portal-card ${sub.cardClass}`}>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.5rem;">
+              <span class="subject-card-icon">{sub.icon}</span>
+              <span class="sub-tag tag-featured" style="background: linear-gradient(135deg, #059669 0%, #2563eb 100%);">{sub.badge}</span>
+            </div>
+
+            <h3 class="subject-card-title">{sub.title}</h3>
+            <div class="subject-card-sub">{sub.sub}</div>
+
+            <div class="subject-card-tags">
+              {sub.tags.map((t) => (
+                <span class="sub-tag">{t}</span>
+              ))}
+            </div>
+
+            <p class="subject-card-desc">{sub.desc}</p>
+
+            <div class="subject-card-foot">
+              <a href={sub.link} class="subject-enter-btn">
+                {sub.btnText}
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
     {/* 通识与历史模块矩阵 Grid */}
     <div style="margin-bottom: 1.5rem; text-align: center;">
       <h2 style="font-size: 1.6rem; font-weight: 800; color: #1e293b; margin: 0 0 0.5rem;">📜 通识与历史长卷</h2>
@@ -217,6 +327,8 @@ const modules = [
     <footer class="portal-footer">
       <p class="foot-text">【十丘】知识门户 · 纯静态构建 · 欢迎共同建设万象知识库</p>
       <p class="foot-text">
+        <a href={`${base}growth/guide/`} style="color: #2563eb; font-weight: 600; text-decoration: none; margin-right: 1rem;">🌱 青少文育指南</a>
+        <a href={`${base}growth/questionnaire/`} style="color: #059669; font-weight: 600; text-decoration: none; margin-right: 1rem;">📝 成长心智问卷</a>
         <a href={`${base}shanhaijing/`} style="color: #8b261e; font-weight: 600; text-decoration: none; margin-right: 1rem;">🦚 山海经大荒专页</a>
         <a href={`${base}ai/`} style="color: #2563eb; font-weight: 600; text-decoration: none; margin-right: 1rem;">🤖 AI & Agent 核心指南</a>
         <a href={`${base}chinese/pinyin/`} style="color: #e11d48; font-weight: 600; text-decoration: none; margin-right: 1rem;">🎯 汉语拼音专页</a>

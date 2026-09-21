@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro'
 import '../../styles/learning.css'
+import { gradesList } from '../../data/mathCurriculum.js'
 
 const base = import.meta.env.BASE_URL
 
@@ -68,6 +69,47 @@ const shapes = [
         <span class="quick-tip-pill" style="border: 1px solid #a7f3d0; color: #047857;">🔢 数字点读 0-20</span>
         <span class="quick-tip-pill" style="border: 1px solid #a7f3d0; color: #047857;">🧮 可视化加减法计算台</span>
         <span class="quick-tip-pill" style="border: 1px solid #a7f3d0; color: #047857;">🔷 几何图形大发现</span>
+      </div>
+    </section>
+
+    {/* 核心特色入口：小学 1~6 年级数学全景知识架构与数学思想思维导图 */}
+    <section class="learn-section" style="background: #fff; border: 2px solid #a7f3d0; border-radius: 1.25rem; padding: 1.5rem; margin-bottom: 2.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.25rem;">
+        <div>
+          <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem;">
+            <span style="font-size: 0.75rem; font-weight: bold; padding: 0.2rem 0.6rem; border-radius: 9999px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0;">
+              ⭐ 重点推荐 · 义务教育新课标 (2022年版)
+            </span>
+          </div>
+          <h2 style="font-size: 1.35rem; font-weight: 800; color: #065f46; margin: 0;">
+            🗺️ 小学 1~6 年级数学 · 全景知识与核心数学思想导图
+          </h2>
+          <p style="font-size: 0.85rem; color: #64748b; margin: 0.35rem 0 0 0;">
+            基于 ECharts 交互式脑图引擎，支持鼠标自由平移、滚轮缩放与分支折叠。深度融入等式与方程思想、画图法（线段图/数形结合）、割补拼摆转化、微积分极限割圆术，以及“除与除以”、等分除/包含除、商不变性质深度辨析。
+          </p>
+        </div>
+        <a
+          href={`${base}math/grade1/`}
+          style="padding: 0.6rem 1.25rem; background: linear-gradient(135deg, #059669 0%, #047857 100%); color: #fff; border-radius: 0.75rem; font-size: 0.9rem; font-weight: bold; text-decoration: none; box-shadow: 0 2px 4px rgba(5,150,105,0.25); display: inline-flex; align-items: center; gap: 0.4rem;"
+        >
+          <span>进入一年级导图</span>
+          <span>→</span>
+        </a>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.75rem;">
+        {gradesList.map((g) => (
+          <a
+            href={`${base}math/${g.id}/`}
+            style={`display: block; padding: 0.85rem 1rem; background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid ${g.themeColor}; border-radius: 0.75rem; text-decoration: none; transition: all 0.2s;`}
+            onmouseover="this.style.background='#ecfdf5'; this.style.borderColor='#a7f3d0'; this.style.transform='translateY(-2px)'"
+            onmouseout="this.style.background='#f8fafc'; this.style.borderColor='#e2e8f0'; this.style.transform='translateY(0)'"
+          >
+            <div style={`font-size: 0.95rem; font-weight: bold; color: ${g.themeColor};`}>{g.name}</div>
+            <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.2rem; line-height: 1.4;">{g.kpiStats.thinking}</div>
+            <div style="font-size: 0.7rem; color: #94a3b8; margin-top: 0.15rem;">{g.kpiStats.models}</div>
+          </a>
+        ))}
       </div>
     </section>
 

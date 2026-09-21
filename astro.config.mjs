@@ -10,4 +10,10 @@ export default defineConfig({
   // 抛出的 SyntaxError 会中断 Vite 的模块链，导致 dev 模式下 CSS
   // 完全不注入（构建产物不受影响——那里是真正的 <link> 标签）。
   devToolbar: { enabled: false },
+
+  vite: {
+    optimizeDeps: {
+      include: ['echarts']
+    }
+  }
 })
