@@ -1,0 +1,1327 @@
+---
+import Base from '../../layouts/Base.astro'
+import {
+  twentyFourPuzzleSets,
+  matchstickPuzzles,
+  speedMathTricks,
+  mathBrainTeasers
+} from '../../data/mathGamesData.js'
+
+const base = import.meta.env.BASE_URL
+---
+
+<Base title="数学思维乐园 · 24点速算与趣味益智大挑战 · 十丘" wide={true}>
+  <div class="mg-container">
+    <!-- 顶部统一导航 -->
+    <header class="mg-header">
+      <div class="mg-nav-bar">
+        <a href={base} class="mg-back-btn">← 返回【十丘】知识总门户</a>
+        <div class="mg-nav-links">
+          <a href={`${base}math/`} class="mg-sub-nav">📐 数学启蒙乐园</a>
+          <a href={`${base}math/grade1/`} class="mg-sub-nav">🗺️ 1-6年级数学脑图</a>
+          <a href={`${base}chinese/`} class="mg-sub-nav">📖 语文乐园</a>
+          <a href={`${base}science/`} class="mg-sub-nav">🚀 华夏科学探索</a>
+          <a href={`${base}history/emperors-battles/`} class="mg-sub-nav">👑 帝王与决战</a>
+        </div>
+      </div>
+
+      <div class="mg-hero">
+        <div class="mg-title-wrap">
+          <span class="mg-badge">🧮 小学数学数感与思维跃升</span>
+          <h1 class="mg-main-title">数学思维乐园 · 趣味速算与益智大闯关</h1>
+          <p class="mg-subtitle">24点速算神投手 · 火柴棒等式巧挪 · 小学速算心算秘籍 · 数学思维小天才</p>
+        </div>
+
+        <div class="mg-top-actions">
+          <button id="btn-open-tricks" class="mg-btn mg-btn-emerald">
+            <span class="btn-icon">⚡</span> 巧算速算大秘籍
+          </button>
+          <button id="btn-open-math-quiz" class="mg-btn mg-btn-indigo">
+            <span class="btn-icon">🏆</span> 思维段位大挑战
+          </button>
+        </div>
+      </div>
+
+      <!-- 三大游戏视窗切换控制器 -->
+      <div class="mg-controls-deck">
+        <div class="mg-view-switcher">
+          <button id="tab-twentyfour" class="mg-view-tab active" data-view="twentyfour">
+            <span class="tab-icon">🎴</span> 24 点速算神投手
+            <span class="tab-count">(精选牌局+随机对战)</span>
+          </button>
+          <button id="tab-matchstick" class="mg-view-tab" data-view="matchstick">
+            <span class="tab-icon">🥢</span> 火柴棒等式巧挪
+            <span class="tab-count">({matchstickPuzzles.length}道奥数谜题)</span>
+          </button>
+          <button id="tab-speedcalc" class="mg-view-tab" data-view="speedcalc">
+            <span class="tab-icon">⚡</span> 巧算速算演练台
+            <span class="tab-count">(头同尾合十/乘11等)</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- 主展示容器 -->
+    <main class="mg-main-content">
+      <!-- 视窗一：🎴 24 点速算神投手 -->
+      <section id="view-twentyfour" class="mg-view-section active">
+        <div class="game-control-row">
+          <div class="level-tabs-group">
+            <button class="level-pill active" data-level="bronze">🥉 青铜入门 (4组)</button>
+            <button class="level-pill" data-level="silver">🥈 白银进阶 (4组)</button>
+            <button class="level-pill" data-level="gold">🥇 黄金大师 (3组)</button>
+            <button class="level-pill btn-random-deal" id="btn-random-deal">🎲 随机发牌对决</button>
+          </div>
+
+          <div class="tf-stats-badge">
+            <span class="stats-item">🏆 累计通关：<strong id="tf-score">0</strong> 局</span>
+          </div>
+        </div>
+
+        <!-- 24点桌面工作台 -->
+        <div class="tf-arena-stage">
+          <div class="tf-cards-row" id="tf-cards-row">
+            <!-- JS 动态注入扑克牌 -->
+          </div>
+
+          <!-- 算式编辑与求值展示区 -->
+          <div class="tf-formula-zone">
+            <div class="formula-label">我的计算式：</div>
+            <div class="formula-screen" id="tf-formula-screen">
+              <span class="formula-placeholder">点击下方卡牌和运算符号组装算式...</span>
+            </div>
+            <div class="formula-result-box" id="tf-eval-result">当前结果：—</div>
+          </div>
+
+          <!-- 键盘控制板 -->
+          <div class="tf-keypad-grid">
+            <div class="keypad-ops">
+              <button class="calc-btn btn-op" data-char="+">＋</button>
+              <button class="calc-btn btn-op" data-char="-">－</button>
+              <button class="calc-btn btn-op" data-char="×">×</button>
+              <button class="calc-btn btn-op" data-char="÷">÷</button>
+              <button class="calc-btn btn-op" data-char="(">(</button>
+              <button class="calc-btn btn-op" data-char=")">)</button>
+              <button class="calc-btn btn-action" id="btn-tf-backspace">⌫ 退格</button>
+              <button class="calc-btn btn-action" id="btn-tf-clear">🔄 清空</button>
+            </div>
+          </div>
+
+          <!-- 提示与解法助手 -->
+          <div class="tf-assistant-bar">
+            <button class="asst-btn" id="btn-tf-hint">💡 给我一点小提示</button>
+            <button class="asst-btn" id="btn-tf-solution">🔑 揭晓全部合法解法</button>
+          </div>
+
+          <div class="tf-hint-box" id="tf-hint-box" style="display: none;">
+            <span class="hint-icon">💡</span>
+            <span id="tf-hint-text">提示内容</span>
+          </div>
+
+          <div class="tf-solution-box" id="tf-solution-box" style="display: none;">
+            <h4>🔑 全部参考解法列表：</h4>
+            <ul id="tf-solutions-list"></ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- 视窗二：🥢 火柴棒等式巧挪魔法台 -->
+      <section id="view-matchstick" class="mg-view-section">
+        <div class="section-intro-bar">
+          <span class="intro-tag">🥢 火柴棒等式解谜</span>
+          <span class="intro-desc">考验空间几何与数码拆解思维！移动 1 根火柴，让看似不成立的错误等式瞬间变成真理！</span>
+        </div>
+
+        <div class="matchstick-deck">
+          {matchstickPuzzles.map((puzzle, idx) => (
+            <article class="mp-card" data-id={puzzle.id}>
+              <div class="mp-card-head">
+                <div class="mp-index">第 {idx + 1} 关</div>
+                <span class="mp-diff-badge">{puzzle.difficulty}</span>
+              </div>
+
+              <div class="mp-rule-bar">
+                <span>🎯 任务目标：<strong>{puzzle.rule}</strong></span>
+              </div>
+
+              <!-- 火柴棒拟真等式展示 -->
+              <div class="matchstick-stage">
+                <div class="matchstick-equation">{puzzle.equation}</div>
+              </div>
+
+              <!-- 解谜展开 -->
+              <div class="mp-solution-zone">
+                <button class="btn-reveal-magic" data-id={puzzle.id}>
+                  <span>✨ 揭晓移动魔法</span> ➔
+                </button>
+                <div class="mp-solution-detail" id={`sol-${puzzle.id}`} style="display: none;">
+                  <div class="sol-answers-row">
+                    <strong>✅ 正确成立等式：</strong>
+                    <div class="sol-pills">
+                      {puzzle.answers.map(ans => (
+                        <span class="sol-pill">{ans}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <p class="sol-explanation"><strong>💡 解题思考步骤：</strong>{puzzle.explanation}</p>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <!-- 火柴数字编码表（奥数知识小卡片） -->
+        <div class="matchstick-ref-box">
+          <h4>💡 火柴棍数字编码小知识（每个数字需要几根火柴？）：</h4>
+          <div class="digits-count-grid">
+            <div class="digit-cell"><span class="d-num">0</span><span class="d-count">6根</span></div>
+            <div class="digit-cell"><span class="d-num">1</span><span class="d-count">2根</span></div>
+            <div class="digit-cell"><span class="d-num">2</span><span class="d-count">5根</span></div>
+            <div class="digit-cell"><span class="d-num">3</span><span class="d-count">5根</span></div>
+            <div class="digit-cell"><span class="d-num">4</span><span class="d-count">4根</span></div>
+            <div class="digit-cell"><span class="d-num">5</span><span class="d-count">5根</span></div>
+            <div class="digit-cell"><span class="d-num">6</span><span class="d-count">6根</span></div>
+            <div class="digit-cell"><span class="d-num">7</span><span class="d-count">3根</span></div>
+            <div class="digit-cell"><span class="d-num">8</span><span class="d-count">7根</span></div>
+            <div class="digit-cell"><span class="d-num">9</span><span class="d-count">6根</span></div>
+          </div>
+          <p class="ref-tip">口诀：“<strong>1最瘦用2根，7最轻用3根，4用4根，8最胖用7根！</strong>”</p>
+        </div>
+      </section>
+
+      <!-- 视窗三：⚡ 巧算速算演练台 -->
+      <section id="view-speedcalc" class="mg-view-section">
+        <div class="section-intro-bar">
+          <span class="intro-tag">⚡ 小学速算心算秘籍</span>
+          <span class="intro-desc">脱离死记硬背！掌握乘除法则背后的数理转化技巧，几秒钟口算大数！</span>
+        </div>
+
+        <!-- 交互演练魔法盒 -->
+        <div class="magic-calc-lab">
+          <div class="lab-header">
+            <span class="lab-icon">🪄</span>
+            <div>
+              <h3 class="lab-title">心算魔法实时演练台</h3>
+              <span class="lab-sub">亲手输入数字，见证“头同尾合十”与“乘以11”的奇迹口算！</span>
+            </div>
+          </div>
+
+          <div class="lab-panels-grid">
+            <!-- 演练一：头同尾合十 -->
+            <div class="calc-play-card">
+              <h4 class="card-play-title">⚡ 演练一：头同尾合十心算</h4>
+              <p class="card-play-sub">（十位相同，个位之和为 10，如 23 × 27, 46 × 44, 71 × 79）</p>
+              <div class="input-inline-group">
+                <input type="number" id="input-tt-1" value="23" min="10" max="99" class="calc-input" />
+                <span>×</span>
+                <input type="number" id="input-tt-2" value="27" min="10" max="99" class="calc-input" />
+                <button id="btn-calc-tt" class="mg-btn mg-btn-emerald">施展魔法 ✨</button>
+              </div>
+              <div class="calc-output-box" id="output-tt-box">
+                <div class="step-line">① 前两位：头 × (头 + 1) = 2 × 3 = <strong>6</strong></div>
+                <div class="step-line">② 后两位：尾 × 尾 = 3 × 7 = <strong>21</strong></div>
+                <div class="result-line">拼合口算答案：<strong>621</strong> 🎉</div>
+              </div>
+            </div>
+
+            <!-- 演练二：乘以 11 妙法 -->
+            <div class="calc-play-card">
+              <h4 class="card-play-title">🪄 演练二：任意数 × 11 速算法</h4>
+              <p class="card-play-sub">（口诀：两头一拉，中间相加，满十进一）</p>
+              <div class="input-inline-group">
+                <input type="number" id="input-e11" value="45" min="10" max="999" class="calc-input" />
+                <span>× 11 =</span>
+                <button id="btn-calc-e11" class="mg-btn mg-btn-indigo">施展魔法 ✨</button>
+              </div>
+              <div class="calc-output-box" id="output-e11-box">
+                <div class="step-line">① 两头拉开：首位 <strong>4</strong>，末位 <strong>5</strong></div>
+                <div class="step-line">② 中间相加：4 + 5 = <strong>9</strong></div>
+                <div class="result-line">拼合口算答案：<strong>495</strong> 🎉</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 巧算秘籍大卡片流 -->
+        <div class="tricks-cards-grid">
+          {speedMathTricks.map(trick => (
+            <article class="trick-card">
+              <div class="trick-card-head">
+                <span class="trick-icon">{trick.icon}</span>
+                <div>
+                  <h3 class="trick-name">{trick.name}</h3>
+                  <span class="trick-category">{trick.category}</span>
+                </div>
+              </div>
+
+              <div class="trick-cond-box">
+                <span class="cond-label">📌 适用条件：</span>
+                <span class="cond-text">{trick.condition}</span>
+              </div>
+
+              <div class="trick-formula-box">
+                <span class="formula-label">🔑 核心口诀公式：</span>
+                <strong class="formula-val">{trick.formula}</strong>
+              </div>
+
+              <div class="trick-example-box">
+                <span class="ex-label">📝 实战推导样例：</span>
+                <pre class="ex-text">{trick.example}</pre>
+              </div>
+
+              <div class="trick-tip-box">
+                <span class="tip-icon">💡</span>
+                <span class="tip-text">{trick.funTip}</span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    </main>
+
+    <!-- 模态框一：🏆 数学思维小天才大挑战 -->
+    <div id="math-quiz-modal" class="mg-modal-overlay" style="display: none;">
+      <div class="mg-modal-card quiz-card">
+        <button class="modal-close" id="btn-close-math-quiz">✕</button>
+        <div class="quiz-header">
+          <span class="quiz-icon">🏆</span>
+          <h2 class="quiz-title">数学小天才思维段位大挑战</h2>
+          <span class="quiz-sub">数感逻辑 · 倒推思维 · 奥数鸡兔与植树推理</span>
+        </div>
+
+        <div class="quiz-status-row">
+          <span id="math-quiz-progress" class="quiz-badge">第 1 / 5 题</span>
+          <span id="math-quiz-score" class="quiz-badge badge-emerald">得分：0 分</span>
+        </div>
+
+        <div class="quiz-question-box">
+          <h3 id="math-quiz-question-text" class="question-text">题目加载中...</h3>
+        </div>
+
+        <div id="math-quiz-options-wrap" class="quiz-options-grid"></div>
+
+        <div id="math-quiz-feedback-box" class="quiz-feedback-box" style="display: none;">
+          <div id="math-quiz-feedback-text" class="feedback-text"></div>
+          <button id="btn-math-quiz-next" class="mg-btn mg-btn-indigo">下一题 ➔</button>
+        </div>
+
+        <div id="math-quiz-complete-box" class="quiz-complete-box" style="display: none;">
+          <div class="complete-trophy">🎉</div>
+          <h3>恭喜完成数学思维大挑战！</h3>
+          <p id="math-quiz-final-score" class="final-score-text">你答对了全部题目！</p>
+          <div class="complete-badge">⭐⭐⭐⭐⭐【📐 华夏少年数学小斐摩那契】</div>
+          <button id="btn-math-quiz-restart" class="mg-btn mg-btn-emerald">再挑战一轮 🔄</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 模态框二：📜 巧算速算大秘籍小百科 -->
+    <div id="tricks-modal" class="mg-modal-overlay" style="display: none;">
+      <div class="mg-modal-card">
+        <button class="modal-close" id="btn-close-tricks">✕</button>
+        <div class="modal-header">
+          <span class="modal-icon">⚡</span>
+          <h2 class="modal-title">小学全套速算心算秘籍宝典</h2>
+          <p class="modal-sub">五大核心技巧 · 乐乐与月亮专用口诀清单</p>
+        </div>
+
+        <div class="tricks-modal-list">
+          {speedMathTricks.map(t => (
+            <div class="t-modal-item">
+              <h4>{t.icon} {t.name}</h4>
+              <p><strong>公式：</strong>{t.formula}</p>
+              <p><strong>技巧：</strong>{t.funTip}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script define:vars={{ twentyFourPuzzleSets, matchstickPuzzles, speedMathTricks, mathBrainTeasers }}>
+    window.MATH_GAMES_DATA = {
+      puzzles: twentyFourPuzzleSets,
+      matchsticks: matchstickPuzzles,
+      tricks: speedMathTricks,
+      quizzes: mathBrainTeasers
+    };
+  </script>
+
+  <script src="../../client/math-games-ui.js"></script>
+</Base>
+
+<style>
+  .mg-container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    color: #1e293b;
+  }
+
+  /* 顶部导航与品牌区 */
+  .mg-header {
+    background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #f7fee7 100%);
+    border: 1px solid #bbf7d0;
+    border-radius: 1.25rem;
+    padding: 1.5rem 1.75rem 1.25rem;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.08);
+    margin-bottom: 2rem;
+  }
+
+  .mg-nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px dashed #bbf7d0;
+  }
+
+  .mg-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: #065f46;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.35rem 0.75rem;
+    background: #d1fae5;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+  }
+  .mg-back-btn:hover {
+    background: #a7f3d0;
+    color: #064e3b;
+  }
+
+  .mg-nav-links {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .mg-sub-nav {
+    color: #475569;
+    text-decoration: none;
+    font-size: 0.85rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.35rem;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    transition: all 0.2s;
+  }
+  .mg-sub-nav:hover {
+    color: #059669;
+    border-color: #059669;
+  }
+
+  /* Hero */
+  .mg-hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .mg-badge {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    background: #059669;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .mg-main-title {
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: #064e3b;
+    letter-spacing: -0.02em;
+    margin: 0.25rem 0 0.5rem;
+  }
+
+  .mg-subtitle {
+    color: #047857;
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .mg-top-actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .mg-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: 0.65rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .mg-btn-emerald {
+    background: linear-gradient(135deg, #059669, #047857);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.25);
+  }
+  .mg-btn-emerald:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+  }
+  .mg-btn-indigo {
+    background: linear-gradient(135deg, #4f46e5, #4338ca);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(79, 70, 229, 0.25);
+  }
+  .mg-btn-indigo:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+  }
+
+  /* 切换控制器 */
+  .mg-controls-deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #bbf7d0;
+  }
+
+  .mg-view-switcher {
+    display: flex;
+    background: #d1fae5;
+    padding: 0.3rem;
+    border-radius: 0.75rem;
+    border: 1px solid #a7f3d0;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  .mg-view-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 1.15rem;
+    border-radius: 0.55rem;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #065f46;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .mg-view-tab .tab-count {
+    font-size: 0.78rem;
+    opacity: 0.75;
+    font-weight: 500;
+  }
+  .mg-view-tab.active {
+    background: #ffffff;
+    color: #064e3b;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  /* 视窗显隐 */
+  .mg-view-section {
+    display: none;
+  }
+  .mg-view-section.active {
+    display: block;
+  }
+
+  .section-intro-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding: 0.75rem 1.25rem;
+    background: #f8fafc;
+    border-radius: 0.65rem;
+    border: 1px solid #e2e8f0;
+    border-left: 5px solid #059669;
+  }
+  .intro-tag {
+    font-weight: 800;
+    color: #064e3b;
+    font-size: 1rem;
+  }
+  .intro-desc {
+    color: #475569;
+    font-size: 0.88rem;
+  }
+
+  /* 24点控制与桌面 */
+  .game-control-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .level-tabs-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .level-pill {
+    padding: 0.4rem 0.85rem;
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .level-pill:hover {
+    border-color: #059669;
+    color: #059669;
+  }
+  .level-pill.active {
+    background: #059669;
+    color: #ffffff;
+    border-color: #059669;
+    box-shadow: 0 2px 6px rgba(5, 150, 105, 0.25);
+  }
+  .btn-random-deal {
+    background: #fef3c7;
+    color: #92400e;
+    border-color: #fde68a;
+  }
+
+  .tf-stats-badge {
+    background: #ecfdf5;
+    color: #065f46;
+    padding: 0.4rem 0.85rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    border: 1px solid #a7f3d0;
+  }
+
+  .tf-arena-stage {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    border: 1.5px solid #e2e8f0;
+    border-radius: 1.25rem;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .tf-cards-row {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .poker-card {
+    width: 100px;
+    height: 140px;
+    background: #ffffff;
+    border: 2px solid #cbd5e1;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0.65rem 0.75rem;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .poker-card:hover:not(.used) {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    border-color: #059669;
+  }
+  .poker-card.used {
+    opacity: 0.35;
+    background: #f1f5f9;
+    border-style: dashed;
+    cursor: not-allowed;
+    transform: scale(0.95);
+  }
+  .poker-card.red-suit {
+    color: #dc2626;
+  }
+  .poker-card.black-suit {
+    color: #1e293b;
+  }
+  .card-val-corner {
+    font-size: 1.25rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .card-suit-center {
+    font-size: 2.2rem;
+    text-align: center;
+    line-height: 1;
+  }
+
+  /* 算式编辑屏 */
+  .tf-formula-zone {
+    background: #0f172a;
+    border-radius: 0.85rem;
+    padding: 1.25rem 1.5rem;
+    color: #ffffff;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.4);
+  }
+  .formula-label {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin-bottom: 0.35rem;
+  }
+  .formula-screen {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.6rem;
+    font-weight: 800;
+    min-height: 2.2rem;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.05em;
+    color: #38bdf8;
+    word-break: break-all;
+  }
+  .formula-placeholder {
+    color: #64748b;
+    font-size: 1rem;
+    font-weight: 400;
+    font-family: sans-serif;
+  }
+  .formula-result-box {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    color: #cbd5e1;
+    font-weight: 600;
+  }
+  .formula-result-box.correct {
+    color: #4ade80 !important;
+    font-size: 1.15rem;
+    font-weight: 800;
+  }
+
+  /* 键盘网格 */
+  .tf-keypad-grid {
+    display: flex;
+    justify-content: center;
+  }
+  .keypad-ops {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .calc-btn {
+    width: 58px;
+    height: 52px;
+    border-radius: 0.55rem;
+    font-size: 1.25rem;
+    font-weight: 800;
+    cursor: pointer;
+    border: 1.5px solid #cbd5e1;
+    background: #ffffff;
+    color: #1e293b;
+    transition: all 0.15s;
+    user-select: none;
+  }
+  .calc-btn:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+  }
+  .calc-btn:active {
+    transform: scale(0.95);
+  }
+  .btn-op {
+    color: #0284c7;
+    border-color: #bae6fd;
+    background: #f0f9ff;
+  }
+  .btn-op:hover {
+    background: #e0f2fe;
+    border-color: #0284c7;
+  }
+  .btn-action {
+    width: 80px;
+    font-size: 0.9rem;
+    background: #f8fafc;
+  }
+
+  /* 助手按钮与提示 */
+  .tf-assistant-bar {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .asst-btn {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    padding: 0.45rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .asst-btn:hover {
+    border-color: #059669;
+    color: #059669;
+    background: #ecfdf5;
+  }
+  .tf-hint-box {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 0.65rem;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #92400e;
+    font-size: 0.9rem;
+  }
+  .tf-solution-box {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 0.65rem;
+    padding: 1rem 1.25rem;
+  }
+  .tf-solution-box h4 {
+    margin: 0 0 0.5rem;
+    color: #166534;
+    font-size: 0.95rem;
+  }
+  .tf-solution-box ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: #15803d;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  /* 火柴棒卡片流 */
+  .matchstick-deck {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .mp-card {
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .mp-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .mp-index {
+    font-weight: 800;
+    color: #0f172a;
+    font-size: 1.05rem;
+  }
+  .mp-diff-badge {
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 0.75rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.35rem;
+    font-weight: 600;
+  }
+  .mp-rule-bar {
+    font-size: 0.85rem;
+    color: #475569;
+    background: #f8fafc;
+    padding: 0.4rem 0.65rem;
+    border-radius: 0.35rem;
+  }
+  .matchstick-stage {
+    background: #1e293b;
+    border-radius: 0.65rem;
+    padding: 1.25rem;
+    text-align: center;
+    box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
+  }
+  .matchstick-equation {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #f59e0b;
+    letter-spacing: 0.15em;
+    text-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+  }
+  .btn-reveal-magic {
+    background: #ecfdf5;
+    color: #065f46;
+    border: 1px solid #a7f3d0;
+    padding: 0.45rem 0.85rem;
+    border-radius: 0.45rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-reveal-magic:hover {
+    background: #a7f3d0;
+  }
+  .mp-solution-detail {
+    margin-top: 0.65rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    font-size: 0.85rem;
+  }
+  .sol-answers-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.4rem;
+  }
+  .sol-pills {
+    display: flex;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+  }
+  .sol-pill {
+    background: #dcfce7;
+    color: #15803d;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.35rem;
+  }
+  .sol-explanation {
+    margin: 0;
+    color: #475569;
+    line-height: 1.5;
+  }
+
+  /* 火柴编码参考 */
+  .matchstick-ref-box {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+  }
+  .matchstick-ref-box h4 {
+    margin: 0 0 0.65rem;
+    color: #92400e;
+    font-size: 0.95rem;
+  }
+  .digits-count-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 0.5rem;
+    text-align: center;
+    margin-bottom: 0.65rem;
+  }
+  .digit-cell {
+    background: #ffffff;
+    border: 1px solid #fed7aa;
+    border-radius: 0.4rem;
+    padding: 0.35rem 0.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+  .d-num {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #1e293b;
+  }
+  .d-count {
+    font-size: 0.75rem;
+    color: #ea580c;
+  }
+  .ref-tip {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #78350f;
+  }
+
+  /* 巧算速算演练台 */
+  .magic-calc-lab {
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 1.15rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    margin-bottom: 2rem;
+  }
+  .lab-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1.25rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .lab-icon {
+    font-size: 2.2rem;
+  }
+  .lab-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 0.2rem;
+  }
+  .lab-sub {
+    font-size: 0.85rem;
+    color: #64748b;
+  }
+  .lab-panels-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .calc-play-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+  }
+  .card-play-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 0.2rem;
+  }
+  .card-play-sub {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin: 0 0 0.85rem;
+  }
+  .input-inline-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+    flex-wrap: wrap;
+  }
+  .calc-input {
+    width: 75px;
+    padding: 0.45rem 0.5rem;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 0.45rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-align: center;
+    outline: none;
+  }
+  .calc-input:focus {
+    border-color: #059669;
+  }
+  .calc-output-box {
+    background: #ffffff;
+    border: 1px dashed #cbd5e1;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    font-size: 0.88rem;
+  }
+  .step-line {
+    color: #475569;
+    margin-bottom: 0.35rem;
+  }
+  .result-line {
+    font-size: 1.05rem;
+    color: #059669;
+    font-weight: 800;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 0.35rem;
+  }
+
+  /* 秘籍卡片流 */
+  .tricks-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1.5rem;
+  }
+  .trick-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .trick-card-head {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+  .trick-icon {
+    font-size: 1.8rem;
+  }
+  .trick-name {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 0.15rem;
+  }
+  .trick-category {
+    font-size: 0.75rem;
+    color: #059669;
+    font-weight: 600;
+  }
+  .trick-cond-box, .trick-formula-box {
+    font-size: 0.85rem;
+    color: #475569;
+    background: #f8fafc;
+    padding: 0.45rem 0.65rem;
+    border-radius: 0.35rem;
+  }
+  .cond-label, .formula-label {
+    font-weight: 700;
+    color: #334155;
+  }
+  .formula-val {
+    color: #059669;
+  }
+  .trick-example-box {
+    background: #fafafa;
+    border: 1px solid #f1f5f9;
+    border-radius: 0.45rem;
+    padding: 0.65rem;
+  }
+  .ex-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #475569;
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+  .ex-text {
+    margin: 0;
+    font-family: inherit;
+    font-size: 0.85rem;
+    color: #334155;
+    line-height: 1.5;
+    white-space: pre-wrap;
+  }
+  .trick-tip-box {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 0.45rem;
+    padding: 0.45rem 0.65rem;
+    display: flex;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+    color: #166534;
+  }
+
+  /* 模态框通用 */
+  .mg-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+  }
+  .mg-modal-card {
+    background: #ffffff;
+    border-radius: 1.25rem;
+    width: 100%;
+    max-width: 680px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    position: relative;
+  }
+  .modal-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-close:hover {
+    background: #ef4444;
+    color: #fff;
+    border-color: #ef4444;
+  }
+
+  /* 答题卡 */
+  .quiz-status-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 1.25rem 0;
+  }
+  .quiz-badge {
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.35rem 0.85rem;
+    border-radius: 0.5rem;
+  }
+  .badge-emerald {
+    background: #d1fae5;
+    color: #065f46;
+  }
+  .quiz-question-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.85rem;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  .question-text {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .quiz-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+  .quiz-opt-btn {
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 0.65rem;
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+  }
+  .quiz-opt-btn:hover:not(:disabled) {
+    border-color: #059669;
+    background: #ecfdf5;
+    color: #065f46;
+  }
+  .quiz-opt-btn.correct {
+    background: #dcfce7 !important;
+    border-color: #22c55e !important;
+    color: #15803d !important;
+  }
+  .quiz-opt-btn.wrong {
+    background: #fee2e2 !important;
+    border-color: #ef4444 !important;
+    color: #b91c1c !important;
+  }
+  .quiz-feedback-box {
+    background: #f8fafc;
+    border-radius: 0.65rem;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  .feedback-text {
+    font-size: 0.9rem;
+    color: #334155;
+    line-height: 1.5;
+  }
+  .quiz-complete-box {
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+  .complete-trophy {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+  }
+  .complete-badge {
+    display: inline-block;
+    background: #d1fae5;
+    color: #065f46;
+    font-weight: 800;
+    padding: 0.5rem 1.25rem;
+    border-radius: 1rem;
+    margin: 1rem 0 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  /* 秘籍小百科列表 */
+  .tricks-modal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.25rem;
+  }
+  .t-modal-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1rem;
+  }
+  .t-modal-item h4 {
+    margin: 0 0 0.35rem;
+    color: #065f46;
+    font-size: 1rem;
+  }
+  .t-modal-item p {
+    margin: 0.2rem 0;
+    font-size: 0.88rem;
+    color: #475569;
+  }
+
+  @media (max-width: 768px) {
+    .mg-main-title {
+      font-size: 1.6rem;
+    }
+    .mg-controls-deck {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .lab-panels-grid {
+      grid-template-columns: 1fr;
+    }
+    .quiz-options-grid {
+      grid-template-columns: 1fr;
+    }
+    .digits-count-grid {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+</style>
