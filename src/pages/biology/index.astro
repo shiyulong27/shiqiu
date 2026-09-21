@@ -1,0 +1,967 @@
+---
+import Base from '../../layouts/Base.astro'
+import { biologyData } from '../../data/biologyData.js'
+
+const base = import.meta.env.BASE_URL
+const { meta, categoryNav, animals, botany, humanBody, quiz } = biologyData
+---
+
+<Base title="生命之树 · 生物奥秘与神奇动物王国 · 十丘万象" wide={true}>
+  <div class="bio-container">
+    <!-- 顶部全景导航与导言 -->
+    <header class="bio-header">
+      <div class="bio-nav-bar">
+        <a href={base} class="bio-back-btn">← 返回【十丘】知识总门户</a>
+        <div class="bio-nav-links">
+          <a href={`${base}astronomy/`} class="bio-sub-nav">🌌 浩瀚星空</a>
+          <a href={`${base}geography/heritage/`} class="bio-sub-nav">🏯 中华世界遗产</a>
+          <a href={`${base}science/`} class="bio-sub-nav">🚀 华夏科学探索</a>
+          <a href={`${base}chinese/solar-terms/`} class="bio-sub-nav">🌾 二十四节气</a>
+          <a href={`${base}math/games/`} class="bio-sub-nav">🧮 数学乐园</a>
+        </div>
+      </div>
+
+      <div class="bio-hero">
+        <div class="bio-title-wrap">
+          <span class="bio-badge">🌿 演化奇迹 · 38亿年地球生命的壮丽史诗</span>
+          <h1 class="bio-main-title">{meta.title}</h1>
+          <p class="bio-subtitle">{meta.subtitle}</p>
+        </div>
+
+        <div class="bio-top-actions">
+          <button id="btn-open-bio-quiz" class="bio-btn bio-btn-emerald">
+            <span class="btn-icon">🏆</span> 生物通识小院士挑战
+          </button>
+        </div>
+      </div>
+
+      <!-- 分类与搜索过滤条 -->
+      <div class="bio-controls-deck">
+        <div class="bio-category-tabs">
+          {categoryNav.map((cat, idx) => (
+            <button class={`bio-filter-tab ${idx === 0 ? 'active' : ''}`} data-cat={cat.id}>
+              <span class="tab-icon">{cat.icon}</span>
+              <span class="tab-name">{cat.name}</span>
+            </button>
+          ))}
+        </div>
+        <div class="bio-search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="bio-search-input" placeholder="搜索物种名称、习性、冷知识..." autocomplete="off" />
+        </div>
+      </div>
+    </header>
+
+    <!-- 主展示区：神奇动物王国卡片阵列 -->
+    <main class="bio-main-content">
+      <div class="bio-section-title">
+        <h2>🐾 奇妙动物王国 (Fauna Showcase)</h2>
+        <p class="bio-section-sub">精选 18 种代表性野生动物与大国旗舰物种，带你洞悉生命的精妙构造与生存智慧</p>
+      </div>
+
+      <div class="bio-species-grid">
+        {animals.map((item) => (
+          <article
+            class="bio-species-card"
+            data-id={item.id}
+            data-name={item.name}
+            data-pinyin={item.pinyin}
+            data-en={item.englishName}
+            data-latin={item.latinName}
+            data-category={item.category}
+            data-badge={item.badge}
+            data-protection={item.protectionLevel}
+            data-habitat={item.habitat}
+            data-diet={item.diet}
+            data-features={item.features}
+            data-habits={item.habits}
+            data-funfact={item.funFact}
+            data-emoji={item.emoji}
+            style={`--accent-color: ${item.accentColor};`}
+          >
+            <div class="card-visual">
+              <div class="card-emoji-wrap">
+                <span class="card-emoji">{item.emoji}</span>
+              </div>
+              <div class="card-badge-tag">{item.badge}</div>
+            </div>
+
+            <div class="card-info">
+              <div class="card-header">
+                <h3 class="card-title">
+                  {item.name}
+                  <span class="card-pinyin">{item.pinyin}</span>
+                </h3>
+                <span class="card-latin">{item.englishName}</span>
+              </div>
+
+              <div class="card-meta-row">
+                <span class="meta-tag meta-habitat">📍 {item.habitat.split('（')[0]}</span>
+                <span class="meta-tag meta-diet">🍽️ {item.diet.split('（')[0]}</span>
+              </div>
+
+              <p class="card-desc">{item.features}</p>
+
+              <div class="card-funfact">
+                <span class="fact-icon">💡</span>
+                <div class="fact-text">{item.funFact}</div>
+              </div>
+
+              <div class="card-footer">
+                <span class="protection-pill">🛡️ {item.protectionLevel.split('/')[0].trim()}</span>
+                <span class="card-cta">点击查看详卷 ➔</span>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <!-- 神奇植物展区 -->
+      <section class="bio-special-section" data-category="botany">
+        <div class="bio-section-title">
+          <h2>🌿 神奇植物与自然活化石 (Flora Showcase)</h2>
+          <p class="bio-section-sub">没有双腿却能捕食昆虫，经历亿万年地壳变迁依然苍翠常青的绿色生命传奇</p>
+        </div>
+
+        <div class="bio-plants-grid">
+          {botany.map((p) => (
+            <div class="bio-plant-card">
+              <div class="plant-header">
+                <span class="plant-icon">🌱</span>
+                <div>
+                  <h3 class="plant-name">{p.name} <small>({p.englishName})</small></h3>
+                  <span class="plant-badge">{p.badge}</span>
+                </div>
+              </div>
+              <div class="plant-body">
+                <p><b>特征形态：</b>{p.features}</p>
+                <p><b>生态价值：</b>{p.importance}</p>
+                <div class="plant-funfact">
+                  <span class="plant-bulb">💡</span>
+                  <span>{p.funFact}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- 人体微观生命奥秘展区 -->
+      <section class="bio-special-section" data-category="humanBody">
+        <div class="bio-section-title">
+          <h2>🫀 人体微观生命宇宙 (Human Biology)</h2>
+          <p class="bio-section-sub">206块骨骼、10万公里血管、860亿神经元，我们体内每时每刻都在上演着神奇的生命交响乐</p>
+        </div>
+
+        <div class="bio-human-grid">
+          {humanBody.map((sys) => (
+            <div class="bio-human-card">
+              <div class="human-header">
+                <span class="human-icon">🔬</span>
+                <div>
+                  <h3 class="human-title">{sys.name}</h3>
+                  <span class="human-sub">{sys.subtitle}</span>
+                </div>
+              </div>
+              <div class="human-body">
+                <p>{sys.features}</p>
+                <div class="human-funfact">
+                  <span class="human-bulb">✨</span>
+                  <span>{sys.funFact}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </main>
+
+    <!-- 弹窗一：物种详卷弹窗 -->
+    <div id="bio-detail-modal" class="bio-modal-backdrop">
+      <div class="bio-modal-container">
+        <button id="btn-close-bio-detail" class="bio-modal-close" aria-label="关闭">&times;</button>
+        <div class="bio-modal-header">
+          <div id="modal-bio-emoji" class="modal-big-emoji">🐼</div>
+          <div>
+            <div id="modal-bio-badge" class="modal-badge">华夏国宝</div>
+            <h2 id="modal-bio-title" class="modal-title">物种名称</h2>
+            <div id="modal-bio-subtitle" class="modal-sub">英文名 · 拉丁学名</div>
+          </div>
+          <button id="btn-bio-speak" class="bio-speak-btn" title="点击朗读物种与冷知识">
+            <span>🔊 语音朗读</span>
+          </button>
+        </div>
+
+        <div class="bio-modal-body">
+          <div class="modal-info-block">
+            <h4>🛡️ 保护级别</h4>
+            <p id="modal-bio-protection">-</p>
+          </div>
+          <div class="modal-info-block">
+            <h4>📍 生存生境</h4>
+            <p id="modal-bio-habitat">-</p>
+          </div>
+          <div class="modal-info-block">
+            <h4>🍽️ 食性食谱</h4>
+            <p id="modal-bio-diet">-</p>
+          </div>
+          <div class="modal-info-block">
+            <h4>🧬 外貌形态与体型</h4>
+            <p id="modal-bio-features">-</p>
+          </div>
+          <div class="modal-info-block">
+            <h4>🐾 生活习性与繁育</h4>
+            <p id="modal-bio-habits">-</p>
+          </div>
+          <div class="modal-info-block fact-block">
+            <h4>💡 奇趣自然冷知识</h4>
+            <p id="modal-bio-funfact">-</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 弹窗二：亲子生物挑战赛答题弹窗 -->
+    <div id="bio-quiz-modal" class="bio-modal-backdrop">
+      <div class="bio-modal-container quiz-modal-container">
+        <button id="btn-close-bio-quiz" class="bio-modal-close" aria-label="关闭">&times;</button>
+        <div class="quiz-modal-header">
+          <span class="quiz-icon">🏆</span>
+          <div>
+            <h2>🌱 华夏自然与生物多样性 · 亲子百科挑战</h2>
+            <p>共 8 道经典生物常识题，测试你对地球生命奥秘的了解程度！</p>
+          </div>
+        </div>
+
+        <div id="bio-quiz-score-card" class="quiz-score-card" style="display: none;"></div>
+
+        <div class="quiz-questions-list">
+          {quiz.map((q, qIndex) => (
+            <div class="bio-quiz-card" data-correct={q.answerIndex} data-expl={q.explanation}>
+              <div class="quiz-q-title">
+                <span class="quiz-q-num">{qIndex + 1}.</span>
+                <span>{q.question}</span>
+              </div>
+              <div class="quiz-options-grid">
+                {q.options.map((opt, oIndex) => (
+                  <button class="bio-quiz-opt" data-index={oIndex}>
+                    <span class="opt-letter">{['A', 'B', 'C', 'D'][oIndex]}.</span>
+                    <span class="opt-text">{opt}</span>
+                  </button>
+                ))}
+              </div>
+              <div class="bio-quiz-feedback" style="display: none;"></div>
+            </div>
+          ))}
+        </div>
+
+        <div class="quiz-modal-actions">
+          <button id="btn-submit-bio-quiz" class="bio-btn bio-btn-emerald">提交测评计算成绩</button>
+          <button id="btn-reset-bio-quiz" class="bio-btn bio-btn-gray">重新开始挑战</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<script src="../../client/biology-ui.js"></script>
+
+<style>
+  .bio-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    color: #1e293b;
+  }
+
+  .bio-header {
+    margin-bottom: 2.5rem;
+    background: linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%);
+    color: #fff;
+    border-radius: 20px;
+    padding: 2rem 2.5rem;
+    box-shadow: 0 12px 36px rgba(6, 78, 59, 0.2);
+  }
+
+  .bio-nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 1rem;
+  }
+
+  .bio-back-btn {
+    color: #a7f3d0;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .bio-back-btn:hover {
+    color: #ffffff;
+  }
+
+  .bio-nav-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .bio-sub-nav {
+    color: #d1fae5;
+    text-decoration: none;
+    font-size: 0.85rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.35rem 0.8rem;
+    border-radius: 20px;
+    transition: all 0.2s;
+  }
+  .bio-sub-nav:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
+  }
+
+  .bio-hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .bio-badge {
+    display: inline-block;
+    background: rgba(167, 243, 208, 0.25);
+    color: #a7f3d0;
+    font-size: 0.85rem;
+    padding: 0.25rem 0.8rem;
+    border-radius: 12px;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+  }
+
+  .bio-main-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0.2rem 0;
+  }
+
+  .bio-subtitle {
+    font-size: 1.05rem;
+    color: #d1fae5;
+    max-width: 720px;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .bio-top-actions {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .bio-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.4rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .bio-btn-emerald {
+    background: #10b981;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+  }
+  .bio-btn-emerald:hover {
+    background: #059669;
+    transform: translateY(-2px);
+  }
+  .bio-btn-gray {
+    background: #e2e8f0;
+    color: #334155;
+  }
+  .bio-btn-gray:hover {
+    background: #cbd5e1;
+  }
+
+  /* 分类与搜索过滤条 */
+  .bio-controls-deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.8rem 1.2rem;
+    border-radius: 16px;
+  }
+
+  .bio-category-tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .bio-filter-tab {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #d1fae5;
+    padding: 0.45rem 0.9rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: all 0.2s;
+  }
+  .bio-filter-tab:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
+  }
+  .bio-filter-tab.active {
+    background: #ffffff;
+    color: #065f46;
+    font-weight: 700;
+    border-color: #ffffff;
+  }
+
+  .bio-search-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0.45rem 1rem;
+    border-radius: 12px;
+    width: 280px;
+  }
+  .bio-search-box input {
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 0.85rem;
+    width: 100%;
+    color: #1e293b;
+  }
+
+  /* 主标题区 */
+  .bio-section-title {
+    margin-bottom: 1.8rem;
+  }
+  .bio-section-title h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 0.3rem 0;
+  }
+  .bio-section-sub {
+    color: #64748b;
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  /* 动物卡片网格 */
+  .bio-species-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .bio-species-card {
+    background: #ffffff;
+    border-radius: 18px;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+  .bio-species-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+    border-color: #cbd5e1;
+  }
+
+  .card-visual {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 1px solid #f1f5f9;
+    position: relative;
+  }
+
+  .card-emoji-wrap {
+    width: 68px;
+    height: 68px;
+    background: #ffffff;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid #f1f5f9;
+  }
+
+  .card-badge-tag {
+    background: #ecfdf5;
+    color: #065f46;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.3rem 0.7rem;
+    border-radius: 20px;
+    border: 1px solid #a7f3d0;
+  }
+
+  .card-info {
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .card-header {
+    margin-bottom: 0.8rem;
+  }
+  .card-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+  .card-pinyin {
+    font-size: 0.8rem;
+    color: #64748b;
+    font-weight: 400;
+  }
+  .card-latin {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-style: italic;
+  }
+
+  .card-meta-row {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.8rem;
+    flex-wrap: wrap;
+  }
+  .meta-tag {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    background: #f1f5f9;
+    color: #475569;
+  }
+
+  .card-desc {
+    font-size: 0.88rem;
+    color: #475569;
+    line-height: 1.5;
+    margin: 0 0 1rem 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-funfact {
+    background: #fffbeb;
+    border: 1px solid #fef3c7;
+    border-radius: 10px;
+    padding: 0.6rem 0.8rem;
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.2rem;
+  }
+  .fact-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .fact-text {
+    font-size: 0.8rem;
+    color: #92400e;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .card-footer {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #f8fafc;
+    padding-top: 0.8rem;
+    font-size: 0.78rem;
+  }
+  .protection-pill {
+    color: #059669;
+    font-weight: 600;
+  }
+  .card-cta {
+    color: #0284c7;
+    font-weight: 700;
+  }
+
+  /* 植物展区样式 */
+  .bio-plants-grid, .bio-human-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .bio-plant-card, .bio-human-card {
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  }
+
+  .plant-header, .human-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1rem;
+  }
+  .plant-icon, .human-icon {
+    font-size: 2.2rem;
+  }
+  .plant-name, .human-title {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+  }
+  .plant-badge {
+    display: inline-block;
+    background: #f0fdf4;
+    color: #166534;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 12px;
+    margin-top: 0.2rem;
+  }
+  .human-sub {
+    font-size: 0.8rem;
+    color: #64748b;
+  }
+
+  .plant-body p, .human-body p {
+    font-size: 0.88rem;
+    color: #475569;
+    line-height: 1.5;
+    margin: 0 0 0.5rem 0;
+  }
+
+  .plant-funfact, .human-funfact {
+    background: #f0fdf4;
+    border: 1px solid #dcfce7;
+    border-radius: 10px;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.8rem;
+    color: #166534;
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.8rem;
+    line-height: 1.4;
+  }
+
+  /* 弹窗样式 */
+  .bio-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1.5rem;
+  }
+  .bio-modal-backdrop.active {
+    display: flex;
+  }
+
+  .bio-modal-container {
+    background: #ffffff;
+    border-radius: 20px;
+    max-width: 650px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 2rem;
+    position: relative;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.2);
+  }
+
+  .quiz-modal-container {
+    max-width: 800px;
+  }
+
+  .bio-modal-close {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.2rem;
+    background: #f1f5f9;
+    border: none;
+    font-size: 1.5rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #475569;
+    transition: all 0.2s;
+  }
+  .bio-modal-close:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+  }
+
+  .bio-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 1.2rem;
+  }
+  .modal-big-emoji {
+    font-size: 3.5rem;
+  }
+  .modal-badge {
+    display: inline-block;
+    background: #ecfdf5;
+    color: #065f46;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    margin-bottom: 0.3rem;
+  }
+  .modal-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    margin: 0;
+    color: #0f172a;
+  }
+  .modal-sub {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-style: italic;
+  }
+
+  .bio-speak-btn {
+    margin-left: auto;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #0284c7;
+    transition: all 0.2s;
+  }
+  .bio-speak-btn:hover {
+    background: #f0f9ff;
+    border-color: #bae6fd;
+  }
+
+  .bio-modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .modal-info-block h4 {
+    margin: 0 0 0.3rem 0;
+    font-size: 0.9rem;
+    color: #0f172a;
+  }
+  .modal-info-block p {
+    margin: 0;
+    font-size: 0.88rem;
+    color: #475569;
+    line-height: 1.5;
+  }
+  .fact-block {
+    background: #fffbeb;
+    border: 1px solid #fef3c7;
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+  }
+  .fact-block h4 {
+    color: #b45309;
+  }
+  .fact-block p {
+    color: #92400e;
+    font-weight: 500;
+  }
+
+  /* 答题卡片与交互 */
+  .quiz-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 1.2rem;
+  }
+  .quiz-icon {
+    font-size: 2.8rem;
+  }
+  .quiz-modal-header h2 {
+    font-size: 1.4rem;
+    margin: 0 0 0.3rem 0;
+    color: #0f172a;
+  }
+  .quiz-modal-header p {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin: 0;
+  }
+
+  .quiz-score-card {
+    background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    border: 1px solid #a7f3d0;
+    border-radius: 14px;
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  .score-badge {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #065f46;
+    margin-bottom: 0.4rem;
+  }
+  .score-honor {
+    font-size: 0.95rem;
+    color: #047857;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .quiz-questions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  .bio-quiz-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 1.2rem;
+  }
+  .bio-quiz-card.correct {
+    border-color: #10b981;
+    background: #f0fdf4;
+  }
+  .bio-quiz-card.wrong {
+    border-color: #ef4444;
+    background: #fef2f2;
+  }
+
+  .quiz-q-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.8rem;
+  }
+  .quiz-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+  .bio-quiz-opt {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    font-size: 0.85rem;
+    color: #334155;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s;
+  }
+  .bio-quiz-opt:hover {
+    border-color: #0284c7;
+    background: #f0f9ff;
+  }
+  .bio-quiz-opt.selected {
+    border-color: #10b981;
+    background: #ecfdf5;
+    color: #065f46;
+    font-weight: 700;
+  }
+
+  .bio-quiz-feedback {
+    margin-top: 0.8rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    line-height: 1.4;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+  }
+
+  .quiz-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 1.2rem;
+  }
+
+  @media (max-width: 768px) {
+    .bio-container {
+      padding: 1rem;
+    }
+    .bio-header {
+      padding: 1.5rem;
+    }
+    .bio-main-title {
+      font-size: 1.6rem;
+    }
+    .bio-species-grid, .bio-plants-grid, .bio-human-grid {
+      grid-template-columns: 1fr;
+    }
+    .quiz-options-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
