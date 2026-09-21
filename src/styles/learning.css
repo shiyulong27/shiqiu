@@ -1021,6 +1021,33 @@
   background: #b45309;
 }
 
+.card-history .subject-card-sub { color: #0284c7; }
+.card-history .subject-enter-btn {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+  color: #fff;
+}
+.card-history .subject-enter-btn:hover {
+  background: #0369a1;
+}
+
+.card-biology .subject-card-sub { color: #16a34a; }
+.card-biology .subject-enter-btn {
+  background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  color: #fff;
+}
+.card-biology .subject-enter-btn:hover {
+  background: #15803d;
+}
+
+.card-commonsense .subject-card-sub { color: #ea580c; }
+.card-commonsense .subject-enter-btn {
+  background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+  color: #fff;
+}
+.card-commonsense .subject-enter-btn:hover {
+  background: #c2410c;
+}
+
 .card-guide {
   border-color: #bfdbfe;
 }

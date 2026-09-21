@@ -232,6 +232,74 @@ const { planets, moonPhases, phenomena } = solarSystemData
         <p class="polaris-p">
           在北半球夜空，找到大熊座勺子形的北斗七星。将勺口朝外的两颗星——<strong>天璇</strong>向<strong>天枢</strong>连成一条直线，朝着勺口前方延长大约 <strong>5 倍</strong>的距离，就会碰到孤单闪耀的<strong>北极星 (Polaris)</strong>！它正好位于地轴正北方向，终夜指明北方！
         </p>
+        <!-- 动态 SVG 星空连线与延长线图解 -->
+        <div class="polaris-svg-wrap">
+          <svg class="polaris-svg-chart" viewBox="0 0 640 210" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <filter id="star-glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+              <marker id="arrow-gold" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+                <path d="M0,0 L0,6 L9,3 z" fill="#facc15" />
+              </marker>
+            </defs>
+
+            <!-- 背景星尘小点 -->
+            <circle cx="35" cy="45" r="1" fill="#fff" opacity="0.4" />
+            <circle cx="95" cy="180" r="1.2" fill="#fff" opacity="0.5" />
+            <circle cx="280" cy="30" r="1.5" fill="#fff" opacity="0.4" />
+            <circle cx="360" cy="160" r="1" fill="#fff" opacity="0.3" />
+            <circle cx="480" cy="185" r="1.2" fill="#fff" opacity="0.4" />
+            <circle cx="580" cy="120" r="1" fill="#fff" opacity="0.5" />
+
+            <!-- 北斗七星连线 (勺柄与勺身) -->
+            <line x1="70" y1="105" x2="115" y2="85" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" opacity="0.85" />
+            <line x1="115" y1="85" x2="165" y2="75" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" opacity="0.85" />
+            <line x1="165" y1="75" x2="215" y2="95" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" opacity="0.85" />
+
+            <line x1="215" y1="95" x2="195" y2="160" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" opacity="0.85" />
+            <line x1="195" y1="160" x2="255" y2="165" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" opacity="0.85" />
+            <line x1="255" y1="165" x2="275" y2="100" stroke="#facc15" stroke-width="3" stroke-linecap="round" opacity="0.95" />
+            <line x1="275" y1="100" x2="215" y2="95" stroke="#38bdf8" stroke-width="2.5" stroke-linecap="round" opacity="0.85" />
+
+            <!-- 天璇->天枢 指向北极星的 5 倍延长线 (金色虚线与箭头) -->
+            <line x1="275" y1="100" x2="535" y2="42" stroke="#facc15" stroke-width="2.5" stroke-dasharray="6,4" marker-end="url(#arrow-gold)" opacity="0.9" />
+
+            <!-- 延长线距离刻度与标注 -->
+            <rect x="365" y="52" width="96" height="24" rx="6" fill="rgba(15,23,42,0.85)" stroke="#facc15" stroke-width="1" />
+            <text x="413" y="68" fill="#fde047" font-size="11" font-weight="bold" text-anchor="middle">5倍距离延长 ➔</text>
+
+            <!-- 北斗七星各主星点 -->
+            <circle cx="70" cy="105" r="5" fill="#38bdf8" filter="url(#star-glow)" />
+            <text x="70" y="125" fill="#bae6fd" font-size="11" text-anchor="middle">摇光</text>
+            <circle cx="115" cy="85" r="5" fill="#38bdf8" filter="url(#star-glow)" />
+            <text x="115" y="70" fill="#bae6fd" font-size="11" text-anchor="middle">开阳</text>
+            <circle cx="165" cy="75" r="5.5" fill="#38bdf8" filter="url(#star-glow)" />
+            <text x="165" y="60" fill="#bae6fd" font-size="11" text-anchor="middle">玉衡</text>
+            <circle cx="215" cy="95" r="4.5" fill="#38bdf8" filter="url(#star-glow)" />
+            <text x="200" y="90" fill="#bae6fd" font-size="11" text-anchor="middle">天权</text>
+            <circle cx="195" cy="160" r="5" fill="#38bdf8" filter="url(#star-glow)" />
+            <text x="195" y="180" fill="#bae6fd" font-size="11" text-anchor="middle">天玑</text>
+            <circle cx="255" cy="165" r="6.5" fill="#facc15" filter="url(#star-glow)" />
+            <text x="255" y="185" fill="#fde047" font-size="12" font-weight="bold" text-anchor="middle">天璇 (基点)</text>
+            <circle cx="275" cy="100" r="6.5" fill="#facc15" filter="url(#star-glow)" />
+            <text x="290" y="118" fill="#fde047" font-size="12" font-weight="bold" text-anchor="start">天枢 (指向)</text>
+
+            <!-- 北极星 (终点超强辉光) -->
+            <circle cx="550" cy="38" r="14" fill="rgba(250, 204, 21, 0.2)" />
+            <circle cx="550" cy="38" r="8" fill="#ffffff" filter="url(#star-glow)" />
+            <circle cx="550" cy="38" r="4" fill="#fef08a" />
+            <line x1="550" y1="20" x2="550" y2="56" stroke="#fef08a" stroke-width="1.5" opacity="0.8" />
+            <line x1="532" y1="38" x2="568" y2="38" stroke="#fef08a" stroke-width="1.5" opacity="0.8" />
+            <text x="550" y="70" fill="#ffffff" font-size="13" font-weight="800" text-anchor="middle">北极星 (Polaris)</text>
+            <text x="550" y="86" fill="#fde047" font-size="10" text-anchor="middle">正北方 · 小熊座α</text>
+          </svg>
+        </div>
+
         <div class="polaris-rhyme">
           💡 顺口溜：认星先从北斗来，迎头五倍北极开；一年四季星斗转，指针正北定乾坤！
         </div>
@@ -1034,6 +1102,22 @@ const { planets, moonPhases, phenomena } = solarSystemData
     font-size: 0.95rem;
     color: #fef08a;
     font-weight: 600;
+  }
+  .polaris-svg-wrap {
+    background: rgba(10, 15, 30, 0.7);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    border-radius: 14px;
+    padding: 1.2rem;
+    margin: 1.2rem 0;
+    box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.5);
+    overflow-x: auto;
+  }
+  .polaris-svg-chart {
+    display: block;
+    width: 100%;
+    max-width: 680px;
+    height: auto;
+    margin: 0 auto;
   }
 
   /* 十二黄道星座网格 */

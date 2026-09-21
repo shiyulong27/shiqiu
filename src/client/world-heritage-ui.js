@@ -153,6 +153,10 @@ document.addEventListener('DOMContentLoaded', () => {
             <strong>👑 关联历史大事件与先贤：</strong>
             <p>${item.historyLink}</p>
           </div>
+          <div class="modal-info-block modal-action-links" style="margin-top: 1.5rem; display: flex; gap: 0.8rem; flex-wrap: wrap;">
+            <a href="${document.querySelector('.heritage-back-btn')?.getAttribute('href') || '/'}geography/explore/?province=${encodeURIComponent(item.province)}" class="modal-nav-link" style="background: rgba(14, 165, 233, 0.2); border: 1px solid #0ea5e9; color: #7dd3fc; padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600;">🧭 在地理探索地图中查找【${item.province}】</a>
+            <a href="${document.querySelector('.heritage-back-btn')?.getAttribute('href') || '/'}geography/" class="modal-nav-link" style="background: rgba(245, 158, 11, 0.2); border: 1px solid #f59e0b; color: #fde68a; padding: 0.5rem 1rem; border-radius: 8px; text-decoration: none; font-size: 0.85rem; font-weight: 600;">🗺️ 查看全省地理通识</a>
+          </div>
         </div>
       `
     }
