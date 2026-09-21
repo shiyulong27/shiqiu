@@ -1,0 +1,999 @@
+---
+import Base from '../../layouts/Base.astro'
+import { rubikCubeData } from '../../data/rubikCubeData.js'
+
+const base = import.meta.env.BASE_URL
+const { meta, cubeStructure, notationList, layerSteps, spatialBenefits, quiz } = rubikCubeData
+---
+
+<Base title="空间大师 · 三阶魔方还原与空间思维乐园 · 十丘万象" wide={true}>
+  <div class="rubik-container">
+    <!-- 顶部全景导航与导言 -->
+    <header class="rubik-header">
+      <div class="rubik-nav-bar">
+        <a href={base} class="rubik-back-btn">← 返回【十丘】知识总门户</a>
+        <div class="rubik-nav-links">
+          <a href={`${base}math/games/`} class="rubik-sub-nav">🧮 数学思维乐园</a>
+          <a href={`${base}astronomy/`} class="rubik-sub-nav">🌌 浩瀚星空</a>
+          <a href={`${base}biology/`} class="rubik-sub-nav">🌿 生物与动物</a>
+          <a href={`${base}knowledge/commonsense/`} class="rubik-sub-nav">🛡️ 生活常识</a>
+          <a href={`${base}science/`} class="rubik-sub-nav">🚀 华夏科学探索</a>
+        </div>
+      </div>
+
+      <div class="rubik-hero">
+        <div class="rubik-title-wrap">
+          <span class="rubik-badge">🎲 三维空间思维 · 心智旋转与算法逻辑训练</span>
+          <h1 class="rubik-main-title">{meta.title}</h1>
+          <p class="rubik-subtitle">{meta.subtitle}</p>
+        </div>
+
+        <div class="rubik-top-actions">
+          <button id="btn-open-rubik-quiz" class="rubik-btn rubik-btn-amber">
+            <span class="btn-icon">🏆</span> 空间魔方小院士挑战
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="rubik-main-content">
+      <!-- 模块一：三维空间认知与国际配色 -->
+      <section class="rubik-section">
+        <div class="rubik-section-title">
+          <h2>🧩 魔方三维构造与空间坐标认知</h2>
+          <p class="rubik-section-sub">理解中心块、棱块、角块的空间物理规律与国际标准六面配色法则</p>
+        </div>
+
+        <div class="cube-structure-grid">
+          <div class="structure-card center-card">
+            <div class="structure-icon">🎯</div>
+            <h3>6 个中心块 (Centers)</h3>
+            <p class="structure-rule"><b>核心定律：</b>{cubeStructure.centerBlocks.rule}</p>
+            <span class="structure-pill">{cubeStructure.centerBlocks.colors}</span>
+          </div>
+
+          <div class="structure-card edge-card">
+            <div class="structure-icon">➖</div>
+            <h3>12 个棱块 (Edges)</h3>
+            <p class="structure-rule"><b>运动规律：</b>{cubeStructure.edgeBlocks.rule}</p>
+            <span class="structure-pill">{cubeStructure.edgeBlocks.colors}</span>
+          </div>
+
+          <div class="structure-card corner-card">
+            <div class="structure-icon">🔺</div>
+            <h3>8 个角块 (Corners)</h3>
+            <p class="structure-rule"><b>空间特征：</b>{cubeStructure.cornerBlocks.rule}</p>
+            <span class="structure-pill">{cubeStructure.cornerBlocks.colors}</span>
+          </div>
+        </div>
+
+        <!-- 国际配色对比 -->
+        <div class="color-code-banner">
+          <div class="color-code-title">
+            <span class="code-icon">🎨</span>
+            <span>国际标准六面配色 (BOY 规则)</span>
+          </div>
+          <div class="color-pairs-grid">
+            {cubeStructure.internationalColorCode.map((c) => (
+              <div class="color-pair-card">
+                <b>{c.pair}</b>
+                <span>{c.rule}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- 模块二：七步层先法互动通关展台 -->
+      <section class="rubik-section">
+        <div class="rubik-section-title">
+          <h2>🏆 三阶魔方入门【七步层先法】通关宝典</h2>
+          <p class="rubik-section-sub">分步通关，朗朗上口的口诀与手把手图解，让孩子像搭积木一样轻松还原六面！</p>
+        </div>
+
+        <div class="step-navigator-deck">
+          <div class="step-tabs-row">
+            {layerSteps.map((st) => (
+              <button class={`rubik-step-tab ${st.stepNum === 1 ? 'active' : ''}`} data-step={st.stepNum}>
+                <span class="step-index">第 {st.stepNum} 步</span>
+                <span class="step-label">{st.formulaName.split('（')[0]}</span>
+              </button>
+            ))}
+          </div>
+
+          <!-- 当前步骤目标与 3D 状态提示 -->
+          <div class="step-stage-bar">
+            <span class="stage-tag">🎯 当前步骤目标：</span>
+            <span id="rubik-stage-preview" class="stage-text">🌼 第一步：黄心白瓣小白菊</span>
+          </div>
+
+          <!-- 七步卡片列表 -->
+          <div class="steps-cards-container">
+            {layerSteps.map((st) => (
+              <div class="rubik-step-card" data-step={st.stepNum} style={`display: ${st.stepNum === 1 ? 'block' : 'none'};`}>
+                <div class="step-card-header">
+                  <div class="step-badge-circle">{st.stepNum}</div>
+                  <div>
+                    <h3 class="step-card-title">{st.title}</h3>
+                    <span class="step-formula-code">代号公式：<code>{st.formulaCode}</code></span>
+                  </div>
+                </div>
+
+                <div class="step-chant-box">
+                  <span class="chant-symbol">🗣️ 速记口诀：</span>
+                  <p class="chant-content">"{st.chant}"</p>
+                </div>
+
+                <div class="step-body-grid">
+                  <div class="step-detail-pane">
+                    <h4>📖 详细操作指引：</h4>
+                    <p>{st.detail}</p>
+                    <div class="step-key-tip">
+                      <span class="tip-icon">💡</span>
+                      <span><b>大师关键秘诀：</b>{st.keyTip}</span>
+                    </div>
+                  </div>
+
+                  <div class="step-visual-pane">
+                    <div class="cube-isometric-mock">
+                      <div class="mock-cube-face top-face">
+                        <span class="face-text">U (顶面)</span>
+                      </div>
+                      <div class="mock-cube-face front-face">
+                        <span class="face-text">F (正面)</span>
+                      </div>
+                      <div class="mock-cube-face right-face">
+                        <span class="face-text">R (右面)</span>
+                      </div>
+                    </div>
+                    <div class="mock-goal-text">{st.goal}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div class="step-controls-actions">
+            <button id="btn-prev-step" class="step-ctrl-btn" disabled>← 上一步</button>
+            <button id="btn-next-step" class="step-ctrl-btn primary">下一步 ➔</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 模块三：转动代码与指尖公式组合台 -->
+      <section class="rubik-section">
+        <div class="rubik-section-title">
+          <h2>📐 国际通用转动记号 (Notation) 与指尖演练</h2>
+          <p class="rubik-section-sub">看懂世界魔方协会（WCA）官方符号，点击卡片自由组合手法串！</p>
+        </div>
+
+        <div class="formula-test-deck">
+          <div class="sequence-display-bar">
+            <span class="seq-label">当前公式序列：</span>
+            <code id="rubik-formula-sequence" class="seq-code">点击下方动作卡片组合公式...</code>
+            <button id="btn-clear-sequence" class="seq-clear-btn">清空</button>
+          </div>
+
+          <div class="notations-grid">
+            {notationList.map((n) => (
+              <div class="notation-item-card" data-code={n.code}>
+                <div class="notation-code-badge">{n.code}</div>
+                <div class="notation-info">
+                  <h4>{n.name} <small>({n.en})</small></h4>
+                  <p>{n.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <!-- 模块四：空间思维四维赋能 -->
+      <section class="rubik-section">
+        <div class="rubik-section-title">
+          <h2>🧠 魔方给孩子带来的四维空间脑力飞跃</h2>
+          <p class="rubik-section-sub">这不仅仅是一个益智玩具，更是开启空间几何与系统算法思维的金钥匙</p>
+        </div>
+
+        <div class="benefits-grid">
+          {spatialBenefits.map((b) => (
+            <div class="benefit-card">
+              <div class="benefit-header">
+                <span class="benefit-icon">🚀</span>
+                <h3>{b.title}</h3>
+              </div>
+              <p>{b.desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    </main>
+
+    <!-- 弹窗：亲子空间思维与魔方问答大闯关 -->
+    <div id="rubik-quiz-modal" class="rubik-modal-backdrop">
+      <div class="rubik-modal-container quiz-modal-container">
+        <button id="btn-close-rubik-quiz" class="rubik-modal-close" aria-label="关闭">&times;</button>
+        <div class="quiz-modal-header">
+          <span class="quiz-icon">🏆</span>
+          <div>
+            <h2>🎲 三维空间与三阶魔方 · 亲子脑力大挑战</h2>
+            <p>共 8 道空间方位、符号与还原逻辑题，检验你的空间想象力！</p>
+          </div>
+        </div>
+
+        <div id="rubik-quiz-score-card" class="quiz-score-card" style="display: none;"></div>
+
+        <div class="quiz-questions-list">
+          {quiz.map((q, qIndex) => (
+            <div class="rubik-quiz-card" data-correct={q.answerIndex} data-expl={q.explanation}>
+              <div class="quiz-q-title">
+                <span class="quiz-q-num">{qIndex + 1}.</span>
+                <span>{q.question}</span>
+              </div>
+              <div class="quiz-options-grid">
+                {q.options.map((opt, oIndex) => (
+                  <button class="rubik-quiz-opt" data-index={oIndex}>
+                    <span class="opt-letter">{['A', 'B', 'C', 'D'][oIndex]}.</span>
+                    <span class="opt-text">{opt}</span>
+                  </button>
+                ))}
+              </div>
+              <div class="rubik-quiz-feedback" style="display: none;"></div>
+            </div>
+          ))}
+        </div>
+
+        <div class="quiz-modal-actions">
+          <button id="btn-submit-rubik-quiz" class="rubik-btn rubik-btn-amber">提交答卷计算成绩</button>
+          <button id="btn-reset-rubik-quiz" class="rubik-btn rubik-btn-gray">重新开始挑战</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<script src="../../client/rubik-ui.js"></script>
+
+<style>
+  .rubik-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    color: #1e293b;
+  }
+
+  .rubik-header {
+    margin-bottom: 2.5rem;
+    background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 50%, #2563eb 100%);
+    color: #fff;
+    border-radius: 20px;
+    padding: 2rem 2.5rem;
+    box-shadow: 0 12px 36px rgba(30, 58, 138, 0.2);
+  }
+
+  .rubik-nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 1rem;
+  }
+
+  .rubik-back-btn {
+    color: #bfdbfe;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+  .rubik-back-btn:hover {
+    color: #ffffff;
+  }
+
+  .rubik-nav-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .rubik-sub-nav {
+    color: #dbeafe;
+    text-decoration: none;
+    font-size: 0.85rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.35rem 0.8rem;
+    border-radius: 20px;
+    transition: all 0.2s;
+  }
+  .rubik-sub-nav:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
+  }
+
+  .rubik-hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+
+  .rubik-badge {
+    display: inline-block;
+    background: rgba(191, 219, 254, 0.25);
+    color: #bfdbfe;
+    font-size: 0.85rem;
+    padding: 0.25rem 0.8rem;
+    border-radius: 12px;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+  }
+
+  .rubik-main-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin: 0.2rem 0;
+  }
+
+  .rubik-subtitle {
+    font-size: 1.05rem;
+    color: #dbeafe;
+    max-width: 720px;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .rubik-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.4rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .rubik-btn-amber {
+    background: #f59e0b;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+  }
+  .rubik-btn-amber:hover {
+    background: #d97706;
+    transform: translateY(-2px);
+  }
+  .rubik-btn-gray {
+    background: #e2e8f0;
+    color: #334155;
+  }
+
+  .rubik-section {
+    margin-bottom: 3.5rem;
+  }
+  .rubik-section-title {
+    margin-bottom: 1.8rem;
+  }
+  .rubik-section-title h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 0.3rem 0;
+  }
+  .rubik-section-sub {
+    color: #64748b;
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  /* 1. 结构卡片 */
+  .cube-structure-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 1.8rem;
+  }
+  .structure-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  }
+  .structure-icon {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+  }
+  .structure-card h3 {
+    margin: 0 0 0.6rem 0;
+    font-size: 1.25rem;
+    color: #0f172a;
+  }
+  .structure-rule {
+    font-size: 0.88rem;
+    color: #475569;
+    line-height: 1.5;
+    margin: 0 0 1rem 0;
+  }
+  .structure-pill {
+    background: #f1f5f9;
+    color: #334155;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+  }
+
+  .color-code-banner {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.4rem;
+  }
+  .color-code-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 1rem;
+  }
+  .color-pairs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+  .color-pair-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+  }
+  .color-pair-card b {
+    color: #1e293b;
+  }
+  .color-pair-card span {
+    color: #64748b;
+    font-size: 0.8rem;
+  }
+
+  /* 2. 七步层先法播放器 */
+  .step-navigator-deck {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 1.8rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+  }
+  .step-tabs-row {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.2rem;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 1rem;
+  }
+  .rubik-step-tab {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 0.5rem 0.8rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.2rem;
+    transition: all 0.2s;
+  }
+  .rubik-step-tab:hover {
+    background: #eff6ff;
+    border-color: #93c5fd;
+  }
+  .rubik-step-tab.active {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #2563eb;
+  }
+  .rubik-step-tab.active .step-index, .rubik-step-tab.active .step-label {
+    color: #ffffff;
+  }
+  .step-index {
+    font-size: 0.72rem;
+    color: #64748b;
+    font-weight: 700;
+  }
+  .step-label {
+    font-size: 0.85rem;
+    font-weight: 800;
+  }
+
+  .step-stage-bar {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 10px;
+    padding: 0.6rem 1rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+  }
+  .stage-tag {
+    color: #166534;
+    font-weight: 700;
+  }
+  .stage-text {
+    color: #15803d;
+    font-weight: 800;
+  }
+
+  .rubik-step-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+  .step-card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+  }
+  .step-badge-circle {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #2563eb;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  .step-card-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 0.2rem 0;
+  }
+  .step-formula-code code {
+    background: #e2e8f0;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 0.85rem;
+    color: #b91c1c;
+    font-weight: 700;
+  }
+
+  .step-chant-box {
+    background: #fffbeb;
+    border: 1px solid #fef3c7;
+    border-radius: 12px;
+    padding: 0.8rem 1.2rem;
+    margin-bottom: 1.5rem;
+  }
+  .chant-symbol {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #b45309;
+  }
+  .chant-content {
+    margin: 0.3rem 0 0 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #92400e;
+    line-height: 1.6;
+  }
+
+  .step-body-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 1.8rem;
+  }
+  .step-detail-pane h4 {
+    margin: 0 0 0.6rem 0;
+    color: #0f172a;
+  }
+  .step-detail-pane p {
+    font-size: 0.9rem;
+    color: #475569;
+    line-height: 1.6;
+    margin: 0 0 1rem 0;
+  }
+  .step-key-tip {
+    background: #eff6ff;
+    border: 1px solid #dbeafe;
+    border-radius: 10px;
+    padding: 0.8rem;
+    font-size: 0.85rem;
+    color: #1e40af;
+    display: flex;
+    gap: 0.5rem;
+    line-height: 1.5;
+  }
+
+  .step-visual-pane {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .cube-isometric-mock {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    transform: rotateX(60deg) rotateZ(45deg);
+    margin-bottom: 1.2rem;
+  }
+  .mock-cube-face {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border: 2px solid #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 0.85rem;
+  }
+  .top-face {
+    background: #facc15;
+    transform: translateZ(50px);
+    color: #713f12;
+  }
+  .front-face {
+    background: #ef4444;
+    transform: rotateX(-90deg) translateZ(50px);
+    color: #fff;
+  }
+  .right-face {
+    background: #3b82f6;
+    transform: rotateY(90deg) translateZ(50px);
+    color: #fff;
+  }
+  .mock-goal-text {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #475569;
+    text-align: center;
+  }
+
+  .step-controls-actions {
+    display: flex;
+    justify-content: space-between;
+  }
+  .step-ctrl-btn {
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 0.6rem 1.4rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #334155;
+    transition: all 0.2s;
+  }
+  .step-ctrl-btn.primary {
+    background: #2563eb;
+    color: #fff;
+    border-color: #2563eb;
+  }
+  .step-ctrl-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  /* 3. 转动符号与公式台 */
+  .formula-test-deck {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 20px;
+    padding: 1.8rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+  }
+  .sequence-display-bar {
+    background: #0f172a;
+    color: #fff;
+    border-radius: 12px;
+    padding: 0.8rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .seq-label {
+    font-size: 0.85rem;
+    color: #94a3b8;
+  }
+  .seq-code {
+    font-family: monospace;
+    font-size: 1.2rem;
+    color: #38bdf8;
+    font-weight: 800;
+    flex: 1;
+  }
+  .seq-clear-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #fff;
+    border-radius: 6px;
+    padding: 0.3rem 0.8rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+
+  .notations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .notation-item-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .notation-item-card:hover {
+    background: #eff6ff;
+    border-color: #3b82f6;
+    transform: translateY(-2px);
+  }
+  .notation-code-badge {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: #2563eb;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    font-weight: 800;
+    font-family: monospace;
+    flex-shrink: 0;
+  }
+  .notation-info h4 {
+    margin: 0 0 0.2rem 0;
+    font-size: 0.95rem;
+    color: #0f172a;
+  }
+  .notation-info p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #64748b;
+  }
+
+  /* 4. 空间思维价值 */
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.4rem;
+  }
+  .benefit-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  }
+  .benefit-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.8rem;
+  }
+  .benefit-icon {
+    font-size: 1.8rem;
+  }
+  .benefit-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #0f172a;
+  }
+  .benefit-card p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.6;
+  }
+
+  /* 弹窗样式 */
+  .rubik-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1.5rem;
+  }
+  .rubik-modal-backdrop.active {
+    display: flex;
+  }
+  .rubik-modal-container {
+    background: #ffffff;
+    border-radius: 20px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 2rem;
+    position: relative;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.2);
+  }
+  .rubik-modal-close {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.2rem;
+    background: #f1f5f9;
+    border: none;
+    font-size: 1.5rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #475569;
+  }
+
+  .quiz-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 1.2rem;
+  }
+  .quiz-icon {
+    font-size: 2.8rem;
+  }
+  .quiz-modal-header h2 {
+    font-size: 1.4rem;
+    margin: 0 0 0.3rem 0;
+    color: #0f172a;
+  }
+  .quiz-modal-header p {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin: 0;
+  }
+
+  .quiz-score-card {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 1px solid #fcd34d;
+    border-radius: 14px;
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  .score-badge {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #b45309;
+    margin-bottom: 0.4rem;
+  }
+  .score-honor {
+    font-size: 0.95rem;
+    color: #92400e;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .quiz-questions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  .rubik-quiz-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 1.2rem;
+  }
+  .rubik-quiz-card.correct {
+    border-color: #10b981;
+    background: #f0fdf4;
+  }
+  .rubik-quiz-card.wrong {
+    border-color: #ef4444;
+    background: #fef2f2;
+  }
+  .quiz-q-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.8rem;
+  }
+  .quiz-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+  .rubik-quiz-opt {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    font-size: 0.85rem;
+    color: #334155;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s;
+  }
+  .rubik-quiz-opt:hover {
+    border-color: #2563eb;
+    background: #eff6ff;
+  }
+  .rubik-quiz-opt.selected {
+    border-color: #2563eb;
+    background: #dbeafe;
+    color: #1e40af;
+    font-weight: 700;
+  }
+  .rubik-quiz-feedback {
+    margin-top: 0.8rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    line-height: 1.4;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+  }
+  .quiz-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 1.2rem;
+  }
+
+  @media (max-width: 768px) {
+    .rubik-container {
+      padding: 1rem;
+    }
+    .rubik-header {
+      padding: 1.5rem;
+    }
+    .rubik-main-title {
+      font-size: 1.6rem;
+    }
+    .step-body-grid {
+      grid-template-columns: 1fr;
+    }
+    .quiz-options-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
