@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro'
 import { biologyData } from '../../data/biologyData.js'
 
 const base = import.meta.env.BASE_URL
-const { meta, categoryNav, animals, botany, humanBody, quiz } = biologyData
+const { meta, categoryNav, animals, botany, microAndHuman, humanBody, quiz } = biologyData
 ---
 
 <Base title="生命之树 · 生物奥秘与神奇动物王国 · 十丘万象" wide={true}>
@@ -13,17 +13,17 @@ const { meta, categoryNav, animals, botany, humanBody, quiz } = biologyData
       <div class="bio-nav-bar">
         <a href={base} class="bio-back-btn">← 返回【十丘】知识总门户</a>
         <div class="bio-nav-links">
-          <a href={`${base}astronomy/`} class="bio-sub-nav">🌌 浩瀚星空</a>
+          <a href={`${base}astronomy/`} class="bio-sub-nav">🌌 浩瀚星空与深空摄影</a>
+          <a href={`${base}geography/nature/`} class="bio-sub-nav">🏔️ 自然地理与大江大河</a>
           <a href={`${base}geography/heritage/`} class="bio-sub-nav">🏯 中华世界遗产</a>
           <a href={`${base}science/`} class="bio-sub-nav">🚀 华夏科学探索</a>
           <a href={`${base}chinese/solar-terms/`} class="bio-sub-nav">🌾 二十四节气</a>
-          <a href={`${base}math/games/`} class="bio-sub-nav">🧮 数学乐园</a>
         </div>
       </div>
 
       <div class="bio-hero">
         <div class="bio-title-wrap">
-          <span class="bio-badge">🌿 演化奇迹 · 38亿年地球生命的壮丽史诗</span>
+          <span class="bio-badge">🌿 演化奇迹 · 38亿年地球生命与真实生态大图鉴</span>
           <h1 class="bio-main-title">{meta.title}</h1>
           <p class="bio-subtitle">{meta.subtitle}</p>
         </div>
@@ -52,11 +52,11 @@ const { meta, categoryNav, animals, botany, humanBody, quiz } = biologyData
       </div>
     </header>
 
-    <!-- 主展示区：神奇动物王国卡片阵列 -->
+    <!-- 主展示区：神奇动物王国与史前恐龙卡片阵列 -->
     <main class="bio-main-content">
       <div class="bio-section-title">
-        <h2>🐾 奇妙动物王国 (Fauna Showcase)</h2>
-        <p class="bio-section-sub">精选 18 种代表性野生动物与大国旗舰物种，带你洞悉生命的精妙构造与生存智慧</p>
+        <h2>🐾 奇妙动物与史前王朝 (Fauna & Prehistoric)</h2>
+        <p class="bio-section-sub">精选 30+ 种陆地与深海代表物种及 8 种史前恐龙古生物，真实原生态高清特写与博物馆骨架装架，带你洞悉生命的精妙构造与生存演化</p>
       </div>
 
       <div class="bio-species-grid">
@@ -77,12 +77,21 @@ const { meta, categoryNav, animals, botany, humanBody, quiz } = biologyData
             data-habits={item.habits}
             data-funfact={item.funFact}
             data-emoji={item.emoji}
+            data-img={item.image ? `${base}${item.image.replace(/^\//, '')}` : ''}
+            data-caption={item.imageCaption || ''}
             style={`--accent-color: ${item.accentColor};`}
           >
             <div class="card-visual">
-              <div class="card-emoji-wrap">
-                <span class="card-emoji">{item.emoji}</span>
-              </div>
+              {item.image ? (
+                <div class="card-photo-box">
+                  <img src={`${base}${item.image.replace(/^\//, '')}`} alt={item.name} class="card-real-photo" loading="lazy" />
+                  <span class="photo-badge">📷 真实高清摄影</span>
+                </div>
+              ) : (
+                <div class="card-emoji-wrap">
+                  <span class="card-emoji">{item.emoji}</span>
+                </div>
+              )}
               <div class="card-badge-tag">{item.badge}</div>
             </div>
 
@@ -109,7 +118,7 @@ const { meta, categoryNav, animals, botany, humanBody, quiz } = biologyData
 
               <div class="card-footer">
                 <span class="protection-pill">🛡️ {item.protectionLevel.split('/')[0].trim()}</span>
-                <span class="card-cta">点击查看详卷 ➔</span>
+                <span class="card-cta">点击查看详卷与大图 ➔</span>
               </div>
             </div>
           </article>
@@ -126,6 +135,12 @@ const { meta, categoryNav, animals, botany, humanBody, quiz } = biologyData
         <div class="bio-plants-grid">
           {botany.map((p) => (
             <div class="bio-plant-card">
+              {p.image && (
+                <div class="plant-visual">
+                  <img src={`${base}${p.image.replace(/^\//, '')}`} alt={p.name} class="plant-real-photo" loading="lazy" />
+                  <span class="photo-badge">🌿 植物生态实拍</span>
+                </div>
+              )}
               <div class="plant-header">
                 <span class="plant-icon">🌱</span>
                 <div>
@@ -146,6 +161,41 @@ const { meta, categoryNav, animals, botany, humanBody, quiz } = biologyData
         </div>
       </section>
 
+      <!-- 微观生命奥秘展区 -->
+      {microAndHuman && microAndHuman.length > 0 && (
+        <section class="bio-special-section" data-category="humanBody">
+          <div class="bio-section-title">
+            <h2>🔬 显微镜下的奇迹生命 (Microscopic Life)</h2>
+            <p class="bio-section-sub">超越肉眼极限的微观世界：从能在绝对零度与太空存活的水熊虫，到我们体内奔流不息的血液卫士</p>
+          </div>
+
+          <div class="bio-micro-grid">
+            {microAndHuman.map((m) => (
+              <div class="bio-micro-card">
+                {m.image && (
+                  <div class="micro-visual">
+                    <img src={`${base}${m.image.replace(/^\//, '')}`} alt={m.name} class="micro-real-photo" loading="lazy" />
+                    <span class="photo-badge">🔬 电子显微镜扫描实拍</span>
+                  </div>
+                )}
+                <div class="micro-header">
+                  <span class="micro-icon">🧫</span>
+                  <div>
+                    <h3 class="micro-name">{m.name} <small>({m.englishName})</small></h3>
+                    <span class="micro-badge">{m.badge}</span>
+                  </div>
+                </div>
+                <div class="micro-body">
+                  <p><b>微观特征：</b>{m.features}</p>
+                  <p><b>生存超能力：</b>{m.secret}</p>
+                  <p><b>极端纪录：</b>{m.extremes}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       <!-- 人体微观生命奥秘展区 -->
       <section class="bio-special-section" data-category="humanBody">
         <div class="bio-section-title">
@@ -157,14 +207,15 @@ const { meta, categoryNav, animals, botany, humanBody, quiz } = biologyData
           {humanBody.map((sys) => (
             <div class="bio-human-card">
               <div class="human-header">
-                <span class="human-icon">🔬</span>
+                <span class="human-icon">{sys.icon || '🔬'}</span>
                 <div>
                   <h3 class="human-title">{sys.name}</h3>
-                  <span class="human-sub">{sys.subtitle}</span>
+                  <span class="human-sub">{sys.tag || sys.subtitle}</span>
                 </div>
               </div>
               <div class="human-body">
-                <p>{sys.features}</p>
+                <p><b>运转奥秘：</b>{sys.description || sys.features}</p>
+                {sys.vitalStats && <p class="human-stats">📊 <b>核心指标：</b>{sys.vitalStats}</p>}
                 <div class="human-funfact">
                   <span class="human-bulb">✨</span>
                   <span>{sys.funFact}</span>
@@ -180,9 +231,17 @@ const { meta, categoryNav, animals, botany, humanBody, quiz } = biologyData
     <div id="bio-detail-modal" class="bio-modal-backdrop">
       <div class="bio-modal-container">
         <button id="btn-close-bio-detail" class="bio-modal-close" aria-label="关闭">&times;</button>
+
+        <!-- 高清原图展示区 -->
+        <div id="modal-bio-photo-box" class="modal-photo-hero" style="display: none;">
+          <img id="modal-bio-photo" src="" alt="" class="modal-photo-img" />
+          <div id="modal-bio-caption" class="modal-photo-caption"></div>
+          <button id="btn-open-lightbox" class="modal-lightbox-btn">🔍 点击全屏看大图</button>
+        </div>
+
         <div class="bio-modal-header">
           <div id="modal-bio-emoji" class="modal-big-emoji">🐼</div>
-          <div>
+          <div class="modal-title-wrap">
             <div id="modal-bio-badge" class="modal-badge">华夏国宝</div>
             <h2 id="modal-bio-title" class="modal-title">物种名称</h2>
             <div id="modal-bio-subtitle" class="modal-sub">英文名 · 拉丁学名</div>
@@ -259,6 +318,15 @@ const { meta, categoryNav, animals, botany, humanBody, quiz } = biologyData
           <button id="btn-submit-bio-quiz" class="bio-btn bio-btn-emerald">提交测评计算成绩</button>
           <button id="btn-reset-bio-quiz" class="bio-btn bio-btn-gray">重新开始挑战</button>
         </div>
+      </div>
+    </div>
+
+    <!-- 弹窗三：超清大图灯箱预览 -->
+    <div id="bio-lightbox-modal" class="bio-lightbox-backdrop" style="display: none;">
+      <button id="btn-close-lightbox" class="lightbox-close" aria-label="关闭">&times;</button>
+      <div class="lightbox-content">
+        <img id="lightbox-img" src="" alt="" class="lightbox-photo" />
+        <div id="lightbox-caption" class="lightbox-caption"></div>
       </div>
     </div>
   </div>
@@ -497,13 +565,45 @@ const { meta, categoryNav, animals, botany, humanBody, quiz } = biologyData
   }
 
   .card-visual {
-    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-    padding: 1.5rem;
+    background: #0f172a;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
     border-bottom: 1px solid #f1f5f9;
     position: relative;
+    overflow: hidden;
+  }
+
+  .card-photo-box {
+    width: 100%;
+    height: 220px;
+    position: relative;
+    overflow: hidden;
+    background: #0f172a;
+  }
+
+  .card-real-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .bio-species-card:hover .card-real-photo {
+    transform: scale(1.06);
+  }
+
+  .photo-badge {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    background: rgba(15, 23, 42, 0.75);
+    color: #e2e8f0;
+    font-size: 0.72rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
   }
 
   .card-emoji-wrap {
@@ -517,16 +617,22 @@ const { meta, categoryNav, animals, botany, humanBody, quiz } = biologyData
     font-size: 2.5rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
     border: 1px solid #f1f5f9;
+    margin: 1.5rem;
   }
 
   .card-badge-tag {
-    background: #ecfdf5;
-    color: #065f46;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(15, 23, 42, 0.78);
+    color: #a7f3d0;
     font-size: 0.75rem;
     font-weight: 700;
-    padding: 0.3rem 0.7rem;
+    padding: 0.25rem 0.65rem;
     border-radius: 20px;
-    border: 1px solid #a7f3d0;
+    border: 1px solid rgba(167, 243, 208, 0.35);
+    backdrop-filter: blur(6px);
+    z-index: 2;
   }
 
   .card-info {
@@ -625,38 +731,62 @@ const { meta, categoryNav, animals, botany, humanBody, quiz } = biologyData
     font-weight: 700;
   }
 
-  /* 植物展区样式 */
-  .bio-plants-grid, .bio-human-grid {
+  /* 植物与微观展区样式 */
+  .bio-plants-grid, .bio-human-grid, .bio-micro-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
     gap: 1.5rem;
     margin-bottom: 3.5rem;
   }
 
-  .bio-plant-card, .bio-human-card {
+  .bio-plant-card, .bio-human-card, .bio-micro-card {
     background: #ffffff;
     border-radius: 16px;
     border: 1px solid #e2e8f0;
-    padding: 1.5rem;
+    overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .bio-plant-card:hover, .bio-micro-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.07);
   }
 
-  .plant-header, .human-header {
+  .plant-visual, .micro-visual {
+    width: 100%;
+    height: 190px;
+    position: relative;
+    overflow: hidden;
+    background: #0f172a;
+  }
+  .plant-real-photo, .micro-real-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+  }
+  .bio-plant-card:hover .plant-real-photo,
+  .bio-micro-card:hover .micro-real-photo {
+    transform: scale(1.06);
+  }
+
+  .plant-header, .human-header, .micro-header {
     display: flex;
     align-items: center;
     gap: 0.8rem;
-    margin-bottom: 1rem;
+    padding: 1.2rem 1.4rem 0.6rem;
   }
-  .plant-icon, .human-icon {
+  .plant-icon, .human-icon, .micro-icon {
     font-size: 2.2rem;
   }
-  .plant-name, .human-title {
+  .plant-name, .human-title, .micro-name {
     font-size: 1.2rem;
     font-weight: 800;
     color: #0f172a;
     margin: 0;
   }
-  .plant-badge {
+  .plant-badge, .micro-badge {
     display: inline-block;
     background: #f0fdf4;
     color: #166534;
@@ -666,16 +796,30 @@ const { meta, categoryNav, animals, botany, humanBody, quiz } = biologyData
     border-radius: 12px;
     margin-top: 0.2rem;
   }
+  .micro-badge {
+    background: #eff6ff;
+    color: #1d4ed8;
+  }
   .human-sub {
     font-size: 0.8rem;
     color: #64748b;
   }
 
-  .plant-body p, .human-body p {
+  .plant-body, .human-body, .micro-body {
+    padding: 0.5rem 1.4rem 1.4rem;
+  }
+  .plant-body p, .human-body p, .micro-body p {
     font-size: 0.88rem;
     color: #475569;
-    line-height: 1.5;
+    line-height: 1.55;
     margin: 0 0 0.5rem 0;
+  }
+  .human-stats {
+    background: #f1f5f9;
+    padding: 0.4rem 0.7rem;
+    border-radius: 8px;
+    font-size: 0.82rem !important;
+    color: #334155 !important;
   }
 
   .plant-funfact, .human-funfact {
@@ -698,8 +842,8 @@ const { meta, categoryNav, animals, botany, humanBody, quiz } = biologyData
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(4px);
+    background: rgba(15, 23, 42, 0.65);
+    backdrop-filter: blur(5px);
     display: none;
     align-items: center;
     justify-content: center;
@@ -713,13 +857,131 @@ const { meta, categoryNav, animals, botany, humanBody, quiz } = biologyData
   .bio-modal-container {
     background: #ffffff;
     border-radius: 20px;
-    max-width: 650px;
+    max-width: 680px;
     width: 100%;
-    max-height: 85vh;
+    max-height: 88vh;
     overflow-y: auto;
     padding: 2rem;
     position: relative;
-    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.25);
+  }
+
+  .quiz-modal-container {
+    max-width: 800px;
+  }
+
+  /* 详情弹窗中的高清大图展示 */
+  .modal-photo-hero {
+    width: 100%;
+    max-height: 290px;
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 1.4rem;
+    background: #0f172a;
+  }
+  .modal-photo-img {
+    width: 100%;
+    max-height: 290px;
+    object-fit: cover;
+    display: block;
+    border-radius: 14px;
+  }
+  .modal-photo-caption {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.4) 70%, transparent 100%);
+    color: #e2e8f0;
+    font-size: 0.78rem;
+    padding: 1.2rem 0.8rem 0.5rem;
+    line-height: 1.4;
+  }
+  .modal-lightbox-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(15, 23, 42, 0.8);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(6px);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.3rem 0.7rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .modal-lightbox-btn:hover {
+    background: #10b981;
+    border-color: #10b981;
+  }
+
+  /* 全屏灯箱样式 */
+  .bio-lightbox-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(2, 6, 23, 0.98);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    backdrop-filter: blur(12px);
+  }
+  .lightbox-content {
+    max-width: 1100px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: zoomIn 0.25s ease-out;
+  }
+  @keyframes zoomIn {
+    from { transform: scale(0.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .lightbox-photo {
+    max-width: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+  }
+  .lightbox-caption {
+    color: #cbd5e1;
+    font-size: 0.95rem;
+    margin-top: 1rem;
+    text-align: center;
+    background: rgba(15, 23, 42, 0.7);
+    padding: 0.4rem 1.2rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  .lightbox-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 2rem;
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: #ffffff;
+    font-size: 2.2rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .lightbox-close:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: scale(1.08);
   }
 
   .quiz-modal-container {

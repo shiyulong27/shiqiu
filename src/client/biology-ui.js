@@ -7,8 +7,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initCategoryFilters();
   initSearch();
   initAnimalModals();
+  initLightbox();
   initQuiz();
   initSpeech();
+  initKeyboardNav();
 });
 
 // 1. 分类筛选
@@ -67,11 +69,16 @@ function initSearch() {
   });
 }
 
-// 3. 物种详情弹窗与数据渲染
+// 3. 物种详情弹窗与真实高清大图渲染
 function initAnimalModals() {
   const modal = document.getElementById('bio-detail-modal');
   const closeBtn = document.getElementById('btn-close-bio-detail');
   const cards = document.querySelectorAll('.bio-species-card');
+
+  const photoBox = document.getElementById('modal-bio-photo-box');
+  const photoImg = document.getElementById('modal-bio-photo');
+  const captionBox = document.getElementById('modal-bio-caption');
+  const emojiBox = document.getElementById('modal-bio-emoji');
 
   if (!modal || !closeBtn) return;
 
@@ -89,8 +96,23 @@ function initAnimalModals() {
       const funFact = card.getAttribute('data-funfact');
       const emoji = card.getAttribute('data-emoji');
       const protection = card.getAttribute('data-protection');
+      const imgUrl = card.getAttribute('data-img');
+      const caption = card.getAttribute('data-caption');
 
-      document.getElementById('modal-bio-emoji').textContent = emoji;
+      if (imgUrl && photoBox && photoImg) {
+        photoImg.src = imgUrl;
+        photoImg.alt = name;
+        if (captionBox) captionBox.textContent = caption || `${name} (${latin}) 真实生态展示`;
+        photoBox.style.display = 'block';
+        if (emojiBox) emojiBox.style.display = 'none';
+      } else {
+        if (photoBox) photoBox.style.display = 'none';
+        if (emojiBox) {
+          emojiBox.style.display = 'flex';
+          emojiBox.textContent = emoji || '🐾';
+        }
+      }
+
       document.getElementById('modal-bio-title').textContent = `${name} (${pinyin})`;
       document.getElementById('modal-bio-subtitle').textContent = `${enName} · ${latin}`;
       document.getElementById('modal-bio-badge').textContent = badge;
@@ -111,6 +133,60 @@ function initAnimalModals() {
 
   modal.addEventListener('click', (e) => {
     if (e.target === modal) modal.classList.remove('active');
+  });
+}
+
+// 4. 超清全屏灯箱
+function initLightbox() {
+  const lightbox = document.getElementById('bio-lightbox-modal');
+  const closeBtn = document.getElementById('btn-close-lightbox');
+  const lbImg = document.getElementById('lightbox-img');
+  const lbCaption = document.getElementById('lightbox-caption');
+
+  const openBtn = document.getElementById('btn-open-lightbox');
+  const photoImg = document.getElementById('modal-bio-photo');
+  const captionBox = document.getElementById('modal-bio-caption');
+
+  if (!lightbox) return;
+
+  function openLb() {
+    if (photoImg && photoImg.src) {
+      lbImg.src = photoImg.src;
+      lbImg.alt = photoImg.alt;
+      if (lbCaption && captionBox) lbCaption.textContent = captionBox.textContent;
+      lightbox.style.display = 'flex';
+    }
+  }
+
+  if (openBtn) openBtn.addEventListener('click', openLb);
+  if (photoImg) {
+    photoImg.style.cursor = 'zoom-in';
+    photoImg.addEventListener('click', openLb);
+  }
+
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      lightbox.style.display = 'none';
+    });
+  }
+
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) lightbox.style.display = 'none';
+  });
+}
+
+// 键盘 ESC 快捷关闭
+function initKeyboardNav() {
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const lightbox = document.getElementById('bio-lightbox-modal');
+      if (lightbox && lightbox.style.display === 'flex') {
+        lightbox.style.display = 'none';
+        return;
+      }
+      const modals = document.querySelectorAll('.bio-modal-backdrop.active');
+      modals.forEach(m => m.classList.remove('active'));
+    }
   });
 }
 
