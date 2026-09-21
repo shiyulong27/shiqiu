@@ -1021,6 +1021,40 @@
   background: #b45309;
 }
 
+.card-guide {
+  border-color: #bfdbfe;
+}
+.card-guide:hover {
+  border-color: #2563eb;
+}
+.card-guide .subject-card-sub {
+  color: #2563eb;
+}
+.card-guide .subject-enter-btn {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  color: #ffffff;
+}
+.card-guide .subject-enter-btn:hover {
+  background: #1d4ed8;
+}
+
+.card-questionnaire {
+  border-color: #bbf7d0;
+}
+.card-questionnaire:hover {
+  border-color: #059669;
+}
+.card-questionnaire .subject-card-sub {
+  color: #059669;
+}
+.card-questionnaire .subject-enter-btn {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: #ffffff;
+}
+.card-questionnaire .subject-enter-btn:hover {
+  background: #047857;
+}
+
 /* ── 数学与英语卡片通用扩展 ───────────────────────── */
 .math-grid {
   display: grid;

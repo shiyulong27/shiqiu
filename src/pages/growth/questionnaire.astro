@@ -1,0 +1,1716 @@
+---
+import Base from '../../layouts/Base.astro'
+import '../../styles/learning.css'
+
+const base = import.meta.env.BASE_URL
+
+// 72道完整题目数据定义
+const modulesData = [
+  {
+    id: 'food',
+    title: '🍎 一、【舌尖宇宙·吃喝偏好类】',
+    desc: '记录孩子的舌尖味蕾演变，了解当下的饮食喜好与挑食雷区',
+    icon: '🍎',
+    questions: [
+      {
+        id: 1,
+        q: '最喜欢的零食是什么？',
+        options: [
+          'A. 甜蜜糖巧类（巧克力、棒棒糖、冰淇淋、软糖）',
+          'B. 酥脆咸香类（薯片、饼干、海苔、爆米花）',
+          'C. 健康果奶类（坚果、果干、奶酪棒、酸奶）',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 2,
+        q: '最喜欢哪种水果？',
+        options: [
+          'A. 多汁甜爽类（西瓜、草莓、葡萄、樱桃）',
+          'B. 经典温和类（苹果、香蕉、梨、橘子）',
+          'C. 浓郁热带类（芒果、荔枝、菠萝、哈密瓜）',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 3,
+        q: '不喜欢的蔬菜是什么？',
+        options: [
+          'A. 特殊气味组（香菜、芹菜、洋葱、大蒜）',
+          'B. 苦味/硬皮组（苦瓜、胡萝卜、西兰花、青椒）',
+          'C. 叶菜/滑溜组（菠菜、秋葵、木耳、茄子）',
+          'D. 我是好胃口小卫士，基本不挑食！',
+          'E. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 4,
+        q: '最喜欢吃的家常饭菜是什么？',
+        options: [
+          'A. 大口吃肉类（红烧肉、排骨、可乐鸡翅、牛排）',
+          'B. 海鲜水产类（清蒸鱼、大虾、贝类）',
+          'C. 灵魂主食面点（番茄鸡蛋面、水饺、披萨、汉堡）',
+          'D. 清爽家常菜（番茄炒蛋、土豆丝、蒸蛋羹）',
+          'E. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 5,
+        q: '最不喜欢吃的食物是什么？',
+        options: [
+          'A. 肥肉、带皮的油腻肉类',
+          'B. 味道奇怪的蔬菜或软趴趴的菌菇',
+          'C. 辣辣的、苦苦的、或者太酸的味道',
+          'D. 几乎没有，我是不挑食的“干饭小能手”！',
+          'E. 其他自选'
+        ],
+        hasInput: true
+      }
+    ]
+  },
+  {
+    id: 'hobby',
+    title: '🎮 二、【兴趣天地·玩乐与文艺类】',
+    desc: '捕捉孩子的兴趣焦点，包含动画、游戏、阅读、运动与好奇心',
+    icon: '🎮',
+    questions: [
+      {
+        id: 6,
+        q: '你喜欢看动画片吗？你目前最喜欢的一部动画片是什么？',
+        options: [
+          'A. 超级喜欢！只要有时间就想看，剧情和角色我都特别熟悉！',
+          'B. 挺喜欢的！遇到特别搞笑、神奇或酷炫的才会追着看。',
+          'C. 一般般，比起看动画，我更喜欢去户外疯跑或玩别的。',
+          'D. 我目前最最最喜欢的一部动画片是：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 7,
+        q: '你平时最喜欢玩什么游戏？（户外奔跑、益智桌游、电子游戏都算！）',
+        options: [
+          'A. 户外奔跑与追逐类（捉迷藏、抓人游戏、打水枪、撕名牌、老鹰抓小鸡）',
+          'B. 动手拼装与桌游类（乐高积木、飞行棋、大富翁、拼图、魔方、卡牌对战）',
+          'C. 角色扮演与想象类（奥特曼打怪兽、特工探险、过家家当医生/老板）',
+          'D. 手机/平板/主机电子游戏类（益智闯关、我的世界等）',
+          'E. 我目前最最最喜欢玩的一个具体游戏是：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 8,
+        q: '喜欢唱歌/听歌吗？',
+        options: [
+          'A. 超喜欢！听到音乐就想跟着哼、跟着跳！',
+          'B. 喜欢戴耳机或在车里听，自己不太爱当众唱。',
+          'C. 一般般，只有听到特别好听的歌才留意。',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 9,
+        q: '你喜欢看书/读书吗？（漫画、绘本、百科书、故事书都算！）',
+        options: [
+          'A. 超级喜欢！我是个名副其实的小书虫，抓到什么书都能津津有味看半天！',
+          'B. 挺喜欢的！但我只偏爱某一类书（爆笑漫画/恐龙宇宙百科/探险故事）',
+          'C. 一般般，有特别搞笑好玩的图画书才翻翻，密密麻麻全是字的书有点头疼。',
+          'D. 不太喜欢看书，比起坐着看书，我更想去动手拼乐高或去户外疯跑！',
+          'E. 我目前最最最喜欢的一本书是：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 10,
+        q: '喜欢运动吗？',
+        options: [
+          'A. 超喜欢！一天不跑跑跳跳浑身就难受！',
+          'B. 偶尔喜欢，有小伙伴一起玩时最来劲。',
+          'C. 不太爱动，我更喜欢安静地呆在屋里做喜欢的事。',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 11,
+        q: '最喜欢什么运动？',
+        options: [
+          'A. 球类运动（足球、篮球、羽毛球、乒乓球）',
+          'B. 飞驰轮子（骑自行车、滑板车、轮滑、平衡车）',
+          'C. 奔跑与水（游泳、跑步、跳绳、攀爬）',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 12,
+        q: '最喜欢的颜色是什么？',
+        options: [
+          'A. 热情阳光色（红色、黄色、橙色）',
+          'B. 沉静自然色（蓝色、绿色）',
+          'C. 甜美梦幻色（粉色、紫色）',
+          'D. 酷炫简约色（黑色、白色、灰色）',
+          'E. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 13,
+        q: '最喜欢的动物是什么？',
+        options: [
+          'A. 呆萌伴侣（小狗、小猫、小兔子、仓鼠）',
+          'B. 霸气猛兽（狮子、老虎、恐龙、老鹰）',
+          'C. 神奇生灵（海豚、大熊猫、小鸟、变色龙）',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 14,
+        q: '你最想学的一门新本领/特长是什么？',
+        options: [
+          'A. 一项酷炫运动（游泳、滑板、轮滑、跆拳道）',
+          'B. 一门艺术特长（弹钢琴、吉他、画画、跳舞）',
+          'C. 一套神奇本领（做美食烘焙、魔术、拼装大机器人）',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      }
+    ]
+  },
+  {
+    id: 'fear',
+    title: '🦁 三、【胆量考验·害怕与勇气类】',
+    desc: '触达孩子心底深处最真实的安全感：医院打针、挨打惩罚、言语恐吓与夜间独立',
+    icon: '🦁',
+    questions: [
+      {
+        id: 15,
+        q: '平时什么事情最容易让你觉得害怕？',
+        options: [
+          'A. 黑漆漆的房间、或者突然的一声巨响。',
+          'B. 恐怖的怪物、听鬼故事或吓人的噩梦。',
+          'C. 爸爸妈妈生气发火、严厉地批评我。',
+          'D. 被孤立、或者没人愿意听我说话。',
+          'E. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 16,
+        q: '你害怕打针、打疫苗或者生病去医院吗？',
+        options: [
+          'A. 超级害怕！一看到白大褂、闻到消毒水味或看到针头就想逃跑！',
+          'B. 去医院还行，但一听说“抽血打针”就瞬间紧张，必须死死抓住爸妈的手。',
+          'C. 其实打针的疼能忍，最怕的是生病难受（发烧头晕浑身无力还要吃苦药）。',
+          'D. 毫无畏惧！我是坚强小勇士，打针就像大蚂蚁夹一下，咬咬牙就挺过去！',
+          'E. 我的真实体验是：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 17,
+        q: '你害怕挨打（或者被打屁股/受严厉体罚）吗？心里是怎么看待这件事的？',
+        options: [
+          'A. 超级害怕！只要看到爸爸妈妈板起脸、声音变大，心里就扑通扑通直跳！',
+          'B. 害怕倒还好，但我会觉得特别委屈难过，有时候会在被窝里偷偷掉眼泪。',
+          'C. 我知道犯了严重错误才会挨打，知道大人是为我好，但我仍希望不要挨打。',
+          'D. 我觉得“好好讲道理”比“打我”管用一百倍！耐心解释我一定会改，打我我反而不服气。',
+          'E. 爸爸妈妈平时基本不打我，最严厉也就是严肃批评或罚站/取消看电视。',
+          'F. 我的真实心里话是：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 18,
+        q: '如果犯了错，你会害怕爸爸妈妈或爷爷奶奶生气“不要你”吗？（比如平时口头说“把你卖了”、“把你扔掉/送人”这类话）',
+        options: [
+          'A. 超级害怕！每次听到这样的话心里就特别慌特别难受，眼泪忍不住掉下来，害怕真的被丢下。',
+          'B. 有时候会当真，尤其是看到大人生气、脸色很凶的时候，心里很恐惧以为大人真的不爱我了。',
+          'C. 我知道这只是大人气头上的假话，但我心里还是很难受，我特别讨厌大人说这种话！',
+          'D. 完全不怕！我知道全家人都很爱我，这肯定是逗我玩的假话，绝对不可能不要我！',
+          'E. 我的真实心里话是：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 19,
+        q: '你可以自己一个人睡觉吗？如果不可以，你觉得什么时候可以？',
+        options: [
+          'A. 毫无压力！我现在已经完全可以自己一个人睡了！（独立小勇士）',
+          'B. 基本可以！只要开着小夜灯，或者抱着心爱的小毯子/玩偶，我现在就能自己睡。',
+          'C. 现在还不行，我觉得等我到更大一点（或者上更高年级）的时候才可以！',
+          'D. 现在还不行，我觉得要等我长得像爸爸/妈妈一样高的时候才可以！',
+          'E. 我想一直跟爸爸妈妈睡在大床上，永远都不想分开！',
+          'F. 其他想法：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 20,
+        q: '你是一个爱哭的小朋友吗？',
+        options: [
+          'A. 泪点有点低，一委屈、一挨吵眼泪立马掉下来。',
+          'B. 平时不爱哭，只有身体真的很疼、或者被大声冤枉才哭。',
+          'C. 坚强硬汉/勇敢女孩，流汗流血不流泪！',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 21,
+        q: '有没有什么事情是你以前不敢做，但现在敢做了？',
+        options: [
+          'A. 敢自己一个人关灯睡觉 / 敢自己洗头洗澡了。',
+          'B. 敢在大庭广众、全班同学面前大声举手发言了。',
+          'C. 敢尝试以前不敢玩的刺激游乐设施了。',
+          'D. 敢主动走上前去跟陌生小朋友打招呼交朋友了。',
+          'E. 其他自选'
+        ],
+        hasInput: true
+      }
+    ]
+  },
+  {
+    id: 'boy-traits',
+    title: '⚡ 四、【一年级·小男子汉专属活力特质包】',
+    desc: '直击一年级男生活力、胜负欲、座驾梦想、身体坐立感与英雄情结',
+    icon: '⚡',
+    questions: [
+      {
+        id: 22,
+        q: '玩游戏或者和小朋友比赛跑输了，你的真实心情是？',
+        options: [
+          'A. 极其不服气！“刚才不算，必须立刻再来一局，我一定要赢回来！”',
+          'B. 哇的一声哭出来 / 瞬间大发脾气，觉得太委屈、太丢面子了！',
+          'C. 虽然心里有点沮丧难受，但我能忍住，还能大方对赢的人说一句“你真厉害”。',
+          'D. 根本不在意输赢，大家一起热热闹闹玩得开心最重要！',
+          'E. 其他想法：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 23,
+        q: '在所有动画片、奥特曼或故事角色里，你最崇拜/最想成为谁？',
+        options: [
+          'A. 奥特曼家族（迪迦、赛罗、布莱泽……发射光线打败怪兽守护地球的终极战士！）',
+          'B. 《汪汪队立大功》的救援小队（阿奇、毛毛、莱德队长……“没有困难的工作，只有勇敢的狗狗！”）',
+          'C. 《海底小纵队》的探险勇士（巴克队长、勇敢的呱唧、温柔的皮医生……探险、拯救与保护！）',
+          'D. 《熊出没》或《猫和老鼠》的机智活宝（聪明勇敢的熊大、力大善良的熊二、机智神奇永远抓不到的杰瑞……）',
+          'E. 现实中的大英雄（抓坏人的警察叔叔、救火的消防员战士、解放军、医生……）',
+          'F. 身边最厉害的人（爸爸、妈妈……他们在我心里最酷最无所不能！）',
+          'G. 我目前最崇拜的具体角色是：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 24,
+        q: '如果送你一辆属于你自己的终极座驾，你最想开什么？',
+        options: [
+          'A. 陆地狂飙车（炫酷超跑、大脚怪兽越野卡车、装甲坦克）',
+          'B. 天空与宇宙战机（超音速战斗机、喷气式火箭、星际飞船）',
+          'C. 重型巨无霸工程车（巨型挖掘机、高耸吊车、全地形推土机）',
+          'D. 贴地飞行的轮子（自己改装的极速两轮自行车、拉风滑板）',
+          'E. 我最想开的梦幻座驾是：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 25,
+        q: '在教室里规规矩矩坐 40 分钟，你的真实感受是？',
+        options: [
+          'A. 屁股上像长了钉子！坐久了浑身难受，忍不住扭来扭去、抠橡皮、摆弄铅笔盒。',
+          'B. 老师讲得有趣我就能坐得住；要是无聊，我的思绪早就飞到外太空去了。',
+          'C. 毫无压力！我能安安静静坐一节课，认真听讲看黑板，我是纪律小标兵。',
+          'D. 其他真实感受：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 26,
+        q: '你觉得自己是个小男子汉吗？如果有人欺负妈妈或家人，你会？',
+        options: [
+          'A. 毫不犹豫挺身而出！像小战士一样张开双臂挡在前面保护他们！',
+          'B. 我会先大声制止坏人，然后拉着大人的手赶紧去找警察叔叔或老师帮忙！',
+          'C. 我现在还小有点害怕，但我会紧紧抱住妈妈，等我长成大高个我再去保护她！',
+          'D. 我自己本身就是个需要被大家保护的小淘气包呢！',
+          'E. 其他想法：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 27,
+        q: '走在路上看到小泥坑，或者草丛里有小虫子，你会？',
+        options: [
+          'A. 踩水坑小狂人！看到水坑一脚踩下去溅起水花才过瘾；抓蚂蚱、抓西瓜虫我最在行！',
+          'B. 充满好奇但有点小心，喜欢蹲在旁边仔细观察，不敢轻易用手去抓。',
+          'C. 嫌脏或者有点害怕，会绕开泥水坑，看到小虫子会立刻叫妈妈！',
+          'D. 其他反应：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 28,
+        q: '拿着铅笔在田字格里一笔一划写生字，你的手累吗？',
+        options: [
+          'A. 手指头酸死了！握笔握得骨头疼，生字写着写着字就飞出田字格了。',
+          'B. 刚开始写挺工整，写到后面手没力气了，就想快点写完去玩。',
+          'C. 一点都不累！我握笔姿势很标准，写出横平竖直漂亮的字让我很有成就感！',
+          'D. 其他感受：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 29,
+        q: '从开学到现在，你的橡皮擦和铅笔经常神秘失踪吗？',
+        options: [
+          'A. 它们好像长了腿！我的橡皮天天掉地上失踪，铅笔盒里的笔总是越来越少。',
+          'B. 我的橡皮擦不是丢了，而是被我用铅笔戳成了“蜂窝煤”或者切成了小块……',
+          'C. 保护得极好！每天放学我都会数一数文具，一件都少不了，整齐带回家！',
+          'D. 其他情况：'
+        ],
+        hasInput: true
+      }
+    ]
+  },
+  {
+    id: 'emotion',
+    title: '🌈 五、【喜怒哀乐·情绪与自我认知类】',
+    desc: '自我评价、情绪触发点与自尊萌芽，探访孩子心中对自己的认同',
+    icon: '🌈',
+    questions: [
+      {
+        id: 30,
+        q: '喜欢过生日吗？最期待的是什么？',
+        options: [
+          'A. 超级喜欢！最期待吹蜡烛、吃蛋糕和拆礼物！',
+          'B. 挺喜欢的，因为能跟全家人、好朋友聚在一起玩。',
+          'C. 感觉一般般，和平常差不多。',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 31,
+        q: '什么事情会让你特别开心？',
+        options: [
+          'A. 得到心仪的礼物或超级好吃的美味。',
+          'B. 爸爸妈妈放下手机，全心全意陪我痛快玩！',
+          'C. 自己努力做好了一件事，被大人真诚地夸奖。',
+          'D. 和好朋友、哥哥妹妹一起做游戏。',
+          'E. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 32,
+        q: '你平时最讨厌的事情是什么？',
+        options: [
+          'A. 玩得正开心时，被强行打断叫去干别的事。',
+          'B. 被大人唠叨、催促，或者拿我和别的小朋友比。',
+          'C. 被冤枉、被误解，没人耐心听我把话解释完。',
+          'D. 坐着写很长、很重复枯燥的作业。',
+          'E. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 33,
+        q: '觉得自己最厉害的是什么？',
+        options: [
+          'A. 运动力爆棚（跑得快、跳得高、力气大、平衡感好）',
+          'B. 想象与创造（画画好看、搭积木乐高厉害、会讲故事）',
+          'C. 聪明小脑瓜（记性好、算数快、学新东西特别快）',
+          'D. 性格好人缘棒（爱笑、善良、很多小朋友喜欢跟我玩）',
+          'E. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 34,
+        q: '你最擅长的事情是什么？',
+        options: [
+          'A. 动手搭建（乐高、拼图、手工折纸、画画）',
+          'B. 语言表达（背诗、唱歌、讲笑话、表演）',
+          'C. 运动奔跑（骑车、赛跑、跳绳、球类）',
+          'D. 生活小助手（帮忙拿东西、整理地盘、照顾人）',
+          'E. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 35,
+        q: '你觉得自己是一个温柔的人吗？',
+        options: [
+          'A. 超级温柔！对小动物、小朋友都特别有耐心和爱心。',
+          'B. 大多数时候很温和，但着急生气时也会发小脾气。',
+          'C. 比较风风火火、大大咧咧，不太像温柔型的。',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 36,
+        q: '如果让你选，你想快快长高，还是变得超级聪明？',
+        options: [
+          'A. 必须快快长高！变成长腿大高个！',
+          'B. 必须变聪明！脑袋像超级电脑一样好用！',
+          'C. 小孩子才做选择，我长高和变聪明全都要！',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 37,
+        q: '你觉得自己现在是一个“小宝宝”，还是一个“大孩子”了？',
+        options: [
+          'A. 当然是大孩子了！我已经懂得很多道理，能做很多事了！',
+          'B. 介于中间，有时候懂事，但有时候还是想撒娇当小宝宝。',
+          'C. 我还小呢，就想无忧无虑当个被宠着的小宝宝。'
+        ],
+        hasInput: false
+      }
+    ]
+  },
+  {
+    id: 'family',
+    title: '🏡 六、【家庭港湾·爸妈与手足类】',
+    desc: '涵盖父母陪伴喜好、感恩之情，以及多子女家庭中手足相处与偏心感受核心灵魂题',
+    icon: '🏡',
+    questions: [
+      {
+        id: 38,
+        q: '爸爸做什么事会让你瞬间开心？',
+        options: [
+          'A. 放下手机，专心陪我疯玩、打球、打闹！',
+          'B. 爽快地给我买心仪已久的玩具或零食。',
+          'C. 带我出去旅行、去游乐园大冒险。',
+          'D. 温柔地摸摸我的头，真诚地夸我“做得真棒！”',
+          'E. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 39,
+        q: '妈妈做什么事会让你瞬间超级开心？',
+        options: [
+          'A. 给我一个温暖的大拥抱，亲亲我、听我说话。',
+          'B. 给我做我最爱吃的美食大餐。',
+          'C. 不催促我、不生气唠叨，笑眯眯地陪着我。',
+          'D. 送我心仪的礼物或漂亮的衣服。',
+          'E. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 40,
+        q: '你最想和爸爸妈妈一起做什么？',
+        options: [
+          'A. 去大自然露营、爬山、去海边踩水野餐！',
+          'B. 去大型主题游乐园狂欢疯玩一整天！',
+          'C. 宅在家里一起看电影、吃好吃的、打枕头大战！',
+          'D. 安安静静坐在我身边，陪我做手工看书。',
+          'E. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 41,
+        q: '家里人你心底里最想感谢谁？为什么？',
+        options: [
+          'A. 爸爸（感谢他辛苦工作，还带我玩、保护全家）',
+          'B. 妈妈（感谢她无微不至地照顾我、给我满满的爱）',
+          'C. 爷爷奶奶 / 外公外婆（感谢做香喷喷的饭菜、心疼我）',
+          'D. 哥哥 / 妹妹（感谢陪我玩耍长大，生活不孤单）',
+          'E. 每个人都想感谢，因为全家人都很爱我！'
+        ],
+        hasInput: false
+      },
+      {
+        id: 42,
+        q: '哥哥/妹妹做了什么事会让你觉得他/她很棒？',
+        options: [
+          'A. 有好吃的好玩的，主动先拿来跟我分享。',
+          'B. 我遇到困难或被别人欺负时，坚定地站出来帮我。',
+          'C. 愿意耐心教我不会玩的游戏或新本领。',
+          'D. （若独生可填好朋友）：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 43,
+        q: '哥哥/妹妹做什么会让你有点小生气抓狂？',
+        options: [
+          'A. 没经过我同意，乱动、乱抢或弄坏我的心爱宝贝。',
+          'B. 跟我争抢爸爸妈妈的关注、拥抱或夸奖。',
+          'C. 故意搞破坏、或者跑去跟爸爸妈妈告我的状。',
+          'D. 玩游戏耍赖皮、不遵守约定好的规则。',
+          'E. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 44,
+        q: '★【核心灵魂题】你觉得爸爸妈妈对待你和哥哥/妹妹，谁更好一点？会偏心吗？还是一样好？',
+        options: [
+          'A. 完全一样好！爸爸妈妈就像天平一样公平，对我和哥哥/妹妹的爱一模一样，从不偏心！',
+          'B. 我觉得爸爸妈妈更偏心哥哥/妹妹一点（比如好吃的总先给他/她、或者总叫我让着他/她），我心里挺委屈的。',
+          'C. 我觉得爸爸妈妈好像更偏心我、更宠我一点（嘿嘿，我心里其实偷偷挺开心的）！',
+          'D. 爸爸妈妈分工不同（比如：妈妈更偏心我，但爸爸更偏向哥哥/妹妹；或者反过来）。',
+          'E. 有时候觉得挺公平，但有时候又觉得偏心，得看当时发生了什么具体事儿。',
+          'F. 我的真实心里话是：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 45,
+        q: '你希望家人以后多陪你做什么事情？',
+        options: [
+          'A. 陪我安安静静读绘本、讲好听的故事。',
+          'B. 陪我搭积木、做手工、玩益智桌游。',
+          'C. 多带我出门走走，骑车、跑步、打球。',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      }
+    ]
+  },
+  {
+    id: 'school',
+    title: '🎒 七、【学校天地·学科、社交与冲突实战类】',
+    desc: '聚焦小学一年级同伴关系、科目偏好与【同伴微冲突四大实战场景】应对机制',
+    icon: '🎒',
+    questions: [
+      {
+        id: 46,
+        q: '你喜欢去学校上学吗？',
+        options: [
+          'A. 超级喜欢！学校里有超多同学一起玩，热闹！',
+          'B. 还可以，虽然要早起，但有很多好玩的新鲜事。',
+          'C. 不太喜欢，在教室坐着有点累，更想在家里玩。',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 47,
+        q: '你在学校最开心的事是什么？',
+        options: [
+          'A. 课间跟好朋友在操场上追逐疯玩！',
+          'B. 举手回答问题对了，被老师当众表扬、得小红花！',
+          'C. 学校午餐吃到了自己最爱吃的美味。',
+          'D. 听到放学铃声响起、排队回家的时候！',
+          'E. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 48,
+        q: '你在学校最不开心的事是什么？',
+        options: [
+          'A. 跟好朋友闹矛盾吵架，或者觉得被冷落了。',
+          'B. 上课没听懂，或者作业没做好被老师批评。',
+          'C. 考试没考好，或者忘记带书本铅笔盒。',
+          'D. 没有什么不开心的，学校里每天都挺快乐！'
+        ],
+        hasInput: false
+      },
+      {
+        id: 49,
+        q: '你目前最喜欢什么科目？',
+        options: [
+          'A. 语文（学好玩的汉字故事、读朗朗上口的儿歌童谣）',
+          'B. 数学（做数字推理、数数游戏、挑战有趣的算术脑筋急转弯）',
+          'C. 体育（尽情在阳光下奔跑、玩游戏、挥洒汗水）',
+          'D. 美术 / 音乐（自由画画涂鸦、唱歌打节拍）',
+          'E. 科学 / 劳动 / 道德与法治（探索大自然奥秘、动手做小实验）',
+          'F. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 50,
+        q: '你目前觉得哪个科目学起来有点吃力或不太喜欢？',
+        options: [
+          'A. 语文（拼音拼读有点绕、生字笔顺多容易记错、还要工整写田字格）',
+          'B. 数学（思维拐弯的图文应用题有点绕脑筋，容易粗心看错数字）',
+          'C. 英语（要记陌生的单词发音，不太敢开口大声读）',
+          'D. 体育（跳绳总绊脚、跑步有点累）',
+          'E. 美术 / 音乐（觉得自己画得不够像、或者记不住简谱）',
+          'F. 我是全能小标兵，目前没有觉得特别讨厌的科目！',
+          'G. 其他想法：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 51,
+        q: '你平时喜欢交新朋友吗？',
+        options: [
+          'A. 超级喜欢！我是“社交小达人”，到哪都能迅速跟新小朋友玩成一片！',
+          'B. 挺喜欢的！但比起认识很多人，我更喜欢和两三个最要好的死党在一起。',
+          'C. 有点慢热害羞，我更希望别人先主动找我玩，自己不太敢先开口。',
+          'D. 觉得一个人也挺好，自己搭乐高、画画、看书更自在。',
+          'E. 其他想法：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 52,
+        q: '你遇到搞不定的困难，会第一时间找谁帮忙？',
+        options: [
+          'A. 妈妈（最温柔体贴、第一信赖的港湾）',
+          'B. 爸爸（大英雄解题能手，什么问题都能搞定）',
+          'C. 老师 / 哥哥妹妹 / 好朋友',
+          'D. 先自己憋大招想办法，实在搞不定才去求助！',
+          'E. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 53,
+        q: '⚔️【冲突场景一：心爱物品被抢】你在玩心爱的玩具/奥特曼卡片，有同学没经过同意一把抢了过去，你会？',
+        options: [
+          'A. 当场愤怒吼回去/抢回来！大喊：“还给我！这是我的，你凭什么抢？！”',
+          'B. 挥舞小拳头直接动手！敢抢我的东西，直接推他、打他，用拳头教训他！',
+          'C. 立刻举手跑去告诉老师/大人：“老师！谁谁谁抢了我的心爱玩具！”',
+          'D. 先压住火气，双眼瞪着他严肃交涉：“没经过允许不能乱拿！请你立刻还给我，否则我就找老师了！”',
+          'E. 愣在原地手足无措，心里特别委屈想哭，不知道该怎么夺回来。',
+          'F. 其他做法：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 54,
+        q: '⚔️【冲突场景二：排队规则被破坏】在排队玩滑梯或玩游戏时，有同学蛮横插队、耍赖不守规则，你会？',
+        options: [
+          'A. 用身体坚决挡住他！毫不退让大声说：“大家都在按规矩排队，你凭什么插队？到后面去！”',
+          'B. 觉得特别扫兴和生气，“这游戏没法玩了！”直接气呼呼地走开，不玩了。',
+          'C. 叫上自己的好哥们/好朋友一起抗议，让大家一起管他、孤立他。',
+          'D. 找老师或现场维持秩序的大人：“老师，有人耍赖插队，破坏规则！”',
+          'E. 其他做法：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 55,
+        q: '⚔️【冲突场景三：意外冲撞与磕碰】在走廊或操场跑跳时，被别的小朋友不小心狠狠撞倒、磕疼了，你会？',
+        options: [
+          'A. 哇的一声大哭起来！觉得又疼又委屈，坐在地上起不来。',
+          'B. 怒火中烧爬起来就想去推他：“你没长眼睛啊！凭什么撞我？！”',
+          'C. 自己拍拍灰尘站起来，先看对方的态度：如果他道歉说“对不起”，我就大方说“没关系”；如果理都不理跑了，我绝不答应！',
+          'D. 捂着伤口第一时间找老师/校医：“老师，我被谁谁谁撞伤了，需要处理一下。”',
+          'E. 其他反应：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 56,
+        q: '⚔️【冲突场景四：言语嘲笑与排挤】如果有小朋友故意嘲笑你、起难听外号，或拉帮结派喊“不带他玩！”，你会？',
+        options: [
+          'A. 霸气反击！“不带我玩拉倒，我才不稀罕跟你们玩呢！”转头去找别的好朋友。',
+          'B. 当场反唇相讥，用同样难听的话怼回去，甚至想动手打人。',
+          'C. 特别难过受打击，一个人默默走到角落抠手指、偷偷抹眼泪，怀疑是不是自己不好。',
+          'D. 走到他们面前严肃质问：“起外号很不礼貌！你们为什么要这样？”若还起哄，直接报告老师言语霸凌。',
+          'E. 其他做法：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 57,
+        q: '你觉得现在的学习难不难？',
+        options: [
+          'A. 简单极了，轻轻松松就能学会！',
+          'B. 刚刚好，只要认真听老师讲，都能搞懂。',
+          'C. 有点难，有时候脑子会绕不过弯来。',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 58,
+        q: '你最想学会的一项新知识是什么？',
+        options: [
+          'A. 宇宙星空与恐龙时代的秘密（天文古生物）',
+          'B. 大自然动物植物与人体的奥秘（自然科学）',
+          'C. 电脑、机器人、飞机是怎么制造出来的（现代科技）',
+          'D. 像大孩子一样能写出长长的好文章、算大题目。',
+          'E. 其他自选'
+        ],
+        hasInput: true
+      }
+    ]
+  },
+  {
+    id: 'character',
+    title: '🌟 八、【品格教养·自立与习惯类】',
+    desc: '考察分享、诚信、自立整理、睡前讲故事与抗拒日常习惯',
+    icon: '🌟',
+    questions: [
+      {
+        id: 59,
+        q: '有了好东西（美味零食或新玩具），你愿意分享吗？会分享给谁？',
+        options: [
+          'A. 很大方！第一时间拿去分给全家人或最好的朋友。',
+          'B. 先自己吃够/玩够了，然后很乐意大方分享给大家。',
+          'C. 大多数会分享，但最心爱的某一件只想自己悄悄留着。',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 60,
+        q: '在日常生活中，你会主动说“谢谢”或“对不起”吗？',
+        options: [
+          'A. 非常主动！我是个懂礼貌的好孩子。',
+          'B. 说“谢谢”很容易，但做错事说“对不起”会有点害羞不好意思。',
+          'C. 经常忘记，得大人提醒我才会说。',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 61,
+        q: '你觉得自己守信用吗？有没有答应别人但没做到的事？',
+        options: [
+          'A. 绝对守信！我说到做到，答应了拼命也会办到！',
+          'B. 大多数时候都守信，偶尔玩嗨了不小心给忘了。',
+          'C. 有时候遇到困难会忍不住反悔，但我心里会觉得内疚。',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 62,
+        q: '自己的玩具和书包，你会自己主动收拾整齐吗？',
+        options: [
+          'A. 井井有条，我每天都是自己整理整齐的！',
+          'B. 大人提醒我一次，我才动一下。',
+          'C. 经常乱糟糟的，最后都是爸爸妈妈帮我收。',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 63,
+        q: '放学回家后，你最抗拒/不喜欢做的事情是什么？',
+        options: [
+          'A. 坐下来一笔一划写作业。',
+          'B. 洗澡、洗头、刷牙、剪指甲。',
+          'C. 玩得正起劲时被赶去早睡。',
+          'D. 收拾散落一地的玩具和书包。',
+          'E. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 64,
+        q: '你自己会讲故事吗？',
+        options: [
+          'A. 超级会讲！不仅能讲，还能自己编新故事！',
+          'B. 能讲一两个熟悉的故事，但需要先想一想。',
+          'C. 不太会讲，我更喜欢安静听别人讲。',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 65,
+        q: '你平时喜欢听故事吗？',
+        options: [
+          'A. 超喜欢！每天睡前不听一个根本睡不着！',
+          'B. 遇到特别精彩的才听，平时更喜欢看动画。',
+          'C. 一般般，可听可不听。',
+          'D. 其他自选'
+        ],
+        hasInput: true
+      }
+    ]
+  },
+  {
+    id: 'future',
+    title: '🚀 九、【未来星空·计划、梦想、金钱观与超能力类】',
+    desc: '从理想愿景、超能力幻想，到真实的花钱金钱观与过年压岁钱保管权安排',
+    icon: '🚀',
+    questions: [
+      {
+        id: 66,
+        q: '你现在有自己的小计划吗？什么计划都可以！',
+        options: [
+          'A. 玩乐大计！（把乐高拼好 / 看完漫画 / 假期去哪玩）',
+          'B. 学习小目标！（坚持阅读打卡 / 练字 / 考试拿满分）',
+          'C. 运动技能！（跳绳100个 / 学会两轮自行车 / 学会游泳）',
+          'D. 习惯挑战！（自己整理玩具 / 晚上9点前准时睡觉）',
+          'E. 暂时还没有固定计划，每天跟着感觉开开心心走！',
+          'F. 我的具体神奇小计划是：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 67,
+        q: '长大以后，你最想成为一个“什么样的人”？',
+        options: [
+          'A. 成为一个快乐、有趣的人（每天都开开心心，给朋友带来欢笑）',
+          'B. 成为一个勇敢、有担当的人（像超级英雄一样，保护家人和弱小）',
+          'C. 成为一个善良、温暖有爱心的人（帮助困难的人和流浪小动物）',
+          'D. 成为一个博学、聪明厉害的人（探索科学奥秘，做一番大事业）',
+          'E. 成为一个像爸爸 / 妈妈一样的人！（他们是我心里最棒的榜样）',
+          'F. 成为一个自由自在的人（去很多地方旅行，体验精彩生活）',
+          'G. 其他心中的模样：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 68,
+        q: '长大以后，你目前最想从事什么职业？',
+        options: [
+          'A. 探索家（宇航员、科学家、程序员、发明家）',
+          'B. 艺术家（画家、作家、歌手、导演、设计师）',
+          'C. 守护者（警察、军人、消防员、医生、法官）',
+          'D. 体验官（机长、美食家、动物饲养员、创业当老板）',
+          'E. 其他自选梦想：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 69,
+        q: '如果有一根魔法棒，你最希望拥有什么超能力？',
+        options: [
+          'A. 隐身术（能悄悄去探索各种神秘好玩的地方）',
+          'B. 瞬间移动 / 会飞（想去哪里一秒就到）',
+          'C. 过目不忘（看一遍书全记住，考试写作业不用愁）',
+          'D. 变出吃不完的美食与玩具，还能让全家人长命百岁！',
+          'E. 其他超能力：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 70,
+        q: '如果有 20 块钱零花钱完全由你支配，你会怎么用？',
+        options: [
+          'A. 全存进储蓄罐，攒大钱买最心爱的宝贝！',
+          'B. 马上奔向小卖部，买心心念念的美味零食。',
+          'C. 买奥特曼卡片、贴纸或盲盒玩具。',
+          'D. 给爸爸妈妈或哥哥妹妹买个暖心小礼物。',
+          'E. 其他自选'
+        ],
+        hasInput: true
+      },
+      {
+        id: 71,
+        q: '💰【金钱观】你平时是怎么看待“花钱”这件事的？',
+        options: [
+          'A. 只要看到喜欢的新玩具、好吃的零食，就超级想全部买下来，花钱让我觉得特别快乐！',
+          'B. 我知道爸爸妈妈赚钱很辛苦、不容易，买东西前会先想想“到底是不是真的需要”，不能乱花。',
+          'C. 我喜欢看着储蓄罐里的钱越来越多，把钱攒起来比花掉更有安全感和成就感！',
+          'D. 我对钱还没有太明确的概念，需要买什么就跟爸爸妈妈说，大人决定就好。',
+          'E. 我的花钱想法是：'
+        ],
+        hasInput: true
+      },
+      {
+        id: 72,
+        q: '🧧【压岁钱归属】过年收到的“压岁钱”，你觉得应该怎么安排？应该由爸爸妈妈保管吗？',
+        options: [
+          'A. 应该全部交给爸爸妈妈保管！因为他们要帮我交学费、买书本和生活用品，大人管钱更安全不会乱花。',
+          'B. 应该“联合管理”：大钱存进银行存折或理财（长大给我用），留一小部分零钱放我自己的储蓄罐让我自由支配！',
+          'C. 这是长辈给我的祝福，我觉得完全应该由我自己保管，我想买什么自己说了算！',
+          'D. 爸爸妈妈可以帮我存起来，但必须跟我签个协议或者记在小本本上，不能悄悄花掉哦！',
+          'E. 我的真实想法是：'
+        ],
+        hasInput: true
+      }
+    ]
+  }
+]
+---
+
+<Base title="成长喜好与心智变化档案（年度问卷 · 72题全景版）· 十丘" wide={true}>
+  <div class="questionnaire-page">
+    
+    <!-- 顶部面包屑与操作栏 -->
+    <header class="no-print q-top-bar">
+      <nav class="q-breadcrumb">
+        <a href={base} class="brand-link">🏛️ 十丘门户</a>
+        <span>/</span>
+        <a href={`${base}growth/guide/`} class="guide-link">🌱 青少文育指南</a>
+        <span>/</span>
+        <span class="curr-node">📝 成长心智问卷（72题）</span>
+      </nav>
+      <div class="q-actions">
+        <button id="btnPrint" class="action-btn btn-print" title="打开系统打印对话框">
+          🖨️ 打印问卷
+        </button>
+        <button id="btnSave" class="action-btn btn-save" title="本地暂存已填内容">
+          💾 保存草稿
+        </button>
+        <button id="btnReset" class="action-btn btn-reset" title="清空已填答案">
+          🔄 重置
+        </button>
+      </div>
+    </header>
+
+    <!-- 顶部时光胶囊 Banner -->
+    <section class="q-hero-card">
+      <div class="hero-badge">🌱 时光胶囊 · 动态成长档案袋</div>
+      <h1 class="hero-title">【我的成长时光胶囊】年度喜好与心智变化档案</h1>
+      <p class="hero-subtitle">
+        专为小学一年级小男孩及多子女家庭量身定制 · 72 道全景灵魂提问 · 一年一测
+      </p>
+
+      <!-- 档案基础信息登记栏 -->
+      <div class="child-info-bar">
+        <div class="info-field">
+          <label>👦 孩子姓名：</label>
+          <input type="text" id="infoName" placeholder="如：可乐 / 辰辰" />
+        </div>
+        <div class="info-field">
+          <label>📅 记录日期：</label>
+          <input type="text" id="infoDate" placeholder="如：2026年9月20日" />
+        </div>
+        <div class="info-field">
+          <label>🎂 当前年龄与年级：</label>
+          <input type="text" id="infoAge" placeholder="如：7岁3个月 / 一年级" />
+        </div>
+        <div class="info-field">
+          <label>🎯 记录节点：</label>
+          <select id="infoNode">
+            <option value="birthday">🎂 生日专属记录</option>
+            <option value="school">🎒 新学年开学</option>
+            <option value="newyear">🧧 跨年 / 春节除夕</option>
+            <option value="other">⭐ 其他特别日子</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 采访与使用提示 -->
+      <div class="interview-tips no-print">
+        💡 <strong>采访小贴士</strong>：建议爸爸妈妈化身“电视台专访小记者”，一边录像/录音，一边带着微笑把选项念给孩子听。让孩子在轻松自如的氛围中表达真实心声。完成后点击右上角【🖨️ 打印问卷】可直接存档进成长档案袋！
+      </div>
+
+      <!-- 实时完成度进度条 -->
+      <div class="progress-container no-print">
+        <div class="progress-info">
+          <span>📝 填写进度：<strong id="answeredCount">0</strong> / 72 题</span>
+          <span id="progressPercent">0%</span>
+        </div>
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progressBarFill" style="width: 0%;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 问卷主体大类遍历 -->
+    <main class="q-content-main">
+      {modulesData.map((mod) => (
+        <section class="module-group-card" id={`mod-${mod.id}`}>
+          <div class="module-group-head">
+            <div class="module-title-box">
+              <h2 class="module-title">{mod.title}</h2>
+              <p class="module-desc">{mod.desc}</p>
+            </div>
+          </div>
+
+          <div class="questions-list">
+            {mod.questions.map((item) => (
+              <div class="question-item" data-qid={item.id}>
+                <div class="q-title-row">
+                  <span class="q-num-tag">Q{item.id}</span>
+                  <h3 class="q-text">{item.q}</h3>
+                </div>
+
+                <div class="options-container">
+                  {item.options.map((opt, optIdx) => {
+                    const optKey = `q_${item.id}_opt_${optIdx}`
+                    const isLast = optIdx === item.options.length - 1
+                    return (
+                      <label class="option-label" for={optKey}>
+                        <input
+                          type="radio"
+                          name={`q_${item.id}`}
+                          id={optKey}
+                          value={opt}
+                          class="q-radio"
+                        />
+                        <span class="opt-custom-radio"></span>
+                        <span class="opt-text">{opt}</span>
+                      </label>
+                    )
+                  })}
+                </div>
+
+                {item.hasInput && (
+                  <div class="custom-input-box">
+                    <span class="custom-input-prefix">✍️ 自选/补充/真实童语：</span>
+                    <input
+                      type="text"
+                      name={`q_${item.id}_custom`}
+                      class="custom-answer-input"
+                      placeholder="写下孩子在此题的原话或补充想法..."
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+    </main>
+
+    <!-- 底部操作与签名区 -->
+    <footer class="q-bottom-card">
+      <div class="print-signatures print-only">
+        <div class="sig-line">孩子签名/手印：__________________</div>
+        <div class="sig-line">采访人（爸爸/妈妈）签名：__________________</div>
+        <div class="sig-line">归档封存日期：_____年____月____日</div>
+      </div>
+
+      <div class="bottom-actions no-print">
+        <button id="btnPrintBottom" class="action-btn btn-print-big">
+          🖨️ 打印装订这份成长时光胶囊
+        </button>
+        <a href={`${base}growth/guide/`} class="action-btn btn-guide-big">
+          📚 前往 12年文育全景进阶指南 ➔
+        </a>
+      </div>
+    </footer>
+  </div>
+</Base>
+
+<style>
+  .questionnaire-page {
+    max-width: 1060px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    color: #1e293b;
+    line-height: 1.6;
+  }
+
+  /* 顶部操作条 */
+  .q-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .q-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    color: #64748b;
+  }
+
+  .q-breadcrumb a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .q-breadcrumb a:hover {
+    text-decoration: underline;
+  }
+
+  .q-breadcrumb .curr-node {
+    font-weight: 700;
+    color: #0f172a;
+  }
+
+  .q-actions {
+    display: flex;
+    gap: 0.6rem;
+  }
+
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+    text-decoration: none;
+  }
+
+  .btn-print {
+    background: #059669;
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
+  }
+  .btn-print:hover {
+    background: #047857;
+  }
+
+  .btn-save {
+    background: #2563eb;
+    color: #ffffff;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+  }
+  .btn-save:hover {
+    background: #1d4ed8;
+  }
+
+  .btn-reset {
+    background: #f1f5f9;
+    color: #64748b;
+    border-color: #cbd5e1;
+  }
+  .btn-reset:hover {
+    background: #fee2e2;
+    color: #dc2626;
+    border-color: #fca5a5;
+  }
+
+  /* 顶部 Hero Banner */
+  .q-hero-card {
+    background: linear-gradient(135deg, #f0fdf4 0%, #eff6ff 100%);
+    border: 1px solid #bbf7d0;
+    border-radius: 16px;
+    padding: 2rem 1.8rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 16px rgba(5, 150, 105, 0.06);
+  }
+
+  .hero-badge {
+    display: inline-block;
+    padding: 0.25rem 0.8rem;
+    background: #dcfce7;
+    color: #15803d;
+    font-size: 0.82rem;
+    font-weight: 700;
+    border-radius: 20px;
+    margin-bottom: 0.8rem;
+  }
+
+  .hero-title {
+    font-size: 1.85rem;
+    font-weight: 900;
+    color: #0f172a;
+    margin: 0 0 0.5rem;
+    line-height: 1.35;
+  }
+
+  .hero-subtitle {
+    font-size: 1.05rem;
+    color: #475569;
+    margin: 0 0 1.5rem;
+  }
+
+  .child-info-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    background: #ffffff;
+    padding: 1.2rem;
+    border-radius: 12px;
+    border: 1px solid #cbd5e1;
+    margin-bottom: 1.2rem;
+  }
+
+  .info-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .info-field label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #334155;
+  }
+
+  .info-field input,
+  .info-field select {
+    padding: 0.45rem 0.65rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #1e293b;
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .info-field input:focus,
+  .info-field select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+  }
+
+  .interview-tips {
+    background: #fffbeb;
+    border: 1px solid #fef3c7;
+    border-left: 4px solid #f59e0b;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 0.88rem;
+    color: #92400e;
+    margin-bottom: 1.2rem;
+    line-height: 1.55;
+  }
+
+  /* 进度条 */
+  .progress-container {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+  }
+
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #334155;
+    margin-bottom: 0.4rem;
+  }
+
+  .progress-bar-track {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+
+  /* 模块组卡片 */
+  .module-group-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 1.6rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+  }
+
+  .module-group-head {
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .module-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 0.35rem;
+  }
+
+  .module-desc {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin: 0;
+  }
+
+  /* 题目项 */
+  .questions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .question-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 1.1rem 1.2rem;
+    transition: border-color 0.2s, background-color 0.2s;
+  }
+
+  .question-item:hover {
+    border-color: #cbd5e1;
+  }
+
+  .question-item.answered {
+    background: #f0fdf4;
+    border-color: #86efac;
+  }
+
+  .q-title-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .q-num-tag {
+    display: inline-block;
+    background: #e2e8f0;
+    color: #334155;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    margin-top: 0.15rem;
+    white-space: nowrap;
+  }
+
+  .question-item.answered .q-num-tag {
+    background: #10b981;
+    color: #ffffff;
+  }
+
+  .q-text {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+    line-height: 1.45;
+  }
+
+  /* 选项列表 */
+  .options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .option-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.55rem 0.8rem;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    color: #334155;
+  }
+
+  .option-label:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+  }
+
+  .option-label input[type="radio"] {
+    margin-top: 0.2rem;
+    cursor: pointer;
+  }
+
+  .option-label.checked-opt {
+    background: #eff6ff;
+    border-color: #3b82f6;
+    color: #1d4ed8;
+    font-weight: 600;
+  }
+
+  /* 自选填写框 */
+  .custom-input-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .custom-input-prefix {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #64748b;
+    white-space: nowrap;
+  }
+
+  .custom-answer-input {
+    flex: 1;
+    min-width: 240px;
+    padding: 0.4rem 0.7rem;
+    border: 1px dashed #94a3b8;
+    background: #ffffff;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border 0.2s;
+  }
+
+  .custom-answer-input:focus {
+    border-color: #2563eb;
+    border-style: solid;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+  }
+
+  /* 底部操作卡片 */
+  .q-bottom-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+  }
+
+  .bottom-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+  }
+
+  .btn-print-big {
+    padding: 0.8rem 1.8rem;
+    background: #059669;
+    color: #ffffff;
+    font-size: 1.05rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(5, 150, 105, 0.25);
+  }
+  .btn-print-big:hover {
+    background: #047857;
+  }
+
+  .btn-guide-big {
+    padding: 0.8rem 1.8rem;
+    background: #ffffff;
+    color: #2563eb;
+    border-color: #bfdbfe;
+    font-size: 1.05rem;
+    border-radius: 10px;
+  }
+  .btn-guide-big:hover {
+    background: #eff6ff;
+  }
+
+  /* 打印专属显示与隐藏 */
+  .print-only {
+    display: none;
+  }
+
+  @media print {
+    .no-print {
+      display: none !important;
+    }
+    .print-only {
+      display: block !important;
+    }
+    .questionnaire-page {
+      max-width: 100% !important;
+      padding: 0 !important;
+      color: #000000 !important;
+    }
+    .q-hero-card {
+      background: none !important;
+      border: 1px solid #000 !important;
+      box-shadow: none !important;
+      padding: 1rem !important;
+      page-break-after: avoid;
+    }
+    .hero-title {
+      font-size: 1.5rem !important;
+      color: #000 !important;
+    }
+    .child-info-bar {
+      border: 1px solid #333 !important;
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+    .module-group-card {
+      box-shadow: none !important;
+      border: 1px solid #999 !important;
+      page-break-inside: avoid;
+      margin-bottom: 1.5rem !important;
+      padding: 1rem !important;
+    }
+    .question-item {
+      background: none !important;
+      border: 1px solid #ccc !important;
+      page-break-inside: avoid;
+      margin-bottom: 0.8rem !important;
+    }
+    .option-label {
+      border: 1px solid #ddd !important;
+      background: none !important;
+    }
+    .custom-answer-input {
+      border-bottom: 1px solid #000 !important;
+      border-top: none !important;
+      border-left: none !important;
+      border-right: none !important;
+      border-radius: 0 !important;
+    }
+    .print-signatures {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      font-size: 0.95rem;
+      font-weight: 700;
+    }
+  }
+</style>
+
+<script>
+  // 本地存储键名
+  const STORAGE_KEY = 'tenqiu_growth_questionnaire_v1'
+
+  function updateProgress() {
+    const total = 72
+    const answeredItems = document.querySelectorAll('.question-item.answered').length
+    const countEl = document.getElementById('answeredCount')
+    const percentEl = document.getElementById('progressPercent')
+    const fillEl = document.getElementById('progressBarFill')
+
+    const percent = Math.round((answeredItems / total) * 100)
+
+    if (countEl) countEl.innerText = String(answeredItems)
+    if (percentEl) percentEl.innerText = `${percent}%`
+    if (fillEl) fillEl.style.width = `${percent}%`
+  }
+
+  function checkQuestionStatus(qItem: HTMLElement) {
+    const radios = qItem.querySelectorAll('input[type="radio"]:checked')
+    const customInput = qItem.querySelector('.custom-answer-input') as HTMLInputElement | null
+    const hasCustomText = customInput && customInput.value.trim().length > 0
+
+    if (radios.length > 0 || hasCustomText) {
+      qItem.classList.add('answered')
+    } else {
+      qItem.classList.remove('answered')
+    }
+  }
+
+  function saveToLocal() {
+    const data: Record<string, any> = {
+      name: (document.getElementById('infoName') as HTMLInputElement)?.value || '',
+      date: (document.getElementById('infoDate') as HTMLInputElement)?.value || '',
+      age: (document.getElementById('infoAge') as HTMLInputElement)?.value || '',
+      node: (document.getElementById('infoNode') as HTMLSelectElement)?.value || '',
+      answers: {},
+      customs: {}
+    }
+
+    // 收集选项
+    document.querySelectorAll('input[type="radio"]:checked').forEach((radio) => {
+      const r = radio as HTMLInputElement
+      data.answers[r.name] = r.value
+    })
+
+    // 收集输入框
+    document.querySelectorAll('.custom-answer-input').forEach((inp) => {
+      const input = inp as HTMLInputElement
+      if (input.value.trim()) {
+        data.customs[input.name] = input.value.trim()
+      }
+    })
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+  }
+
+  function loadFromLocal() {
+    try {
+      const savedStr = localStorage.getItem(STORAGE_KEY)
+      if (!savedStr) return
+
+      const data = JSON.parse(savedStr)
+      if (data.name) (document.getElementById('infoName') as HTMLInputElement).value = data.name
+      if (data.date) (document.getElementById('infoDate') as HTMLInputElement).value = data.date
+      if (data.age) (document.getElementById('infoAge') as HTMLInputElement).value = data.age
+      if (data.node) (document.getElementById('infoNode') as HTMLSelectElement).value = data.node
+
+      if (data.answers) {
+        Object.keys(data.answers).forEach((name) => {
+          const val = data.answers[name]
+          const radio = document.querySelector(`input[name="${name}"][value="${CSS.escape(val)}"]`) as HTMLInputElement
+          if (radio) {
+            radio.checked = true
+            const parentLabel = radio.closest('.option-label')
+            if (parentLabel) parentLabel.classList.add('checked-opt')
+          }
+        })
+      }
+
+      if (data.customs) {
+        Object.keys(data.customs).forEach((name) => {
+          const inp = document.querySelector(`input[name="${name}"]`) as HTMLInputElement
+          if (inp) {
+            inp.value = data.customs[name]
+          }
+        })
+      }
+
+      document.querySelectorAll('.question-item').forEach((q) => {
+        checkQuestionStatus(q as HTMLElement)
+      })
+
+      updateProgress()
+    } catch (e) {
+      console.warn('Failed to load questionnaire draft', e)
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // 选项变更监听
+    document.querySelectorAll('.question-item').forEach((qItem) => {
+      const radios = qItem.querySelectorAll('input[type="radio"]')
+      radios.forEach((r) => {
+        r.addEventListener('change', () => {
+          // 清除同组其他 label checked-opt
+          const qName = (r as HTMLInputElement).name
+          document.querySelectorAll(`input[name="${qName}"]`).forEach((sib) => {
+            sib.closest('.option-label')?.classList.remove('checked-opt')
+          })
+          r.closest('.option-label')?.classList.add('checked-opt')
+          checkQuestionStatus(qItem as HTMLElement)
+          updateProgress()
+          saveToLocal()
+        })
+      })
+
+      const customInput = qItem.querySelector('.custom-answer-input')
+      if (customInput) {
+        customInput.addEventListener('input', () => {
+          checkQuestionStatus(qItem as HTMLElement)
+          updateProgress()
+          saveToLocal()
+        })
+      }
+    })
+
+    // 基本信息字段监听
+    ;['infoName', 'infoDate', 'infoAge', 'infoNode'].forEach((id) => {
+      const el = document.getElementById(id)
+      if (el) {
+        el.addEventListener('input', saveToLocal)
+        el.addEventListener('change', saveToLocal)
+      }
+    })
+
+    // 按钮动作
+    const handlePrint = () => window.print()
+    document.getElementById('btnPrint')?.addEventListener('click', handlePrint)
+    document.getElementById('btnPrintBottom')?.addEventListener('click', handlePrint)
+
+    document.getElementById('btnSave')?.addEventListener('click', () => {
+      saveToLocal()
+      alert('✅ 问卷草稿已成功保存到当前浏览器本地！随时刷新不会丢失。')
+    })
+
+    document.getElementById('btnReset')?.addEventListener('click', () => {
+      if (confirm('确定要清空所有填写的答案并重置问卷吗？')) {
+        localStorage.removeItem(STORAGE_KEY)
+        window.location.reload()
+      }
+    })
+
+    // 初次加载草稿
+    loadFromLocal()
+  })
+</script>
