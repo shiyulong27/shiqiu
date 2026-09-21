@@ -1,0 +1,1485 @@
+---
+import Base from '../../layouts/Base.astro'
+import {
+  fourInventions,
+  ancientScientists,
+  silkRoadExchanges,
+  modernAeroScience,
+  scienceQuizList
+} from '../../data/scienceData.js'
+
+const base = import.meta.env.BASE_URL
+---
+
+<Base title="华夏科学探索与古今科技长卷 · 亲子科技天地" wide={true}>
+  <div class="sci-container">
+    <!-- 顶部导航与品牌区 -->
+    <header class="sci-header">
+      <div class="sci-nav-bar">
+        <a href={base} class="sci-back-btn">← 返回【十丘】知识总门户</a>
+        <div class="sci-nav-links">
+          <a href={`${base}timeline/`} class="sci-sub-nav">📜 上下五千年长卷</a>
+          <a href={`${base}history/emperors-battles/`} class="sci-sub-nav">👑 帝王与决战</a>
+          <a href={`${base}geography/explore/`} class="sci-sub-nav">🧭 中国地理通识</a>
+          <a href={`${base}chinese/solar-terms/`} class="sci-sub-nav">🌾 二十四节气</a>
+          <a href={`${base}chinese/poems/`} class="sci-sub-nav">🎙️ 国学古诗点读</a>
+        </div>
+      </div>
+
+      <div class="sci-hero">
+        <div class="sci-title-wrap">
+          <span class="sci-badge">🚀 华夏五千年智慧与现代星辰大海</span>
+          <h1 class="sci-main-title">华夏科学探索与古今科技长卷</h1>
+          <p class="sci-subtitle">四大发明 · 先贤巨擘 · 丝路物产 · 大国重器与深空探索全景故事卷</p>
+        </div>
+
+        <div class="sci-top-actions">
+          <button id="btn-open-sci-chronicle" class="sci-btn sci-btn-cyan">
+            <span class="btn-icon">💡</span> 科技探索编年
+          </button>
+          <button id="btn-open-sci-quiz" class="sci-btn sci-btn-blue">
+            <span class="btn-icon">🏆</span> 科学小博士挑战
+          </button>
+        </div>
+      </div>
+
+      <!-- 三维视窗切换控制器 -->
+      <div class="sci-controls-deck">
+        <div class="sci-view-switcher">
+          <button id="tab-ancient" class="sci-view-tab active" data-view="ancient">
+            <span class="tab-icon">🔬</span> 古代发明与先贤
+            <span class="tab-count">(4大发明+9大先贤)</span>
+          </button>
+          <button id="tab-silkroad" class="sci-view-tab" data-view="silkroad">
+            <span class="tab-icon">🐪</span> 丝路物产大交换
+            <span class="tab-count">(12+物产瑰宝)</span>
+          </button>
+          <button id="tab-modern" class="sci-view-tab" data-view="modern">
+            <span class="tab-icon">🚀</span> 现代大国重器
+            <span class="tab-count">({modernAeroScience.length}项超级工程)</span>
+          </button>
+        </div>
+
+        <!-- 搜索与快速过滤 -->
+        <div class="sci-search-box">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            id="sci-search-input"
+            placeholder="搜索发明、科学家(祖冲之/沈括)、航天器、蔬果物产..."
+            aria-label="搜索科技与物产"
+          />
+          <button id="btn-sci-search-clear" class="btn-clear" title="清空搜索">✕</button>
+        </div>
+      </div>
+
+      <!-- 动态分类胶囊条 -->
+      <div id="sci-pills-bar" class="sci-pills-bar">
+        <!-- JS 动态注入 -->
+      </div>
+    </header>
+
+    <!-- 主视窗展示区 -->
+    <main class="sci-main-content">
+      <!-- 视窗一：🔬 古代发明与科技先贤 -->
+      <section id="view-ancient" class="sci-view-section active">
+        <!-- 四大发明展区 -->
+        <div class="section-banner">
+          <div class="banner-title-row">
+            <span class="banner-icon">📜</span>
+            <h2 class="banner-title">中国古代四大发明全景解构</h2>
+            <span class="banner-badge">文明之母 · 照亮世界</span>
+          </div>
+          <p class="banner-sub">造纸术、活字印刷术、指南针、火药，中国先民对世界文明进步的伟大贡献</p>
+        </div>
+
+        <div class="inventions-deck" id="inventions-deck">
+          {fourInventions.map(inv => (
+            <article class="inv-card" data-name={inv.name} data-inventor={inv.inventor} data-keywords={`${inv.rawMaterials} ${inv.mechanism}`}>
+              <div class="inv-card-head">
+                <span class="inv-icon">{inv.icon}</span>
+                <div class="inv-title-wrap">
+                  <h3 class="inv-name">{inv.name}</h3>
+                  <div class="inv-inventor">{inv.inventor}</div>
+                </div>
+                <span class="inv-period-tag">{inv.period.split('➔')[0].trim()}</span>
+              </div>
+
+              <div class="inv-info-row">
+                <span class="info-label">🌿 核心原料：</span>
+                <span class="info-val">{inv.rawMaterials}</span>
+              </div>
+
+              <div class="inv-mech-box">
+                <span class="mech-label">⚙️ 发明原理与工艺：</span>
+                <p class="mech-text">{inv.mechanism}</p>
+              </div>
+
+              <!-- 演化时间轴 -->
+              <div class="inv-timeline">
+                <div class="timeline-title">📈 历史演化节点：</div>
+                <div class="timeline-steps">
+                  {inv.evolution.map(step => (
+                    <div class="t-step">
+                      <strong class="t-era">{step.era}</strong>
+                      <span class="t-desc">{step.desc}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div class="inv-impact-box">
+                <strong>🌍 世界文明影响：</strong>
+                <span>{inv.impact}</span>
+              </div>
+
+              <div class="inv-fun-fact">
+                <span class="fun-icon">💡</span>
+                <div class="fun-text">
+                  <strong>少儿科学冷知识：</strong>{inv.funFact}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+
+        <!-- 科技先贤巨擘展区 -->
+        <div class="section-banner" style="margin-top: 3rem;">
+          <div class="banner-title-row">
+            <span class="banner-icon">🌟</span>
+            <h2 class="banner-title">中华科技先贤巨擘图鉴</h2>
+            <span class="banner-badge">格物致知 · 传世经典</span>
+          </div>
+          <p class="banner-sub">张衡、祖冲之、沈括、宋应星等先贤，用严谨的科学探索书写了璀璨的世界科学名篇</p>
+        </div>
+
+        <div class="scientists-grid" id="scientists-grid">
+          {ancientScientists.map(sci => (
+            <article
+              class="sci-card"
+              data-id={sci.id}
+              data-name={sci.name}
+              data-dynasty={sci.dynasty}
+              data-works={sci.majorWorks}
+              data-achieve={sci.achievements}
+            >
+              <div class="sci-card-top">
+                <span class="sci-avatar">{sci.avatar}</span>
+                <div class="sci-title-wrap">
+                  <h3 class="sci-name">{sci.name}</h3>
+                  <span class="sci-dynasty-badge">{sci.dynasty}</span>
+                </div>
+              </div>
+
+              <div class="sci-titles">{sci.titles}</div>
+
+              <div class="sci-works-row">
+                <span class="works-label">📚 代表巨著：</span>
+                <strong class="works-val">{sci.majorWorks}</strong>
+              </div>
+
+              <p class="sci-achieve-text">{sci.achievements}</p>
+
+              <div class="sci-anecdote-box">
+                <span class="anecdote-icon">✨</span>
+                <p class="anecdote-text">{sci.anecdote}</p>
+              </div>
+
+              <div class="sci-card-foot">
+                <button class="btn-sci-detail" data-id={sci.id}>
+                  <span>🔬 查看先贤详卷与实验故事</span> ➔
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- 视窗二：🐪 丝绸之路物产大交换 -->
+      <section id="view-silkroad" class="sci-view-section">
+        <div class="section-banner">
+          <div class="banner-title-row">
+            <span class="banner-icon">🐪</span>
+            <h2 class="banner-title">丝绸之路物产与文明大流动</h2>
+            <span class="banner-badge">张骞通西域 · 郑和下西洋</span>
+          </div>
+          <p class="banner-sub">{silkRoadExchanges.summary}</p>
+        </div>
+
+        <!-- 陆海两条伟大路线对比 -->
+        <div class="silk-routes-grid">
+          {silkRoadExchanges.routes.map(r => (
+            <div class="route-card">
+              <h3 class="route-title">{r.title}</h3>
+              <div class="route-path-box">
+                <span class="path-label">🗺️ 核心贸易走向：</span>
+                <p class="path-text">{r.path}</p>
+              </div>
+              <div class="route-highlights">
+                <strong>🌟 沿线历史见证：</strong>{r.highlights}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- 蔬果物产大交换 -->
+        <div class="silk-exchange-columns">
+          <!-- 西域引入中原 -->
+          <div class="exchange-column col-inbound">
+            <div class="col-header">
+              <span class="col-icon">🍇</span>
+              <div>
+                <h3 class="col-title">西域传入中原的奇珍蔬果</h3>
+                <span class="col-sub">极大丰富了中国百姓的餐桌与生活</span>
+              </div>
+            </div>
+
+            <div class="goods-grid">
+              {silkRoadExchanges.inbound.map(item => (
+                <div class="good-card" data-name={item.name} data-intro={item.intro}>
+                  <div class="good-top">
+                    <span class="good-icon">{item.icon}</span>
+                    <div>
+                      <h4 class="good-name">{item.name}</h4>
+                      <span class="good-origin">原产地：{item.origin} · {item.era}</span>
+                    </div>
+                  </div>
+                  <p class="good-intro">{item.intro}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <!-- 中华走向世界 -->
+          <div class="exchange-column col-outbound">
+            <div class="col-header">
+              <span class="col-icon">👘</span>
+              <div>
+                <h3 class="col-title">中华走向世界的文明瑰宝</h3>
+                <span class="col-sub">享誉世界的东方手工业与科技奇迹</span>
+              </div>
+            </div>
+
+            <div class="goods-grid">
+              {silkRoadExchanges.outbound.map(item => (
+                <div class="good-card" data-name={item.name} data-intro={item.intro}>
+                  <div class="good-top">
+                    <span class="good-icon">{item.icon}</span>
+                    <div>
+                      <h4 class="good-name">{item.name}</h4>
+                      <span class="good-origin">远销：{item.destination}</span>
+                    </div>
+                  </div>
+                  <p class="good-intro">{item.intro}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 视窗三：🚀 现代大国重器与深空探索 -->
+      <section id="view-modern" class="sci-view-section">
+        <div class="section-banner">
+          <div class="banner-title-row">
+            <span class="banner-icon">🌌</span>
+            <h2 class="banner-title">现代大国重器与中国式宇宙浪漫</h2>
+            <span class="banner-badge">可上九天揽月 · 可下五洋捉鳖</span>
+          </div>
+          <p class="banner-sub">用最浪漫的华夏神话命名最前沿的现代大国重器，展现当代中国科技的壮丽飞跃！</p>
+        </div>
+
+        <div class="modern-aero-deck" id="modern-deck">
+          {modernAeroScience.map(aero => (
+            <article class="aero-card" data-name={aero.name} data-myth={aero.mythName} data-category={aero.category} data-intro={aero.intro}>
+              <div class="aero-card-head">
+                <span class="aero-icon">{aero.icon}</span>
+                <div class="aero-title-wrap">
+                  <h3 class="aero-name">{aero.name}</h3>
+                  <div class="aero-myth-origin">🌟 神话渊源：<strong>{aero.mythName}</strong></div>
+                </div>
+                <span class="aero-category-badge">{aero.category}</span>
+              </div>
+
+              <div class="aero-milestone-box">
+                <span class="milestone-label">🚩 核心里程碑：</span>
+                <p class="milestone-text">{aero.milestones}</p>
+              </div>
+
+              <p class="aero-intro-text">{aero.intro}</p>
+
+              <div class="aero-secret-box">
+                <span class="secret-icon">💡</span>
+                <div class="secret-text">
+                  <strong>乐乐与月亮硬核科技揭秘：</strong>{aero.secret}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- 空结果状态 -->
+      <div id="sci-empty-state" class="sci-empty-state" style="display: none;">
+        <div class="empty-icon">🔍</div>
+        <h3>未找到匹配的科技发明或物产</h3>
+        <p>可以尝试搜索“祖冲之”、“天问”、“活字印刷”、“石榴”、“墨子号”等关键词。</p>
+        <button id="btn-sci-empty-reset" class="sci-btn sci-btn-cyan">重置搜索与筛选</button>
+      </div>
+    </main>
+
+    <!-- 模态框一：🏆 科学小博士亲子挑战 -->
+    <div id="sci-quiz-modal" class="sci-modal-overlay" style="display: none;">
+      <div class="sci-modal-card quiz-card">
+        <button class="modal-close" id="btn-close-sci-quiz">✕</button>
+        <div class="quiz-header">
+          <span class="quiz-icon">🏆</span>
+          <h2 class="quiz-title">科学小博士亲子益智大挑战</h2>
+          <span class="quiz-sub">探索华夏发明 · 发现大国重器 · 掌握自然奥秘</span>
+        </div>
+
+        <div class="quiz-status-row">
+          <span id="sci-quiz-progress" class="quiz-badge">第 1 / 5 题</span>
+          <span id="sci-quiz-score" class="quiz-badge badge-cyan">得分：0 分</span>
+        </div>
+
+        <div class="quiz-question-box">
+          <h3 id="sci-quiz-question-text" class="question-text">题目加载中...</h3>
+        </div>
+
+        <div id="sci-quiz-options-wrap" class="quiz-options-grid"></div>
+
+        <div id="sci-quiz-feedback-box" class="quiz-feedback-box" style="display: none;">
+          <div id="sci-quiz-feedback-text" class="feedback-text"></div>
+          <button id="btn-sci-quiz-next" class="sci-btn sci-btn-blue">下一题 ➔</button>
+        </div>
+
+        <div id="sci-quiz-complete-box" class="quiz-complete-box" style="display: none;">
+          <div class="complete-trophy">🎉</div>
+          <h3>恭喜完成科学小博士大挑战！</h3>
+          <p id="sci-quiz-final-score" class="final-score-text">你获得了满分！</p>
+          <div class="complete-badge">⭐⭐⭐⭐⭐【🚀 华夏少年未来科学家】</div>
+          <button id="btn-sci-quiz-restart" class="sci-btn sci-btn-cyan">再挑战一轮 🔄</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 模态框二：💡 科技探索编年通识小百科 -->
+    <div id="sci-chronicle-modal" class="sci-modal-overlay" style="display: none;">
+      <div class="sci-modal-card">
+        <button class="modal-close" id="btn-close-sci-chronicle">✕</button>
+        <div class="modal-header">
+          <span class="modal-icon">💡</span>
+          <h2 class="modal-title">华夏科技文明编年口诀与速记</h2>
+          <p class="modal-sub">古今五千年科技大智慧 · 极简少儿速记法</p>
+        </div>
+
+        <div class="chronicle-list">
+          <div class="chronicle-card">
+            <h4>📜 四大发明速记：</h4>
+            <p>“<strong>蔡伦造纸</strong>天下闻，<strong>毕昇泥活字</strong>传千家；<strong>战国司南沈括指</strong>，<strong>唐宋火药</strong>震天下！”</p>
+          </div>
+          <div class="chronicle-card">
+            <h4>📐 先贤名著速记：</h4>
+            <p>“<strong>张衡</strong>地动测天球，<strong>冲之</strong>割圆算到七；<strong>思勰</strong>齐民说农事，<strong>沈括</strong>笔谈名石油；<strong>守敬</strong>授时历法精，<strong>时珍</strong>本草百草全；<strong>应星</strong>天工开万物，<strong>光启</strong>几何译真谛！”</p>
+          </div>
+          <div class="chronicle-card">
+            <h4>🚀 现代航天神话速记：</h4>
+            <p>“月宫探秘唤<strong>嫦娥</strong>，太空驻留是<strong>天宫</strong>；红星巡视名<strong>祝融</strong>，<strong>羲和夸父</strong>看太阳；<strong>北斗</strong>导航引归路，<strong>天眼</strong>遥听脉冲星；<strong>奋斗者</strong>号入深渊，<strong>墨子</strong>量子传天宫！”</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 模态框三：🔬 科技先贤风云详卷 -->
+    <div id="scientist-modal" class="sci-modal-overlay" style="display: none;">
+      <div class="sci-modal-card sci-detail-card">
+        <button class="modal-close" id="btn-close-sci-detail">✕</button>
+        <div class="sci-detail-header">
+          <span id="detail-sci-avatar" class="detail-avatar">🔬</span>
+          <div>
+            <h2 id="detail-sci-name" class="detail-title">祖冲之</h2>
+            <div id="detail-sci-dynasty" class="detail-subtitle">南北朝（刘宋） · 数学家与天文学家</div>
+          </div>
+        </div>
+
+        <div class="sci-detail-body">
+          <div class="detail-section">
+            <h4>📚 传世巨著与重大发明</h4>
+            <p id="detail-sci-works" class="detail-text"></p>
+          </div>
+
+          <div class="detail-section">
+            <h4>🌟 核心科学突破与世界贡献</h4>
+            <p id="detail-sci-achievements" class="detail-text"></p>
+          </div>
+
+          <div class="detail-section experiment-box">
+            <h4>💡 乐乐与月亮的科学探索小故事</h4>
+            <p id="detail-sci-anecdote" class="detail-text"></p>
+          </div>
+        </div>
+
+        <div class="sci-detail-footer">
+          <button id="btn-sci-voice" class="sci-btn sci-btn-cyan">
+            <span>🔊 语音朗读科学故事</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script define:vars={{ fourInventions, ancientScientists, silkRoadExchanges, modernAeroScience, scienceQuizList }}>
+    window.SCI_DATA = {
+      inventions: fourInventions,
+      scientists: ancientScientists,
+      silkroad: silkRoadExchanges,
+      modern: modernAeroScience,
+      quizzes: scienceQuizList
+    };
+  </script>
+
+  <script src="../../client/science-ui.js"></script>
+</Base>
+
+<style>
+  .sci-container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 4rem;
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    color: #1e293b;
+  }
+
+  /* 顶部导航与品牌区 */
+  .sci-header {
+    background: linear-gradient(135deg, #f0fdfa 0%, #e0f2fe 50%, #f0f9ff 100%);
+    border: 1px solid #bae6fd;
+    border-radius: 1.25rem;
+    padding: 1.5rem 1.75rem 1.25rem;
+    box-shadow: 0 4px 16px rgba(14, 165, 233, 0.08);
+    margin-bottom: 2rem;
+  }
+
+  .sci-nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px dashed #bae6fd;
+  }
+
+  .sci-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: #0369a1;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.35rem 0.75rem;
+    background: #e0f2fe;
+    border-radius: 0.5rem;
+    transition: all 0.2s;
+  }
+  .sci-back-btn:hover {
+    background: #bae6fd;
+    color: #0c4a6e;
+  }
+
+  .sci-nav-links {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .sci-sub-nav {
+    color: #475569;
+    text-decoration: none;
+    font-size: 0.85rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.35rem;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    transition: all 0.2s;
+  }
+  .sci-sub-nav:hover {
+    color: #0284c7;
+    border-color: #0284c7;
+  }
+
+  /* Hero */
+  .sci-hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .sci-badge {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    background: #0284c7;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .sci-main-title {
+    font-size: 2.1rem;
+    font-weight: 800;
+    color: #0c4a6e;
+    letter-spacing: -0.02em;
+    margin: 0.25rem 0 0.5rem;
+  }
+
+  .sci-subtitle {
+    color: #0369a1;
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .sci-top-actions {
+    display: flex;
+    gap: 0.75rem;
+  }
+
+  .sci-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: 0.65rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .sci-btn-cyan {
+    background: linear-gradient(135deg, #0d9488, #0f766e);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(13, 148, 136, 0.25);
+  }
+  .sci-btn-cyan:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+  }
+  .sci-btn-blue {
+    background: linear-gradient(135deg, #0284c7, #0369a1);
+    color: #ffffff;
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.25);
+  }
+  .sci-btn-blue:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+  }
+
+  /* 切换控制器与搜索 */
+  .sci-controls-deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #bae6fd;
+  }
+
+  .sci-view-switcher {
+    display: flex;
+    background: #e0f2fe;
+    padding: 0.3rem;
+    border-radius: 0.75rem;
+    border: 1px solid #bae6fd;
+  }
+
+  .sci-view-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 1.15rem;
+    border-radius: 0.55rem;
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #0369a1;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sci-view-tab .tab-count {
+    font-size: 0.78rem;
+    opacity: 0.75;
+    font-weight: 500;
+  }
+  .sci-view-tab.active {
+    background: #ffffff;
+    color: #0c4a6e;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .sci-search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 320px;
+  }
+  .search-icon {
+    position: absolute;
+    left: 0.85rem;
+    color: #0284c7;
+    font-size: 0.9rem;
+  }
+  #sci-search-input {
+    width: 100%;
+    padding: 0.55rem 2rem 0.55rem 2.25rem;
+    border: 1.5px solid #bae6fd;
+    border-radius: 0.65rem;
+    font-size: 0.9rem;
+    outline: none;
+    background: #ffffff;
+    transition: border-color 0.2s;
+  }
+  #sci-search-input:focus {
+    border-color: #0284c7;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+  }
+  .btn-clear {
+    position: absolute;
+    right: 0.6rem;
+    background: transparent;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0.25rem;
+  }
+
+  .sci-pills-bar {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed #bae6fd;
+  }
+  .sci-pill {
+    padding: 0.35rem 0.85rem;
+    border-radius: 2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #0369a1;
+    background: #ffffff;
+    border: 1px solid #bae6fd;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sci-pill:hover {
+    border-color: #0284c7;
+    background: #f0f9ff;
+  }
+  .sci-pill.active {
+    background: #0284c7;
+    color: #ffffff;
+    border-color: #0284c7;
+    box-shadow: 0 2px 6px rgba(2, 132, 199, 0.25);
+  }
+
+  /* 视角切换显隐 */
+  .sci-view-section {
+    display: none;
+  }
+  .sci-view-section.active {
+    display: block;
+  }
+
+  .section-banner {
+    background: #f8fafc;
+    border-left: 5px solid #0284c7;
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+  .banner-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .banner-icon {
+    font-size: 1.3rem;
+  }
+  .banner-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+  }
+  .banner-badge {
+    background: #e0f2fe;
+    color: #0369a1;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.35rem;
+  }
+  .banner-sub {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin: 0.35rem 0 0;
+  }
+
+  /* 四大发明展台 */
+  .inventions-deck {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+    gap: 1.5rem;
+  }
+  .inv-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1.15rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    transition: all 0.2s;
+  }
+  .inv-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    border-color: #93c5fd;
+  }
+  .inv-card-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .inv-icon {
+    font-size: 2rem;
+    width: 48px;
+    height: 48px;
+    background: #f0fdf4;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #bbf7d0;
+  }
+  .inv-title-wrap {
+    flex: 1;
+  }
+  .inv-name {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 0.15rem;
+  }
+  .inv-inventor {
+    font-size: 0.82rem;
+    color: #059669;
+    font-weight: 600;
+  }
+  .inv-period-tag {
+    background: #fef3c7;
+    color: #92400e;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.35rem;
+  }
+
+  .inv-info-row {
+    font-size: 0.85rem;
+    color: #475569;
+    background: #f8fafc;
+    padding: 0.45rem 0.75rem;
+    border-radius: 0.4rem;
+  }
+  .info-label {
+    font-weight: 600;
+    color: #334155;
+  }
+
+  .inv-mech-box {
+    background: #f0fdfa;
+    border-left: 3px solid #0d9488;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.35rem;
+  }
+  .mech-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #0f766e;
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+  .mech-text {
+    font-size: 0.85rem;
+    color: #134e4a;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .inv-timeline {
+    background: #fafafa;
+    border: 1px solid #f1f5f9;
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+  }
+  .timeline-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 0.4rem;
+  }
+  .timeline-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .t-step {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    color: #334155;
+  }
+  .t-era {
+    color: #0284c7;
+    margin-right: 0.3rem;
+  }
+
+  .inv-impact-box {
+    font-size: 0.85rem;
+    color: #334155;
+    line-height: 1.5;
+  }
+
+  .inv-fun-fact {
+    background: #fffbeb;
+    border: 1px solid #fde68a;
+    border-radius: 0.5rem;
+    padding: 0.65rem 0.85rem;
+    display: flex;
+    gap: 0.5rem;
+    font-size: 0.82rem;
+    color: #92400e;
+    line-height: 1.5;
+  }
+  .fun-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+
+  /* 科技先贤网格 */
+  .scientists-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+    gap: 1.25rem;
+  }
+  .sci-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.75rem;
+    transition: all 0.2s;
+  }
+  .sci-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    border-color: #cbd5e1;
+  }
+  .sci-card-top {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+  .sci-avatar {
+    font-size: 1.8rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #f0fdf4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #bbf7d0;
+  }
+  .sci-name {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0;
+  }
+  .sci-dynasty-badge {
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 0.75rem;
+    padding: 0.15rem 0.45rem;
+    border-radius: 0.35rem;
+  }
+  .sci-titles {
+    font-size: 0.8rem;
+    color: #0284c7;
+    font-weight: 600;
+  }
+  .sci-works-row {
+    font-size: 0.82rem;
+    color: #334155;
+    background: #f8fafc;
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.35rem;
+  }
+  .works-label {
+    color: #64748b;
+  }
+  .sci-achieve-text {
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.5;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .sci-anecdote-box {
+    background: #fdf4ff;
+    border: 1px solid #f5d0fe;
+    border-radius: 0.45rem;
+    padding: 0.5rem 0.65rem;
+    display: flex;
+    gap: 0.4rem;
+  }
+  .anecdote-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .anecdote-text {
+    font-size: 0.8rem;
+    color: #701a75;
+    line-height: 1.4;
+    margin: 0;
+  }
+  .sci-card-foot {
+    border-top: 1px dashed #e2e8f0;
+    padding-top: 0.65rem;
+  }
+  .btn-sci-detail {
+    background: transparent;
+    border: none;
+    color: #0284c7;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+  }
+  .btn-sci-detail:hover {
+    color: #0369a1;
+  }
+
+  /* 丝路物产交换 */
+  .silk-routes-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  .route-card {
+    background: #ffffff;
+    border: 1.5px solid #fed7aa;
+    border-radius: 1rem;
+    padding: 1.25rem;
+    box-shadow: 0 2px 8px rgba(249, 115, 22, 0.06);
+  }
+  .route-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #9a3412;
+    margin: 0 0 0.5rem;
+  }
+  .route-path-box {
+    background: #fff7ed;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+  }
+  .path-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #c2410c;
+  }
+  .path-text {
+    font-size: 0.85rem;
+    color: #7c2d12;
+    margin: 0.2rem 0 0;
+    line-height: 1.5;
+  }
+  .route-highlights {
+    font-size: 0.82rem;
+    color: #475569;
+  }
+
+  .silk-exchange-columns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .exchange-column {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1.15rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+  }
+  .col-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .col-icon {
+    font-size: 2.2rem;
+  }
+  .col-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 0.15rem;
+  }
+  .col-sub {
+    font-size: 0.82rem;
+    color: #64748b;
+  }
+  .goods-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .good-card {
+    background: #f8fafc;
+    border: 1px solid #f1f5f9;
+    border-radius: 0.65rem;
+    padding: 0.75rem 0.85rem;
+    transition: all 0.2s;
+  }
+  .good-card:hover {
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+  }
+  .good-top {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 0.35rem;
+  }
+  .good-icon {
+    font-size: 1.6rem;
+  }
+  .good-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 0.15rem;
+  }
+  .good-origin {
+    font-size: 0.75rem;
+    color: #0284c7;
+    font-weight: 600;
+  }
+  .good-intro {
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  /* 现代大国重器 */
+  .modern-aero-deck {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1.5rem;
+  }
+  .aero-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1.15rem;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    transition: all 0.2s;
+  }
+  .aero-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 24px rgba(2, 132, 199, 0.12);
+    border-color: #7dd3fc;
+  }
+  .aero-card-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .aero-icon {
+    font-size: 2.2rem;
+    width: 52px;
+    height: 52px;
+    background: #f0f9ff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid #bae6fd;
+  }
+  .aero-title-wrap {
+    flex: 1;
+  }
+  .aero-name {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #0369a1;
+    margin: 0 0 0.2rem;
+  }
+  .aero-myth-origin {
+    font-size: 0.8rem;
+    color: #d97706;
+  }
+  .aero-category-badge {
+    background: #e0f2fe;
+    color: #0369a1;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.35rem;
+  }
+  .aero-milestone-box {
+    background: #f8fafc;
+    border-left: 3px solid #0284c7;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.35rem;
+  }
+  .milestone-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #0284c7;
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+  .milestone-text {
+    font-size: 0.85rem;
+    color: #334155;
+    line-height: 1.4;
+    margin: 0;
+  }
+  .aero-intro-text {
+    font-size: 0.88rem;
+    color: #475569;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .aero-secret-box {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 0.5rem;
+    padding: 0.65rem 0.85rem;
+    display: flex;
+    gap: 0.5rem;
+  }
+  .secret-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+  }
+  .secret-text {
+    font-size: 0.82rem;
+    color: #1e40af;
+    line-height: 1.5;
+  }
+
+  /* 模态框通用 */
+  .sci-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+  }
+  .sci-modal-card {
+    background: #ffffff;
+    border-radius: 1.25rem;
+    width: 100%;
+    max-width: 680px;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    position: relative;
+  }
+  .modal-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .modal-close:hover {
+    background: #ef4444;
+    color: #fff;
+    border-color: #ef4444;
+  }
+
+  /* 编年小百科 */
+  .chronicle-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.25rem;
+  }
+  .chronicle-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1rem 1.25rem;
+  }
+  .chronicle-card h4 {
+    margin: 0 0 0.35rem;
+    color: #0369a1;
+    font-size: 1rem;
+  }
+  .chronicle-card p {
+    margin: 0;
+    color: #334155;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  /* 先贤详情模态 */
+  .sci-detail-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid #e2e8f0;
+    margin-bottom: 1.25rem;
+  }
+  .detail-avatar {
+    font-size: 2.2rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: #f0fdf4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #bbf7d0;
+  }
+  .detail-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 0.2rem;
+  }
+  .detail-subtitle {
+    font-size: 0.9rem;
+    color: #64748b;
+  }
+  .detail-section {
+    margin-bottom: 1rem;
+  }
+  .detail-section h4 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 0.4rem;
+  }
+  .detail-text {
+    font-size: 0.9rem;
+    color: #475569;
+    line-height: 1.6;
+    margin: 0;
+  }
+  .experiment-box {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 0.65rem;
+    padding: 0.85rem 1rem;
+  }
+  .experiment-box h4 {
+    color: #15803d;
+  }
+  .experiment-box .detail-text {
+    color: #166534;
+  }
+  .sci-detail-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
+  }
+
+  /* 问答挑战 */
+  .quiz-status-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 1.25rem 0;
+  }
+  .quiz-badge {
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 0.35rem 0.85rem;
+    border-radius: 0.5rem;
+  }
+  .badge-cyan {
+    background: #e0f2fe;
+    color: #0369a1;
+  }
+  .quiz-question-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.85rem;
+    padding: 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  .question-text {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.5;
+    margin: 0;
+  }
+  .quiz-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+  .quiz-opt-btn {
+    background: #ffffff;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 0.65rem;
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+  }
+  .quiz-opt-btn:hover:not(:disabled) {
+    border-color: #0284c7;
+    background: #f0f9ff;
+    color: #0369a1;
+  }
+  .quiz-opt-btn.correct {
+    background: #dcfce7 !important;
+    border-color: #22c55e !important;
+    color: #15803d !important;
+  }
+  .quiz-opt-btn.wrong {
+    background: #fee2e2 !important;
+    border-color: #ef4444 !important;
+    color: #b91c1c !important;
+  }
+  .quiz-feedback-box {
+    background: #f8fafc;
+    border-radius: 0.65rem;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  .feedback-text {
+    font-size: 0.9rem;
+    color: #334155;
+    line-height: 1.5;
+  }
+  .quiz-complete-box {
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+  .complete-trophy {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+  }
+  .complete-badge {
+    display: inline-block;
+    background: #e0f2fe;
+    color: #0369a1;
+    font-weight: 800;
+    padding: 0.5rem 1.25rem;
+    border-radius: 1rem;
+    margin: 1rem 0 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  /* 空状态 */
+  .sci-empty-state {
+    text-align: center;
+    padding: 4rem 1rem;
+    background: #f8fafc;
+    border-radius: 1rem;
+    border: 1px dashed #cbd5e1;
+    margin-top: 1rem;
+  }
+  .empty-icon {
+    font-size: 3rem;
+    margin-bottom: 0.75rem;
+  }
+
+  @media (max-width: 768px) {
+    .sci-main-title {
+      font-size: 1.6rem;
+    }
+    .sci-controls-deck {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .sci-search-box {
+      min-width: auto;
+    }
+    .silk-routes-grid {
+      grid-template-columns: 1fr;
+    }
+    .silk-exchange-columns {
+      grid-template-columns: 1fr;
+    }
+    .quiz-options-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
