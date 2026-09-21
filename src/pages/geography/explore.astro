@@ -1,0 +1,1493 @@
+---
+import Base from '../../layouts/Base.astro'
+import '../../styles/learning.css'
+import { chinaGeographyData, regionsList } from '../../data/chinaGeographyData.js'
+
+const base = import.meta.env.BASE_URL
+---
+
+<Base title="中国地理通识长卷 · 华夏万里探索地图 · 34省地标特产古诗联动" wide={true}>
+  <main class="learn-page geo-explore-page">
+    {/* 顶部通栏面包屑与快速切换条 */}
+    <header class="learn-header" style="margin-bottom: 1.25rem;">
+      <div class="learn-header-top">
+        <nav class="learn-breadcrumb">
+          <a href={base}>🏠 知识总门户</a>
+          <span>/</span>
+          <a href={`${base}geography/`}>🗺️ 山川地理</a>
+          <span>/</span>
+          <strong style="color: #d97706;">🧭 中国地理通识长卷</strong>
+        </nav>
+        <div class="learn-subject-switcher">
+          <a href={base} class="subject-chip chip-home">🏠 门户首页</a>
+          <a href={`${base}geography/`} class="subject-chip">📜 历代疆域与古都</a>
+          <a href={`${base}geography/explore/`} class="subject-chip active" style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a;">🧭 地理通识长卷</a>
+          <a href={`${base}chinese/poems/`} class="subject-chip" style="background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3;">🎙️ 古诗点读台</a>
+          <a href={`${base}chinese/`} class="subject-chip chip-chinese">📖 语文</a>
+          <a href={`${base}math/`} class="subject-chip chip-math">📐 数学</a>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;">
+        <div>
+          <h1 class="learn-title" style="margin-bottom: 0.25rem;">
+            🧭 中 国 地 理 通 识 长 卷 · 华 夏 万 里 探 索 地 图
+          </h1>
+          <p class="learn-subtitle" style="margin: 0;">
+            中国 34 个省级行政区全收录 · 省会简称 · 城市地标与名胜古迹 · 风物特产与非遗美食 · 课本古诗山河联动 · 乐乐与月亮的华夏足迹
+          </p>
+        </div>
+
+        <div style="display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap;">
+          <button id="btn-open-footprints" class="geo-header-btn" title="查看乐乐与月亮的打卡足迹与徽章">
+            👣 华夏足迹打卡册 <span id="header-footprint-badge" class="header-count-tag">0/34</span>
+          </button>
+          <button id="btn-open-quiz" class="geo-header-btn btn-quiz" title="趣味猜省份通识挑战">
+            🧩 趣味地理猜省挑战
+          </button>
+        </div>
+      </div>
+    </header>
+
+    {/* 控制过滤栏：大区胶囊 + 主题模式切换 + 搜索框 */}
+    <section class="geo-filter-bar">
+      <div class="region-tabs-list" id="region-tabs">
+        {regionsList.map((r, idx) => (
+          <button
+            class={`region-tab-pill ${idx === 0 ? 'active' : ''}`}
+            data-region={r}
+          >
+            {r} <span class="pill-count">({r === '全部大区' ? chinaGeographyData.length : chinaGeographyData.filter(p => p.region === r).length})</span>
+          </button>
+        ))}
+      </div>
+
+      <div class="geo-mode-and-search">
+        <div class="geo-view-modes" id="geo-view-modes">
+          <button class="mode-pill active" data-mode="all">🏛️ 全貌通识</button>
+          <button class="mode-pill" data-mode="landmarks">🏯 名胜古迹</button>
+          <button class="mode-pill" data-mode="specialties">🍲 风物特产</button>
+          <button class="mode-pill" data-mode="poems">📜 诗意山河</button>
+        </div>
+
+        <div class="geo-search-box">
+          <input
+            type="text"
+            id="geo-search-input"
+            placeholder="🔍 搜索省份、省会、特产、古迹..."
+          />
+          <button id="btn-geo-search-clear" style="display:none;">✕</button>
+        </div>
+      </div>
+    </section>
+
+    {/* 主工作区：左侧交互中国地图 + 侧边省份目录，右侧沉浸式省份通识长卷 */}
+    <div class="geo-stage-layout">
+      {/* 左侧：中国地图与省份列表 */}
+      <div class="geo-left-col">
+        {/* 上部：ECharts 中国交互地图画布 */}
+        <div class="geo-map-card">
+          <div class="map-card-header">
+            <span style="font-weight: bold; color: #1e293b;">🇨🇳 华夏大地交互全景探索图</span>
+            <span style="font-size: 0.8rem; color: #64748b;">鼠标悬停探查，点击进入省份长卷</span>
+          </div>
+          <div id="china-explore-map" class="map-viewport"></div>
+        </div>
+
+        {/* 下部：省份速览卡片抽屉 */}
+        <div class="geo-province-drawer">
+          <div class="drawer-header">
+            <span style="font-weight: bold; color: #1e293b;">📜 省级行政区列表 (<span id="visible-province-count">34</span>)</span>
+            <span style="font-size: 0.8rem; color: #64748b;">点击卡片即时展卷</span>
+          </div>
+          <div class="province-cards-grid" id="province-cards-container">
+            {chinaGeographyData.map((p, idx) => (
+              <div
+                class={`province-mini-card ${idx === 0 ? 'active' : ''}`}
+                data-id={p.id}
+                data-name={p.name}
+                data-adcode={p.adcode}
+                data-region={p.region}
+                data-search={`${p.name} ${p.shortName} ${p.abbr} ${p.capital} ${p.tagline} ${p.landmarks.map(l => l.name).join(' ')} ${p.specialties.map(s => s.name).join(' ')} ${p.famousFigures.join(' ')} ${p.relatedPoems.map(rp => rp.title).join(' ')}`}
+                onclick={`window.switchProvince('${p.id}')`}
+              >
+                <div class="card-seal" style={`background: ${p.themeColor};`}>{p.abbr}</div>
+                <div class="card-info">
+                  <div class="card-name-row">
+                    <strong class="card-name">{p.shortName}</strong>
+                    <span class="card-cap">{p.capital}</span>
+                    <span class="card-region-tag">{p.region}</span>
+                  </div>
+                  <div class="card-tagline">{p.tagline}</div>
+                </div>
+                <div class="card-footprint-tag" id={`footprint-mark-${p.id}`} style="display:none;">👣</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* 右侧：沉浸式省份通识百科长卷 */}
+      <section class="geo-right-col" id="province-detail-sheet">
+        {/* 顶部宏大牌匾 */}
+        <div class="province-banner" id="prov-banner">
+          <div class="banner-top-row">
+            <div class="banner-seal-box">
+              <div class="seal-stamp" id="prov-seal">川</div>
+              <div>
+                <div class="banner-title-group">
+                  <h2 class="banner-prov-name" id="prov-name">四川省</h2>
+                  <span class="banner-cap-badge" id="prov-capital">省会：成都</span>
+                  <span class="banner-region-badge" id="prov-region">西南大区</span>
+                </div>
+                <div class="banner-tagline" id="prov-tagline">天府之国 · 蜀道锦绣 · 熊猫故乡</div>
+              </div>
+            </div>
+
+            <div class="banner-actions">
+              <button class="btn-footprint-toggle" id="btn-toggle-footprint" onclick="window.toggleCurrentFootprint()">
+                👣 点亮足迹：我已去过！
+              </button>
+            </div>
+          </div>
+          <p class="banner-intro" id="prov-intro">
+            地处我国西南，西高东低，四川盆地沃野千里，自古享有“天府之国”的美誉。大熊猫故乡，麻辣川菜享誉全球。
+          </p>
+        </div>
+
+        {/* 省情通识微百科（地貌、气候、冷知识） */}
+        <div class="geo-section-deck">
+          <h3 class="section-deck-title">🌍 自然地理与趣味冷知识</h3>
+          <div class="deck-cards-grid">
+            <div class="stat-card">
+              <div class="stat-card-head">🏔️ 地形地貌</div>
+              <div class="stat-card-text" id="prov-terrain">西有青藏高原横断山脉，东为四川盆地，地貌差异极其悬殊。</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-head">🌤️ 气候特征</div>
+              <div class="stat-card-text" id="prov-climate">盆地为亚热带湿润季风气候，多云雾湿润；川西为高原高山气候。</div>
+            </div>
+            <div class="stat-card funfact-card">
+              <div class="stat-card-head" style="color: #b45309;">💡 你知道吗？（趣味通识）</div>
+              <div class="stat-card-text" id="prov-funfact">四川是中国也是全世界野生大熊猫数量最多的省份，全国 70% 以上的野生大熊猫都生活在四川崇山峻岭的竹林里！</div>
+            </div>
+          </div>
+        </div>
+
+        {/* 著名地标与名胜古迹 */}
+        <div class="geo-section-deck">
+          <h3 class="section-deck-title">🏯 著名地标与名胜古迹</h3>
+          <div class="landmarks-grid" id="prov-landmarks-grid">
+            {/* JS 动态注入 */}
+          </div>
+        </div>
+
+        {/* 风物特产与非遗美食 */}
+        <div class="geo-section-deck">
+          <h3 class="section-deck-title">🍲 风土特产与非遗美食</h3>
+          <div class="specialties-grid" id="prov-specialties-grid">
+            {/* JS 动态注入 */}
+          </div>
+        </div>
+
+        {/* 文化名人与古诗山河联动 */}
+        <div class="geo-section-deck">
+          <h3 class="section-deck-title">📜 诗意山河 · 历史名人与课本古诗联动</h3>
+          <div class="culture-deck-grid">
+            <div class="figures-box">
+              <div class="culture-box-label">👑 著名历史文化名人</div>
+              <div class="figures-tags-wrap" id="prov-figures-tags">
+                {/* 动态注入 */}
+              </div>
+            </div>
+
+            <div class="poems-box">
+              <div class="culture-box-label">📖 课本必背古诗名篇联动</div>
+              <div class="poems-cards-wrap" id="prov-poems-wrap">
+                {/* 动态注入古诗卡片 */}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    {/* 华夏足迹打卡册模态 */}
+    <div id="footprints-modal" class="modal-backdrop" style="display:none;">
+      <div class="modal-card">
+        <div class="modal-head">
+          <h3>👣 乐乐与月亮的华夏足迹打卡册</h3>
+          <button class="modal-close" onclick="window.closeFootprintsModal()">✕</button>
+        </div>
+        <div class="footprint-stats-bar">
+          <div class="stat-item">
+            <span class="stat-num" id="stat-visited-count">0</span>
+            <span class="stat-lbl">已点亮省份</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num" id="stat-visited-pct">0%</span>
+            <span class="stat-lbl">全国覆盖率</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num" id="stat-badge-name">华夏启蒙者</span>
+            <span class="stat-lbl">当前探索段位</span>
+          </div>
+        </div>
+        <p style="font-size: 0.85rem; color: #64748b; margin-top: 0.5rem;">
+          点击省份快速标记“我去过”：记录每一次旅行与地理探索！
+        </p>
+        <div class="footprint-provinces-matrix" id="footprint-matrix">
+          {/* 动态注入 34 省份快速勾选卡 */}
+        </div>
+      </div>
+    </div>
+
+    {/* 趣味地理猜省挑战模态 */}
+    <div id="quiz-modal" class="modal-backdrop" style="display:none;">
+      <div class="modal-card quiz-card">
+        <div class="modal-head">
+          <h3>🧩 趣味地理猜省份通识挑战</h3>
+          <button class="modal-close" onclick="window.closeQuizModal()">✕</button>
+        </div>
+        <div id="quiz-container">
+          <div class="quiz-question-box">
+            <span class="quiz-q-num" id="quiz-q-index">第 1 / 3 题</span>
+            <h4 class="quiz-q-title" id="quiz-q-text">正在生成题目...</h4>
+          </div>
+          <div class="quiz-options-list" id="quiz-options">
+            {/* 动态选项 */}
+          </div>
+          <div class="quiz-feedback-box" id="quiz-feedback" style="display:none;"></div>
+          <div class="quiz-footer">
+            <button id="btn-next-quiz" class="btn-quiz-next" style="display:none;" onclick="window.nextQuizQuestion()">下一题 ➔</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</Base>
+
+<style>
+  /* 基础容器 */
+  .geo-explore-page {
+    max-width: 1480px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem 3rem;
+  }
+
+  .geo-header-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1.15rem;
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    color: #fff;
+    border: none;
+    border-radius: 9999px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(5, 150, 105, 0.25);
+    transition: all 0.2s;
+  }
+  .geo-header-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px -2px rgba(5, 150, 105, 0.35);
+  }
+  .geo-header-btn.btn-quiz {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.25);
+  }
+  .geo-header-btn.btn-quiz:hover {
+    box-shadow: 0 6px 12px -2px rgba(217, 119, 6, 0.35);
+  }
+  .header-count-tag {
+    background: rgba(255, 255, 255, 0.25);
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+  }
+
+  /* 过滤栏 */
+  .geo-filter-bar {
+    background: #fff;
+    border: 1px solid #fed7aa;
+    border-radius: 1rem;
+    padding: 0.8rem 1.25rem;
+    margin-bottom: 1.25rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .region-tabs-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .region-tab-pill {
+    padding: 0.4rem 0.9rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .region-tab-pill:hover {
+    background: #fff7ed;
+    border-color: #fdba74;
+    color: #c2410c;
+  }
+  .region-tab-pill.active {
+    background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+    color: #fff;
+    border-color: #ea580c;
+    box-shadow: 0 2px 4px rgba(234, 88, 12, 0.25);
+  }
+  .region-tab-pill .pill-count {
+    font-size: 0.75rem;
+    opacity: 0.85;
+  }
+
+  .geo-mode-and-search {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    padding-top: 0.5rem;
+    border-top: 1px dashed #fed7aa;
+  }
+  .geo-view-modes {
+    display: flex;
+    gap: 0.4rem;
+  }
+  .mode-pill {
+    padding: 0.35rem 0.8rem;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .mode-pill.active {
+    background: #fef3c7;
+    border-color: #f59e0b;
+    color: #b45309;
+  }
+
+  .geo-search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .geo-search-box input {
+    width: 280px;
+    padding: 0.45rem 2rem 0.45rem 0.85rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    outline: none;
+    transition: all 0.2s;
+  }
+  .geo-search-box input:focus {
+    border-color: #ea580c;
+    box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.15);
+  }
+  .geo-search-box button {
+    position: absolute;
+    right: 0.6rem;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+
+  /* 主工作区左右两列 */
+  .geo-stage-layout {
+    display: grid;
+    grid-template-columns: 480px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+  @media (max-width: 1080px) {
+    .geo-stage-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* 左侧地图与省份列表 */
+  .geo-left-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .geo-map-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  }
+  .map-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+  }
+  .map-viewport {
+    width: 100%;
+    height: 380px;
+    background: #f8fafc;
+    border-radius: 0.75rem;
+  }
+
+  .geo-province-drawer {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  }
+  .drawer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+  .province-cards-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 480px;
+    overflow-y: auto;
+    padding-right: 0.3rem;
+  }
+  .province-mini-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.85rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .province-mini-card:hover {
+    background: #fff7ed;
+    border-color: #fdba74;
+    transform: translateX(3px);
+  }
+  .province-mini-card.active {
+    background: #fffbeb;
+    border: 2px solid #d97706;
+    box-shadow: 0 2px 6px rgba(217, 119, 6, 0.15);
+  }
+  .card-seal {
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    font-weight: 800;
+    flex-shrink: 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  }
+  .card-info {
+    flex: 1;
+    overflow: hidden;
+  }
+  .card-name-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .card-name {
+    font-size: 0.95rem;
+    color: #1e293b;
+  }
+  .card-cap {
+    font-size: 0.8rem;
+    color: #64748b;
+  }
+  .card-region-tag {
+    font-size: 0.7rem;
+    background: #e2e8f0;
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: #475569;
+  }
+  .card-tagline {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 2px;
+  }
+  .card-footprint-tag {
+    font-size: 1.1rem;
+  }
+
+  /* 右侧沉浸式百科长卷 */
+  .geo-right-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .province-banner {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    border: 2px solid #fde68a;
+    border-radius: 1.25rem;
+    padding: 1.5rem 1.75rem;
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.08);
+  }
+  .banner-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .banner-seal-box {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .seal-stamp {
+    width: 68px;
+    height: 68px;
+    background: #dc2626;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.3);
+    font-family: 'Kaiti', serif;
+  }
+  .banner-title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .banner-prov-name {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: #1e293b;
+  }
+  .banner-cap-badge, .banner-region-badge {
+    padding: 3px 10px;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+  .banner-cap-badge {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+  }
+  .banner-region-badge {
+    background: #dbeafe;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+  }
+  .banner-tagline {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #d97706;
+    margin-top: 0.35rem;
+  }
+  .btn-footprint-toggle {
+    padding: 0.5rem 1.1rem;
+    background: #fff;
+    border: 1px solid #d97706;
+    color: #d97706;
+    border-radius: 9999px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.2s;
+  }
+  .btn-footprint-toggle.visited {
+    background: #059669;
+    border-color: #059669;
+    color: #fff;
+  }
+  .banner-intro {
+    margin: 0;
+    font-size: 0.95rem;
+    color: #475569;
+    line-height: 1.6;
+  }
+
+  /* 通识甲板与卡片 */
+  .geo-section-deck {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1.25rem;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+  }
+  .section-deck-title {
+    margin: 0 0 1rem;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .deck-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+  }
+  .stat-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1rem;
+  }
+  .stat-card-head {
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: #334155;
+    margin-bottom: 0.4rem;
+  }
+  .stat-card-text {
+    font-size: 0.85rem;
+    color: #64748b;
+    line-height: 1.55;
+  }
+  .funfact-card {
+    background: #fffbeb;
+    border-color: #fde68a;
+    grid-column: 1 / -1;
+  }
+  .funfact-card .stat-card-text {
+    color: #92400e;
+    font-weight: 500;
+  }
+
+  /* 地标与特产网格 */
+  .landmarks-grid, .specialties-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .landmark-card, .specialty-card {
+    display: flex;
+    gap: 0.85rem;
+    padding: 0.85rem 1rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    transition: all 0.2s;
+  }
+  .landmark-card:hover, .specialty-card:hover {
+    background: #fff7ed;
+    border-color: #fed7aa;
+    transform: translateY(-2px);
+  }
+  .lm-icon, .sp-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+  .lm-content, .sp-content {
+    flex: 1;
+  }
+  .lm-name, .sp-name {
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 2px;
+  }
+  .lm-tag, .sp-tag {
+    display: inline-block;
+    font-size: 0.7rem;
+    padding: 1px 6px;
+    background: #fed7aa;
+    color: #9a3412;
+    border-radius: 4px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .lm-desc, .sp-desc {
+    font-size: 0.82rem;
+    color: #64748b;
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  /* 文化与古诗联动 */
+  .culture-deck-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+  @media (max-width: 860px) {
+    .culture-deck-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  .figures-box, .poems-box {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 1rem;
+  }
+  .culture-box-label {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 0.75rem;
+  }
+  .figures-tags-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .figure-tag-chip {
+    padding: 0.4rem 0.8rem;
+    background: #fff;
+    border: 1px solid #cbd5e1;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #334155;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  .poems-cards-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .poem-link-card {
+    background: #fff;
+    border: 1px solid #fed7aa;
+    border-left: 4px solid #ea580c;
+    border-radius: 0.5rem;
+    padding: 0.6rem 0.85rem;
+  }
+  .poem-card-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: #1e293b;
+  }
+  .poem-card-quote {
+    font-size: 0.82rem;
+    color: #ea580c;
+    font-family: 'Kaiti', serif;
+    font-weight: 600;
+    margin: 4px 0;
+  }
+  .poem-jump-link {
+    display: inline-block;
+    font-size: 0.75rem;
+    color: #0284c7;
+    text-decoration: none;
+    font-weight: 700;
+  }
+  .poem-jump-link:hover {
+    text-decoration: underline;
+  }
+
+  /* 模态弹窗 */
+  .modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+  .modal-card {
+    background: #fff;
+    border-radius: 1.25rem;
+    width: 100%;
+    max-width: 680px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+  }
+  .modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 0.75rem;
+  }
+  .modal-head h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #1e293b;
+  }
+  .modal-close {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #64748b;
+    cursor: pointer;
+  }
+
+  .footprint-stats-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    padding: 0.75rem;
+    margin-top: 1rem;
+    text-align: center;
+  }
+  .stat-num {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #059669;
+  }
+  .stat-lbl {
+    font-size: 0.75rem;
+    color: #64748b;
+  }
+  .footprint-provinces-matrix {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 0.5rem;
+    overflow-y: auto;
+    margin-top: 0.8rem;
+    padding-right: 0.3rem;
+  }
+  .fp-item-btn {
+    padding: 0.5rem;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+  .fp-item-btn.checked {
+    background: #dcfce7;
+    border-color: #86efac;
+    color: #15803d;
+    font-weight: 700;
+  }
+
+  /* 猜省挑战答题 */
+  .quiz-card {
+    max-width: 540px;
+  }
+  .quiz-question-box {
+    margin: 1.25rem 0;
+  }
+  .quiz-q-num {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #ea580c;
+  }
+  .quiz-q-title {
+    margin: 0.4rem 0 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: #1e293b;
+    line-height: 1.5;
+  }
+  .quiz-options-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .quiz-option-btn {
+    padding: 0.75rem 1rem;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    text-align: left;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .quiz-option-btn:hover {
+    background: #fff7ed;
+    border-color: #fdba74;
+  }
+  .quiz-option-btn.correct {
+    background: #dcfce7;
+    border-color: #22c55e;
+    color: #15803d;
+  }
+  .quiz-option-btn.wrong {
+    background: #fee2e2;
+    border-color: #ef4444;
+    color: #b91c1c;
+  }
+  .quiz-feedback-box {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  .quiz-feedback-box.correct {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+  }
+  .quiz-feedback-box.wrong {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+  }
+  .btn-quiz-next {
+    margin-top: 1rem;
+    padding: 0.6rem 1.25rem;
+    background: #ea580c;
+    color: #fff;
+    border: none;
+    border-radius: 9999px;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+  }
+</style>
+
+<script>
+  import * as echarts from 'echarts'
+  import chinaGeo from '../../../data/geography/china_geo.json'
+  import { chinaGeographyData } from '../../data/chinaGeographyData.js'
+
+  // 注册中国矢量底图
+  echarts.registerMap('china', chinaGeo as any)
+
+  // 全局响应式状态
+  let currentProvinceId = 'sichuan'
+  let currentRegionFilter = '全部大区'
+  let currentViewMode = 'all'
+  let chartInstance: echarts.ECharts | null = null
+
+  // 足迹持久化
+  function getFootprints() {
+    try {
+      return JSON.parse(localStorage.getItem('shiqiu_geo_footprints') || '{}')
+    } catch {
+      return {}
+    }
+  }
+
+  function saveFootprints(data: any) {
+    try {
+      localStorage.setItem('shiqiu_geo_footprints', JSON.stringify(data))
+    } catch {}
+  }
+
+  // 初始化地图
+  function initChart() {
+    const chartDom = document.getElementById('china-explore-map')
+    if (!chartDom) return
+
+    chartInstance = echarts.init(chartDom)
+    updateChart()
+
+    chartInstance.on('click', (params: any) => {
+      if (params.name) {
+        const found = chinaGeographyData.find(p => p.name === params.name || p.shortName === params.name || params.name.includes(p.shortName))
+        if (found) {
+          (window as any).switchProvince(found.id)
+        }
+      }
+    })
+
+    window.addEventListener('resize', () => {
+      chartInstance?.resize()
+    })
+  }
+
+  // 刷新地图着色
+  function updateChart() {
+    if (!chartInstance) return
+
+    const regionsColorMap: Record<string, string> = {
+      '华北': '#f97316',
+      '东北': '#0284c7',
+      '华东': '#0d9488',
+      '华中': '#e11d48',
+      '华南': '#10b981',
+      '西南': '#8b5cf6',
+      '西北': '#d97706',
+      '港澳台': '#ec4899'
+    }
+
+    const currentProv = chinaGeographyData.find(p => p.id === currentProvinceId) || chinaGeographyData[0]
+
+    const mapData = chinaGeographyData.map(p => {
+      const isSelected = p.id === currentProvinceId
+      const matchRegion = currentRegionFilter === '全部大区' || p.region === currentRegionFilter
+
+      let areaColor = regionsColorMap[p.region] || '#cbd5e1'
+      let opacity = matchRegion ? 0.75 : 0.15
+      let borderColor = '#ffffff'
+      let borderWidth = 1
+
+      if (isSelected) {
+        areaColor = '#dc2626'
+        opacity = 1
+        borderColor = '#fde047'
+        borderWidth = 2.5
+      }
+
+      return {
+        name: p.name,
+        value: p.capital,
+        itemStyle: {
+          areaColor,
+          opacity,
+          borderColor,
+          borderWidth
+        },
+        emphasis: {
+          itemStyle: {
+            areaColor: '#f97316',
+            opacity: 0.95
+          },
+          label: {
+            show: true,
+            color: '#fff',
+            fontWeight: 'bold'
+          }
+        }
+      }
+    })
+
+    const option = {
+      tooltip: {
+        trigger: 'item',
+        formatter: (params: any) => {
+          const prov = chinaGeographyData.find(p => p.name === params.name || params.name.includes(p.shortName))
+          if (!prov) return params.name
+          return `
+            <div style="font-size:13px;line-height:1.5;">
+              <strong style="color:${prov.themeColor};font-size:14px;">${prov.name} (${prov.abbr})</strong><br/>
+              省会/首府：<b>${prov.capital}</b> · ${prov.region}大区<br/>
+              <em>“${prov.tagline}”</em><br/>
+              地标：${prov.landmarks[0]?.name || ''} · 特产：${prov.specialties[0]?.name || ''}
+            </div>
+          `
+        }
+      },
+      geo: {
+        map: 'china',
+        roam: true,
+        zoom: 1.18,
+        center: [104.5, 36.5],
+        label: {
+          show: false
+        },
+        itemStyle: {
+          borderColor: '#ffffff',
+          borderWidth: 1
+        },
+        regions: mapData
+      },
+      series: []
+    }
+
+    chartInstance.setOption(option, true)
+  }
+
+  // 渲染右侧通识长卷
+  function renderProvinceDetail(p: any) {
+    document.getElementById('prov-seal')!.innerText = p.abbr.split('/')[0].trim()
+    document.getElementById('prov-seal')!.style.background = p.themeColor
+    document.getElementById('prov-name')!.innerText = p.name
+    document.getElementById('prov-capital')!.innerText = `省会：${p.capital}`
+    document.getElementById('prov-region')!.innerText = `${p.region}大区`
+    document.getElementById('prov-tagline')!.innerText = p.tagline
+    document.getElementById('prov-intro')!.innerText = p.intro
+
+    document.getElementById('prov-terrain')!.innerText = p.terrain
+    document.getElementById('prov-climate')!.innerText = p.climate
+    document.getElementById('prov-funfact')!.innerText = p.funFact
+
+    // 地标网格
+    const lmGrid = document.getElementById('prov-landmarks-grid')!
+    lmGrid.innerHTML = p.landmarks.map((l: any) => `
+      <div class="landmark-card">
+        <div class="lm-icon">${l.icon || '🏯'}</div>
+        <div class="lm-content">
+          <div class="lm-name">${l.name}</div>
+          <span class="lm-tag">${l.type}</span>
+          <p class="lm-desc">${l.desc}</p>
+        </div>
+      </div>
+    `).join('')
+
+    // 特产网格
+    const spGrid = document.getElementById('prov-specialties-grid')!
+    spGrid.innerHTML = p.specialties.map((s: any) => `
+      <div class="specialty-card">
+        <div class="sp-icon">${s.icon || '🍲'}</div>
+        <div class="sp-content">
+          <div class="sp-name">${s.name}</div>
+          <span class="sp-tag">${s.type}</span>
+          <p class="sp-desc">${s.desc}</p>
+        </div>
+      </div>
+    `).join('')
+
+    // 文化名人
+    const figWrap = document.getElementById('prov-figures-tags')!
+    figWrap.innerHTML = p.famousFigures.map((f: string) => `
+      <span class="figure-tag-chip">👤 ${f}</span>
+    `).join('')
+
+    // 诗意山河
+    const pmWrap = document.getElementById('prov-poems-wrap')!
+    if (p.relatedPoems && p.relatedPoems.length > 0) {
+      pmWrap.innerHTML = p.relatedPoems.map((rp: any) => `
+        <div class="poem-link-card">
+          <div class="poem-card-title-row">
+            <span>《${rp.title}》</span>
+            <span style="font-weight:normal;color:#64748b;">〔${rp.author}〕</span>
+          </div>
+          <div class="poem-card-quote">“${rp.quote}”</div>
+          <a class="poem-jump-link" href="${(window as any).siteBase || '/'}chinese/poems/">🎙️ 直达古诗点读台 ➔</a>
+        </div>
+      `).join('')
+    } else {
+      pmWrap.innerHTML = '<div style="font-size:0.85rem;color:#94a3b8;">暂无关联诗词</div>'
+    }
+
+    // 足迹按钮状态
+    updateFootprintBtnUI(p.id)
+  }
+
+  function updateFootprintBtnUI(id: string) {
+    const fps = getFootprints()
+    const btn = document.getElementById('btn-toggle-footprint')!
+    if (fps[id]) {
+      btn.innerText = '✅ 乐乐/月亮已打卡此省！(点击取消)'
+      btn.classList.add('visited')
+    } else {
+      btn.innerText = '👣 点亮足迹：我已去过！'
+      btn.classList.remove('visited')
+    }
+
+    // 更新各卡片上的标记
+    chinaGeographyData.forEach(prov => {
+      const mark = document.getElementById(`footprint-mark-${prov.id}`)
+      if (mark) {
+        mark.style.display = fps[prov.id] ? 'inline-block' : 'none'
+      }
+    })
+
+    // 更新顶部总打卡数
+    const count = Object.keys(fps).length
+    const badge = document.getElementById('header-footprint-badge')
+    if (badge) badge.innerText = `${count}/34`
+  }
+
+  // 切换省份
+  (window as any).switchProvince = function(id: string) {
+    currentProvinceId = id
+    const prov = chinaGeographyData.find(p => p.id === id) || chinaGeographyData[0]
+
+    // 高亮左侧卡片
+    document.querySelectorAll('.province-mini-card').forEach(card => {
+      if (card.getAttribute('data-id') === id) {
+        card.classList.add('active')
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      } else {
+        card.classList.remove('active')
+      }
+    })
+
+    renderProvinceDetail(prov)
+    updateChart()
+  };
+
+  // 足迹打卡切换
+  (window as any).toggleCurrentFootprint = function() {
+    const fps = getFootprints()
+    if (fps[currentProvinceId]) {
+      delete fps[currentProvinceId]
+    } else {
+      fps[currentProvinceId] = Date.now()
+    }
+    saveFootprints(fps)
+    updateFootprintBtnUI(currentProvinceId)
+  };
+
+  // 筛选过滤省份
+  function filterProvinces() {
+    const searchText = (document.getElementById('geo-search-input') as HTMLInputElement).value.trim().toLowerCase()
+
+    let visibleCount = 0
+    let firstVisibleId: string | null = null
+
+    document.querySelectorAll('.province-mini-card').forEach(card => {
+      const region = card.getAttribute('data-region')
+      const searchData = card.getAttribute('data-search')!.toLowerCase()
+      const id = card.getAttribute('data-id')!
+
+      const matchRegion = currentRegionFilter === '全部大区' || region === currentRegionFilter
+      const matchSearch = !searchText || searchData.includes(searchText)
+
+      if (matchRegion && matchSearch) {
+        (card as HTMLElement).style.display = 'flex'
+        visibleCount++
+        if (!firstVisibleId) firstVisibleId = id
+      } else {
+        (card as HTMLElement).style.display = 'none'
+      }
+    })
+
+    document.getElementById('visible-province-count')!.innerText = String(visibleCount)
+
+    if (firstVisibleId && !document.querySelector(`.province-mini-card[data-id="${currentProvinceId}"]:not([style*="display: none"])`)) {
+      (window as any).switchProvince(firstVisibleId)
+    }
+
+    updateChart()
+  }
+
+  // ── 足迹模态 ──
+  const btnOpenFp = document.getElementById('btn-open-footprints')
+  const fpModal = document.getElementById('footprints-modal')
+
+  btnOpenFp?.addEventListener('click', () => {
+    renderFootprintMatrix()
+    fpModal!.style.display = 'flex'
+  })
+
+  ;(window as any).closeFootprintsModal = function() {
+    fpModal!.style.display = 'none'
+  }
+
+  function renderFootprintMatrix() {
+    const fps = getFootprints()
+    const count = Object.keys(fps).length
+    const pct = Math.round((count / 34) * 100)
+
+    document.getElementById('stat-visited-count')!.innerText = `${count} / 34`
+    document.getElementById('stat-visited-pct')!.innerText = `${pct}%`
+
+    let badge = '华夏初探者'
+    if (count >= 30) badge = '👑 华夏全通探险大宗师'
+    else if (count >= 20) badge = '🌟 万里河山博学士'
+    else if (count >= 10) badge = '🚀 壮游中国小达人'
+    else if (count >= 5) badge = '🧭 资深小小旅行家'
+    document.getElementById('stat-badge-name')!.innerText = badge
+
+    const matrix = document.getElementById('footprint-matrix')!
+    matrix.innerHTML = chinaGeographyData.map(p => {
+      const isChecked = !!fps[p.id]
+      return `
+        <button class="fp-item-btn ${isChecked ? 'checked' : ''}" onclick="window.toggleFootprintId('${p.id}')">
+          ${isChecked ? '✅' : '⬜'} ${p.shortName}
+        </button>
+      `
+    }).join('')
+  }
+
+  ;(window as any).toggleFootprintId = function(id: string) {
+    const fps = getFootprints()
+    if (fps[id]) delete fps[id]
+    else fps[id] = Date.now()
+    saveFootprints(fps)
+    renderFootprintMatrix()
+    updateFootprintBtnUI(currentProvinceId)
+  }
+
+  // ── 猜省份小挑战 ──
+  const btnOpenQuiz = document.getElementById('btn-open-quiz')
+  const quizModal = document.getElementById('quiz-modal')
+  let quizQuestions: any[] = []
+  let quizIndex = 0
+  let quizScore = 0
+
+  btnOpenQuiz?.addEventListener('click', () => {
+    generateQuizQuestions()
+    quizIndex = 0
+    quizScore = 0
+    renderCurrentQuiz()
+    quizModal!.style.display = 'flex'
+  })
+
+  ;(window as any).closeQuizModal = function() {
+    quizModal!.style.display = 'none'
+  }
+
+  function generateQuizQuestions() {
+    quizQuestions = [
+      {
+        question: '“大熊猫的故乡”、“九寨沟”与“天府之国”指的是我国哪个省份？',
+        options: ['四川省', '陕西省', '云南省', '贵州省'],
+        answer: '四川省',
+        explain: '四川盆地土地肥沃被誉为天府之国，拥有九寨沟及全世界最多的野生大熊猫！'
+      },
+      {
+        question: '“世界第八大奇迹”秦始皇陵兵马俑，以及西岳华山位于哪个省份？',
+        options: ['河南省', '山西省', '陕西省', '甘肃省'],
+        answer: '陕西省',
+        explain: '陕西省简称陕或秦，省会西安是十三朝古都，兵马俑与奇险华山皆坐落于此！'
+      },
+      {
+        question: '享有“人间天堂”美称，西湖龙井茶与钱塘江大潮所在的省份是？',
+        options: ['江苏省', '浙江省', '安徽省', '福建省'],
+        answer: '浙江省',
+        explain: '浙江省会杭州拥有天下闻名的西湖，龙井茶与钱塘江大潮享誉海内外！'
+      }
+    ]
+  }
+
+  function renderCurrentQuiz() {
+    const q = quizQuestions[quizIndex]
+    document.getElementById('quiz-q-index')!.innerText = `第 ${quizIndex + 1} / ${quizQuestions.length} 题`
+    document.getElementById('quiz-q-text')!.innerText = q.question
+    document.getElementById('quiz-feedback')!.style.display = 'none'
+    document.getElementById('btn-next-quiz')!.style.display = 'none'
+
+    const optContainer = document.getElementById('quiz-options')!
+    optContainer.innerHTML = q.options.map((opt: string) => `
+      <button class="quiz-option-btn" onclick="window.checkQuizAnswer('${opt}')">
+        ${opt}
+      </button>
+    `).join('')
+  }
+
+  ;(window as any).checkQuizAnswer = function(chosen: string) {
+    const q = quizQuestions[quizIndex]
+    const isRight = chosen === q.answer
+    if (isRight) quizScore++
+
+    document.querySelectorAll('.quiz-option-btn').forEach((btn: any) => {
+      btn.disabled = true
+      if (btn.innerText.trim() === q.answer) btn.classList.add('correct')
+      else if (btn.innerText.trim() === chosen && !isRight) btn.classList.add('wrong')
+    })
+
+    const fb = document.getElementById('quiz-feedback')!
+    fb.style.display = 'block'
+    if (isRight) {
+      fb.className = 'quiz-feedback-box correct'
+      fb.innerHTML = `🎉 恭喜回答正确！${q.explain}`
+    } else {
+      fb.className = 'quiz-feedback-box wrong'
+      fb.innerHTML = `💡 回答错误哦！正确答案是【${q.answer}】。${q.explain}`
+    }
+
+    const nextBtn = document.getElementById('btn-next-quiz')!
+    nextBtn.style.display = 'block'
+    if (quizIndex === quizQuestions.length - 1) {
+      nextBtn.innerText = `查看挑战成果 🏆`
+    } else {
+      nextBtn.innerText = `下一题 ➔`
+    }
+  }
+
+  ;(window as any).nextQuizQuestion = function() {
+    quizIndex++
+    if (quizIndex < quizQuestions.length) {
+      renderCurrentQuiz()
+    } else {
+      // 挑战完成
+      const container = document.getElementById('quiz-container')!
+      container.innerHTML = `
+        <div style="text-align:center;padding:1.5rem 0;">
+          <div style="font-size:3rem;margin-bottom:0.5rem;">🎉</div>
+          <h4 style="font-size:1.3rem;font-weight:900;color:#1e293b;margin:0 0 0.5rem;">挑战完成！</h4>
+          <p style="font-size:1rem;color:#059669;font-weight:bold;">乐乐与月亮总共答对 ${quizScore} / ${quizQuestions.length} 题！</p>
+          <p style="font-size:0.85rem;color:#64748b;">太棒了！华夏地理通识知识又进步了一大截！</p>
+          <button class="btn-quiz-next" style="margin-top:1rem;" onclick="window.closeQuizModal()">完成挑战</button>
+        </div>
+      `
+    }
+  }
+
+  // 页面启动绑定
+  document.addEventListener('DOMContentLoaded', () => {
+    (window as any).siteBase = import.meta.env.BASE_URL || '/'
+
+    // 初始化 ECharts 地图
+    initChart()
+
+    // 默认渲染四川
+    const defaultProv = chinaGeographyData.find(p => p.id === currentProvinceId) || chinaGeographyData[0]
+    renderProvinceDetail(defaultProv)
+
+    // 大区切换胶囊
+    document.querySelectorAll('.region-tab-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.region-tab-pill').forEach(p => p.classList.remove('active'))
+        pill.classList.add('active')
+        currentRegionFilter = pill.getAttribute('data-region') || '全部大区'
+        filterProvinces()
+      })
+    })
+
+    // 搜索输入
+    const searchInput = document.getElementById('geo-search-input') as HTMLInputElement
+    const searchClear = document.getElementById('btn-geo-search-clear')!
+
+    searchInput.addEventListener('input', () => {
+      searchClear.style.display = searchInput.value ? 'inline-block' : 'none'
+      filterProvinces()
+    })
+
+    searchClear.addEventListener('click', () => {
+      searchInput.value = ''
+      searchClear.style.display = 'none'
+      filterProvinces()
+    })
+
+    // 视图模式切换
+    document.querySelectorAll('.mode-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.mode-pill').forEach(p => p.classList.remove('active'))
+        pill.classList.add('active')
+        currentViewMode = pill.getAttribute('data-mode') || 'all'
+      })
+    })
+  })
+</script>
