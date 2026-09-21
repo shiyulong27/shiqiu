@@ -1,0 +1,1506 @@
+---
+import Base from '../../layouts/Base.astro'
+import '../../styles/learning.css'
+import { poemsData } from '../../data/poemsData.js'
+
+const base = import.meta.env.BASE_URL
+
+// 学段与主题统计 (小学全 12 册 127 篇古诗文大满贯)
+const grades = [
+  { id: 'all', name: '全部', count: poemsData.length },
+  { id: '一上', name: '一上', count: poemsData.filter(p => p.grade === '一上').length },
+  { id: '一下', name: '一下', count: poemsData.filter(p => p.grade === '一下').length },
+  { id: '二上', name: '二上', count: poemsData.filter(p => p.grade === '二上').length },
+  { id: '二下', name: '二下', count: poemsData.filter(p => p.grade === '二下').length },
+  { id: '三上', name: '三上', count: poemsData.filter(p => p.grade === '三上').length },
+  { id: '三下', name: '三下', count: poemsData.filter(p => p.grade === '三下').length },
+  { id: '四上', name: '四上', count: poemsData.filter(p => p.grade === '四上').length },
+  { id: '四下', name: '四下', count: poemsData.filter(p => p.grade === '四下').length },
+  { id: '五上', name: '五上', count: poemsData.filter(p => p.grade === '五上').length },
+  { id: '五下', name: '五下', count: poemsData.filter(p => p.grade === '五下').length },
+  { id: '六上', name: '六上', count: poemsData.filter(p => p.grade === '六上').length },
+  { id: '六下', name: '六下', count: poemsData.filter(p => p.grade === '六下').length },
+]
+
+const themes = [
+  '全部主题',
+  '四季风物',
+  '大好河山',
+  '纯真童趣',
+  '哲理探索',
+  '经典古文',
+  '家国情怀',
+  '托物言志',
+  '真挚情谊',
+  '民俗节庆',
+  '明月思乡',
+  '勤俭农桑',
+  '边塞家国',
+  '动物灵趣',
+  '神话传说'
+]
+---
+
+<Base title="童声朗诵与国学古诗点读台 · 小学1-6年级12册全量127篇必背古诗文" wide={true}>
+  <main class="learn-page poem-page-container">
+    {/* 顶部通栏面包屑与快速切换条 */}
+    <header class="learn-header" style="margin-bottom: 1.5rem;">
+      <div class="learn-header-top">
+        <nav class="learn-breadcrumb">
+          <a href={base}>🏠 知识总门户</a>
+          <span>/</span>
+          <a href={`${base}chinese/`}>📖 语文启蒙</a>
+          <span>/</span>
+          <a href={`${base}chinese/grade1/`} style="color: #059669; font-weight: 600;">🌳 1~6年级全景脑图</a>
+          <span>/</span>
+          <a href={`${base}chinese/pinyin/`} style="color: #e11d48; font-weight: 600;">🎯 汉语拼音</a>
+          <span>/</span>
+          <strong style="color: #d97706;">🎙️ 国学古诗点读台</strong>
+        </nav>
+        <div class="learn-subject-switcher">
+          <a href={base} class="subject-chip chip-home">🏠 门户首页</a>
+          <a href={`${base}chinese/`} class="subject-chip chip-chinese">📖 语文</a>
+          <a href={`${base}chinese/pinyin/`} class="subject-chip" style="background: #fff1f2; color: #e11d48; border: 1px solid #fecdd3;">🎯 拼音</a>
+          <a href={`${base}chinese/poems/`} class="subject-chip active" style="background: #fef3c7; color: #b45309; border: 1px solid #fde68a;">🎙️ 古诗点读</a>
+          <a href={`${base}math/`} class="subject-chip chip-math">📐 数学</a>
+          <a href={`${base}english/`} class="subject-chip chip-english">🔤 英语</a>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 1rem; margin-top: 1rem;">
+        <div>
+          <h1 class="learn-title" style="margin-bottom: 0.25rem;">
+            🎙️ 童 声 朗 诵 · 国 学 古 诗 沉 浸 点 读 台
+          </h1>
+          <p class="learn-subtitle" style="margin: 0;">
+            统编人教版小学 1~6 年级 12 册全量 127 篇必背古诗文大满贯 · 经典绝句与文言小古文 · 规范四线三格拼音 · 律动节奏停顿断句 · 诗意水墨赏析 · 挖空背诵挑战
+          </p>
+        </div>
+
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <button id="btn-fullscreen-reader" class="poem-header-btn" title="进入全屏晨读投影模式">
+            🖥️ 全屏大字晨读模式
+          </button>
+        </div>
+      </div>
+    </header>
+
+    {/* 控制过滤栏：学段胶囊 + 主题下拉 + 搜索框 */}
+    <section class="poem-filter-bar">
+      <div class="grade-tabs-list" id="grade-tabs">
+        {grades.map((g, idx) => (
+          <button
+            class={`grade-tab-pill ${idx === 0 ? 'active' : ''}`}
+            data-grade={g.id}
+          >
+            {g.name} <span class="pill-count">({g.count})</span>
+          </button>
+        ))}
+      </div>
+
+      <div class="poem-search-wrap">
+        <select id="theme-select" class="poem-theme-dropdown">
+          {themes.map(t => (
+            <option value={t}>{t}</option>
+          ))}
+        </select>
+        <div class="poem-search-box">
+          <input
+            type="text"
+            id="poem-search-input"
+            placeholder="🔍 搜索诗名、作者、名句..."
+          />
+          <button id="btn-search-clear" style="display:none;">✕</button>
+        </div>
+      </div>
+    </section>
+
+    {/* 主工作区：左侧诗篇目录，右侧沉浸点读舞台 */}
+    <div class="poem-stage-layout">
+      {/* 左侧：诗篇列表 */}
+      <aside class="poem-sidebar">
+        <div class="sidebar-header">
+          <span style="font-weight: bold; color: #1e293b;">📜 古诗篇目目录</span>
+          <span id="poem-count-display" style="font-size: 0.8rem; color: #64748b; background: #f1f5f9; padding: 2px 8px; border-radius: 9999px;">共 {poemsData.length} 篇</span>
+        </div>
+
+        <div class="poem-cards-list" id="poem-cards-container">
+          {/* 由客户端脚本渲染或初始服务端渲染 */}
+          {poemsData.map((p, idx) => (
+            <div
+              class={`poem-list-card ${idx === 0 ? 'active' : ''}`}
+              data-id={p.id}
+              data-grade={p.grade}
+              data-theme={p.theme}
+              data-search={`${p.title} ${p.author} ${p.famousQuote} ${p.gradeFull} ${p.lines.map(l => l.text).join(' ')}`}
+              onclick={`window.switchPoem('${p.id}')`}
+            >
+              <div class="card-head">
+                <span class="card-title">{p.title}</span>
+                <span class="card-grade-badge" style={`border-left: 3px solid ${p.themeColor};`}>{p.grade}</span>
+              </div>
+              <div class="card-author">〔{p.dynasty}〕{p.author} · <span class="card-theme-tag">{p.theme}</span></div>
+              <div class="card-quote">“{p.famousQuote}”</div>
+            </div>
+          ))}
+        </div>
+      </aside>
+
+      {/* 右侧：沉浸式古诗交互中心舞台 */}
+      <section class="poem-main-stage" id="poem-canvas-card">
+        {/* 顶部工具栏：视图模式切换与背诵挑战 */}
+        <div class="stage-control-bar">
+          <div class="view-mode-group">
+            <button class="view-mode-btn active" id="btn-view-pinyin" onclick="window.setViewMode('pinyin')">
+              🔤 拼音对照
+            </button>
+            <button class="view-mode-btn" id="btn-view-rhythm" onclick="window.setViewMode('rhythm')">
+              🎵 律动节拍
+            </button>
+            <button class="view-mode-btn" id="btn-view-text" onclick="window.setViewMode('text')">
+              📜 纯净水墨
+            </button>
+          </div>
+
+          <div class="challenge-mode-group">
+            <button class="challenge-pill" id="btn-mode-study" onclick="window.setReciteMode('study')">
+              📖 点读研习
+            </button>
+            <button class="challenge-pill" id="btn-mode-blank" onclick="window.setReciteMode('blank')" title="诗眼挖空模式，点击问号揭晓">
+              🧩 挖空挑战
+            </button>
+            <button class="challenge-pill" id="btn-mode-mask" onclick="window.setReciteMode('mask')" title="整行遮挡，点击刮开揭晓">
+              🏆 遮挡背诵
+            </button>
+          </div>
+        </div>
+
+        {/* 诗篇核心展示纸卷 */}
+        <div class="poem-scroll-sheet" id="poem-display-sheet">
+          {/* 诗词信息头部 */}
+          <div class="poem-meta-header">
+            <div class="poem-tags-row" id="poem-tags-row">
+              <span class="poem-tag-pill" id="poem-grade-tag">一年级上册</span>
+              <span class="poem-tag-pill theme" id="poem-theme-tag">动物灵趣</span>
+            </div>
+            <h2 class="poem-main-title" id="poem-title-heading">
+              <ruby id="poem-title-ruby">咏鹅 <rt>yǒng é</rt></ruby>
+            </h2>
+            <div class="poem-author-info" id="poem-author-heading">
+              〔唐代〕· 骆宾王
+            </div>
+          </div>
+
+          {/* 声音朗读播放栏 */}
+          <div class="poem-audio-toolbar">
+            <button class="audio-btn play-btn" id="btn-play-all" onclick="window.togglePlayPoem()">
+              <span id="play-icon">▶️</span> <span id="play-text">朗读全诗</span>
+            </button>
+            <button class="audio-btn stop-btn" onclick="window.stopSpeaking()">
+              ⏹️ 停止
+            </button>
+            <label class="audio-toggle-label">
+              <input type="checkbox" id="toggle-loop" onchange="window.toggleLoopPlay(this.checked)" />
+              🔁 循环慢读
+            </label>
+            <label class="audio-toggle-label">
+              <input type="checkbox" id="toggle-speed" checked onchange="window.toggleSpeechRate(this.checked)" />
+              🐢 儿童适速(0.85x)
+            </label>
+            <span class="audio-hint-pill">💡 点击任意诗句朗读单句，点击汉字查看单字拼音与发音</span>
+          </div>
+
+          {/* 诗句主体区 */}
+          <div class="poem-lines-container" id="poem-lines-body">
+            {/* 动态由 JS 渲染各句 */}
+          </div>
+
+          {/* 背诵打卡小勋章栏 */}
+          <div class="poem-recite-checkin">
+            <div class="checkin-status" id="checkin-status-text">
+              ✨ 乐乐与月亮，这首诗你背熟了吗？
+            </div>
+            <button class="checkin-btn" id="btn-checkin" onclick="window.checkInPoem()">
+              ⭐ 点击打卡：我已熟练背诵！
+            </button>
+          </div>
+        </div>
+
+        {/* 底部折叠百科手帖：白话译文、意境赏析与重点字词 */}
+        <div class="poem-companion-deck">
+          {/* 白话译文 */}
+          <div class="deck-card translation-card">
+            <div class="deck-card-title">
+              <span>🌿 儿童白话译文</span>
+            </div>
+            <p class="deck-card-content" id="poem-translation-text">
+              天鹅呀天鹅，弯着长长的脖子向着晴空欢快歌唱...
+            </p>
+          </div>
+
+          {/* 意境赏析 */}
+          <div class="deck-card appreciation-card">
+            <div class="deck-card-title">
+              <span>🎨 意境童趣赏析</span>
+            </div>
+            <p class="deck-card-content" id="poem-appreciation-text">
+              这是唐代诗人骆宾王七岁时写就的千古名作...
+            </p>
+          </div>
+
+          {/* 重点生字词字典 */}
+          <div class="deck-card keywords-card">
+            <div class="deck-card-title">
+              <span>📚 课文重点生字词字典</span>
+            </div>
+            <div class="keywords-grid" id="poem-keywords-grid">
+              {/* 由 JS 动态渲染 */}
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    {/* 汉字单字释义与发音弹窗 */}
+    <div class="char-modal-backdrop" id="char-modal" onclick="window.closeCharModal(event)">
+      <div class="char-modal-box" onclick="event.stopPropagation()">
+        <button class="modal-close-btn" onclick="window.closeCharModal()">✕</button>
+        <div class="char-tianzige-wrap">
+          <div class="tianzige-grid">
+            <div class="tianzige-line-h"></div>
+            <div class="tianzige-line-v"></div>
+            <span class="tianzige-char" id="modal-char">鹅</span>
+          </div>
+        </div>
+        <div class="char-pinyin-display" id="modal-pinyin">é</div>
+        <div class="char-explain" id="modal-explain">点击发音听纯正普通话</div>
+        <button class="char-speak-btn" onclick="window.speakModalChar()">
+          🔊 再次发音
+        </button>
+      </div>
+    </div>
+
+    {/* 全屏晨读模态界面 */}
+    <div id="fullscreen-reader" class="fullscreen-reader-overlay" style="display:none;">
+      <div class="fs-top-bar">
+        <div class="fs-title-info">
+          <span id="fs-poem-title" style="font-size: 1.4rem; font-weight: bold; color: #1e293b;">咏鹅</span>
+          <span id="fs-poem-author" style="font-size: 1rem; color: #64748b; margin-left: 0.5rem;">〔唐〕骆宾王</span>
+        </div>
+        <div class="fs-actions">
+          <button class="fs-btn" onclick="window.togglePlayPoem()">▶️ / ⏸️ 朗读</button>
+          <button class="fs-btn" onclick="window.exitFullscreenReader()">✕ 退出全屏</button>
+        </div>
+      </div>
+      <div class="fs-lines-wrap" id="fs-lines-container">
+        {/* 由 JS 渲染全屏大字 */}
+      </div>
+    </div>
+  </main>
+</Base>
+
+<style>
+  /* 页面容器基础排版 */
+  .poem-page-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem 3rem;
+  }
+
+  .poem-header-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.25rem;
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    color: #fff;
+    border: none;
+    border-radius: 9999px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(217, 119, 6, 0.3);
+    transition: all 0.2s;
+  }
+  .poem-header-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px -2px rgba(217, 119, 6, 0.4);
+  }
+
+  /* 过滤控制栏 */
+  .poem-filter-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    background: #fff;
+    padding: 0.75rem 1.25rem;
+    border-radius: 1rem;
+    border: 1px solid #fed7aa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    margin-bottom: 1.5rem;
+  }
+
+  .grade-tabs-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .grade-tab-pill {
+    padding: 0.45rem 1rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .grade-tab-pill:hover {
+    background: #fff7ed;
+    border-color: #fdba74;
+    color: #c2410c;
+  }
+  .grade-tab-pill.active {
+    background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+    color: #fff;
+    border-color: #ea580c;
+    box-shadow: 0 2px 4px rgba(234, 88, 12, 0.25);
+  }
+  .grade-tab-pill .pill-count {
+    opacity: 0.85;
+    font-size: 0.75rem;
+  }
+
+  .poem-search-wrap {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .poem-theme-dropdown {
+    padding: 0.45rem 0.75rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    color: #334155;
+    background: #fff;
+    outline: none;
+    cursor: pointer;
+  }
+
+  .poem-search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .poem-search-box input {
+    padding: 0.45rem 1rem;
+    padding-right: 2rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    outline: none;
+    width: 200px;
+    transition: width 0.2s, border-color 0.2s;
+  }
+  .poem-search-box input:focus {
+    width: 260px;
+    border-color: #ea580c;
+    box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.15);
+  }
+  .poem-search-box button {
+    position: absolute;
+    right: 8px;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 0.8rem;
+  }
+
+  /* 主工作区左右分栏 */
+  .poem-stage-layout {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  @media (max-width: 1024px) {
+    .poem-stage-layout {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* 左侧列表侧边栏 */
+  .poem-sidebar {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    max-height: calc(100vh - 220px);
+    overflow-y: auto;
+    position: sticky;
+    top: 1rem;
+  }
+
+  .sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #f1f5f9;
+  }
+
+  .poem-cards-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .poem-list-card {
+    padding: 0.75rem 0.9rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+  }
+  .poem-list-card:hover {
+    background: #fff7ed;
+    border-color: #fdba74;
+    transform: translateX(4px);
+  }
+  .poem-list-card.active {
+    background: #fff;
+    border-color: #ea580c;
+    border-left: 5px solid #ea580c;
+    box-shadow: 0 4px 10px rgba(234, 88, 12, 0.12);
+  }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.2rem;
+  }
+  .card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e293b;
+    font-family: 'Kaiti', 'STKaiti', 'KaiTi_GB2312', serif;
+  }
+  .card-grade-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.15rem 0.45rem;
+    background: #f1f5f9;
+    border-radius: 0.25rem;
+    color: #475569;
+  }
+  .card-author {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin-bottom: 0.3rem;
+  }
+  .card-theme-tag {
+    color: #d97706;
+    font-weight: 500;
+  }
+  .card-quote {
+    font-size: 0.8rem;
+    color: #334155;
+    font-style: italic;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-family: 'Kaiti', 'STKaiti', serif;
+  }
+
+  /* 右侧主舞台 */
+  .poem-main-stage {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* 舞台控制切换条 */
+  .stage-control-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    background: #fff;
+    padding: 0.6rem 1rem;
+    border-radius: 1rem;
+    border: 1px solid #fed7aa;
+  }
+
+  .view-mode-group, .challenge-mode-group {
+    display: flex;
+    gap: 0.35rem;
+  }
+
+  .view-mode-btn {
+    padding: 0.35rem 0.85rem;
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .view-mode-btn:hover {
+    background: #fff7ed;
+    color: #ea580c;
+  }
+  .view-mode-btn.active {
+    background: #ea580c;
+    color: #fff;
+    border-color: #ea580c;
+  }
+
+  .challenge-pill {
+    padding: 0.35rem 0.85rem;
+    background: #f1f5f9;
+    border: 1px dashed #94a3b8;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .challenge-pill:hover {
+    background: #fef3c7;
+    border-color: #d97706;
+    color: #b45309;
+  }
+  .challenge-pill.active {
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    color: #fff;
+    border-style: solid;
+    border-color: #d97706;
+  }
+
+  /* 诗词卷轴核心画布 */
+  .poem-scroll-sheet {
+    background: #fffdfa;
+    border: 3px double #fed7aa;
+    border-radius: 1.5rem;
+    padding: 2.5rem 2rem;
+    box-shadow: 0 10px 25px -5px rgba(217, 119, 6, 0.08), 0 0 0 1px rgba(251, 146, 60, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .poem-scroll-sheet::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: linear-gradient(90deg, #ea580c, #f59e0b, #10b981, #3b82f6, #8b5cf6);
+  }
+
+  .poem-meta-header {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px dashed #fed7aa;
+  }
+
+  .poem-tags-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+  }
+  .poem-tag-pill {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.2rem 0.65rem;
+    border-radius: 9999px;
+    background: #ffedd5;
+    color: #c2410c;
+  }
+  .poem-tag-pill.theme {
+    background: #ecfdf5;
+    color: #059669;
+  }
+
+  .poem-main-title {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #1e293b;
+    margin: 0 0 0.4rem;
+    font-family: 'Kaiti', 'STKaiti', 'KaiTi_GB2312', serif;
+    letter-spacing: 0.15em;
+  }
+  .poem-main-title ruby rt {
+    font-size: 0.95rem;
+    color: #c2410c;
+    font-family: Arial, sans-serif;
+    letter-spacing: 0;
+    font-weight: 500;
+  }
+
+  .poem-author-info {
+    font-size: 1rem;
+    color: #64748b;
+    font-family: 'Kaiti', 'STKaiti', serif;
+  }
+
+  /* 声音朗诵播放条 */
+  .poem-audio-toolbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    background: #fff7ed;
+    border: 1px solid #ffedd5;
+    border-radius: 0.85rem;
+    padding: 0.6rem 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .audio-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.45rem 1rem;
+    border: none;
+    border-radius: 9999px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .audio-btn.play-btn {
+    background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(234, 88, 12, 0.25);
+  }
+  .audio-btn.play-btn:hover {
+    background: #c2410c;
+  }
+  .audio-btn.stop-btn {
+    background: #f1f5f9;
+    color: #475569;
+  }
+  .audio-btn.stop-btn:hover {
+    background: #e2e8f0;
+  }
+
+  .audio-toggle-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+    color: #475569;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  .audio-hint-pill {
+    margin-left: auto;
+    font-size: 0.75rem;
+    color: #9a3412;
+    background: #ffedd5;
+    padding: 0.25rem 0.65rem;
+    border-radius: 9999px;
+  }
+
+  /* 诗句排版核心区 */
+  .poem-lines-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    align-items: center;
+    margin: 1.5rem 0 2.5rem;
+  }
+
+  .poem-line-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 0.75rem;
+    transition: all 0.2s;
+    cursor: pointer;
+    position: relative;
+  }
+  .poem-line-row:hover {
+    background: #fff7ed;
+  }
+  .poem-line-row.reading-active {
+    background: #ffedd5;
+    box-shadow: 0 0 0 2px #ea580c;
+    transform: scale(1.02);
+  }
+
+  /* 汉字与注音单元 */
+  .poem-char-box {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0.15rem 0.25rem;
+    border-radius: 0.35rem;
+    transition: all 0.15s;
+  }
+  .poem-char-box:hover {
+    background: #fef08a;
+  }
+  .poem-char-pinyin {
+    font-size: 0.95rem;
+    color: #c2410c;
+    font-family: Arial, sans-serif;
+    height: 1.2rem;
+    line-height: 1.2rem;
+    font-weight: 600;
+  }
+  .poem-char-hanzi {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #1e293b;
+    font-family: 'Kaiti', 'STKaiti', 'KaiTi_GB2312', serif;
+    line-height: 1.2;
+  }
+
+  /* 节奏标记线 */
+  .poem-rhythm-pause {
+    font-size: 1.8rem;
+    color: #d97706;
+    font-weight: bold;
+    margin: 0 0.3rem;
+    opacity: 0.8;
+  }
+
+  /* 挖空挑战单元格 */
+  .poem-blank-box {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.8rem;
+    height: 2.8rem;
+    background: #fef3c7;
+    border: 2px dashed #d97706;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #b45309;
+    transition: all 0.2s;
+  }
+  .poem-blank-box:hover {
+    background: #fde68a;
+    transform: scale(1.05);
+  }
+  .poem-blank-box.revealed {
+    background: #dcfce7;
+    border-style: solid;
+    border-color: #16a34a;
+    color: #15803d;
+    font-family: 'Kaiti', 'STKaiti', serif;
+    font-size: 2rem;
+  }
+
+  /* 遮挡背诵条 */
+  .poem-mask-bar {
+    width: 320px;
+    height: 3.2rem;
+    background: linear-gradient(135deg, #cbd5e1 0%, #94a3b8 100%);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+  }
+  .poem-mask-bar:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+
+  /* 纯字水墨模式字体放大 */
+  .view-text-mode .poem-char-pinyin {
+    display: none;
+  }
+  .view-text-mode .poem-char-hanzi {
+    font-size: 2.6rem;
+  }
+
+  /* 打卡背诵栏 */
+  .poem-recite-checkin {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background: #fdf2f8;
+    border: 1px solid #fbcfe8;
+    border-radius: 1rem;
+  }
+  .checkin-status {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #9d174d;
+  }
+  .checkin-btn {
+    padding: 0.5rem 1.25rem;
+    background: linear-gradient(135deg, #db2777 0%, #be185d 100%);
+    color: #fff;
+    border: none;
+    border-radius: 9999px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(219, 39, 119, 0.25);
+    transition: all 0.2s;
+  }
+  .checkin-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(219, 39, 119, 0.35);
+  }
+
+  /* 底部百科手帖 */
+  .poem-companion-deck {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .deck-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+  }
+  .deck-card-title {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 0.6rem;
+  }
+  .deck-card-content {
+    font-size: 0.95rem;
+    color: #475569;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .keywords-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.75rem;
+  }
+  .keyword-item {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-left: 3px solid #ea580c;
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+  }
+  .keyword-word {
+    font-weight: 700;
+    color: #c2410c;
+    margin-right: 0.4rem;
+  }
+  .keyword-explain {
+    color: #475569;
+  }
+
+  /* 汉字单字田字格弹窗 */
+  .char-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  .char-modal-box {
+    background: #fff;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    width: 320px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+  }
+  .modal-close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    color: #94a3b8;
+    cursor: pointer;
+  }
+
+  .char-tianzige-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  .tianzige-grid {
+    width: 120px;
+    height: 120px;
+    border: 2px solid #ef4444;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+  }
+  .tianzige-line-h {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    border-top: 1px dashed #fca5a5;
+  }
+  .tianzige-line-v {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    border-left: 1px dashed #fca5a5;
+  }
+  .tianzige-char {
+    font-size: 5rem;
+    font-family: 'Kaiti', 'STKaiti', serif;
+    color: #1e293b;
+    position: relative;
+    z-index: 2;
+  }
+  .char-pinyin-display {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #ef4444;
+    margin-bottom: 0.5rem;
+  }
+  .char-explain {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 1.25rem;
+  }
+  .char-speak-btn {
+    width: 100%;
+    padding: 0.6rem;
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* 全屏晨读模态 */
+  .fullscreen-reader-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #fdfbf7;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 3rem;
+  }
+  .fs-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #fed7aa;
+  }
+  .fs-btn {
+    padding: 0.5rem 1.25rem;
+    background: #ea580c;
+    color: #fff;
+    border: none;
+    border-radius: 9999px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 0.5rem;
+  }
+  .fs-lines-wrap {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+  }
+  .fs-line-row {
+    font-size: 3.5rem;
+    font-family: 'Kaiti', 'STKaiti', serif;
+    font-weight: bold;
+    color: #1e293b;
+    letter-spacing: 0.1em;
+  }
+</style>
+
+<script is:inline define:vars={{ poemsData }}>
+  // 全局响应式状态
+  let currentPoemId = poemsData[0].id
+  let currentViewMode = 'pinyin' // 'pinyin' | 'rhythm' | 'text'
+  let currentReciteMode = 'study' // 'study' | 'blank' | 'mask'
+  let isPlaying = false
+  let isLoop = false
+  let speechRate = 0.85 // 适速 0.85x 适合儿童跟读
+  let currentReadingLineIdx = -1
+
+  // 本地背诵打卡记录缓存
+  function getCheckedInPoems() {
+    try {
+      return JSON.parse(localStorage.getItem('shiqiu_poem_checkin') || '{}')
+    } catch {
+      return {}
+    }
+  }
+
+  function setCheckedInPoem(id) {
+    try {
+      const data = getCheckedInPoems()
+      data[id] = Date.now()
+      localStorage.setItem('shiqiu_poem_checkin', JSON.stringify(data))
+    } catch {}
+  }
+
+  // ── 语音播放引擎 ──
+  window.speakText = function(text, rate = speechRate, onEndCallback = null) {
+    if (!('speechSynthesis' in window)) {
+      alert('您的浏览器暂不支持语音合成，推荐使用 Chrome / Safari / Edge 体验互动朗读！')
+      return
+    }
+    window.speechSynthesis.cancel()
+    const utterance = new SpeechSynthesisUtterance(text)
+    utterance.lang = 'zh-CN'
+    utterance.rate = rate
+    utterance.pitch = 1.05
+    if (onEndCallback) {
+      utterance.onend = onEndCallback
+      utterance.onerror = onEndCallback
+    }
+    window.speechSynthesis.speak(utterance)
+  }
+
+  window.stopSpeaking = function() {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel()
+    }
+    isPlaying = false
+    currentReadingLineIdx = -1
+    updatePlayButtonUI()
+    highlightReadingLine(-1)
+  }
+
+  // ── 全诗朗读与呼吸停顿 ──
+  window.togglePlayPoem = function() {
+    if (isPlaying) {
+      window.stopSpeaking()
+    } else {
+      const poem = poemsData.find(p => p.id === currentPoemId)
+      if (!poem) return
+      isPlaying = true
+      updatePlayButtonUI()
+
+      // 逐句朗读带呼吸停顿与高亮
+      let lineIdx = 0
+      function playNextLine() {
+        if (!isPlaying) return
+        if (lineIdx >= poem.lines.length) {
+          // 朗读完毕
+          if (isLoop) {
+            lineIdx = 0
+            setTimeout(playNextLine, 1200) // 循环等待 1.2 秒
+          } else {
+            window.stopSpeaking()
+          }
+          return
+        }
+
+        currentReadingLineIdx = lineIdx
+        highlightReadingLine(lineIdx)
+        const line = poem.lines[lineIdx]
+        lineIdx++
+
+        // 读完当前句后稍作停顿读下一句
+        window.speakText(line.text, speechRate, () => {
+          if (isPlaying) {
+            setTimeout(playNextLine, 400) // 句间呼吸停顿 400ms
+          }
+        })
+      }
+
+      // 先报诗名作者
+      const intro = `${poem.title}，${poem.dynasty}，${poem.author}`
+      window.speakText(intro, speechRate, () => {
+        setTimeout(playNextLine, 500)
+      })
+    }
+  }
+
+  function updatePlayButtonUI() {
+    const playIcon = document.getElementById('play-icon')
+    const playText = document.getElementById('play-text')
+    const btn = document.getElementById('btn-play-all')
+    if (isPlaying) {
+      playIcon.innerText = '⏸️'
+      playText.innerText = '暂停朗读'
+      btn.style.background = '#dc2626'
+    } else {
+      playIcon.innerText = '▶️'
+      playText.innerText = '朗读全诗'
+      btn.style.background = 'linear-gradient(135deg, #ea580c 0%, #c2410c 100%)'
+    }
+  }
+
+  function highlightReadingLine(idx) {
+    const rows = document.querySelectorAll('.poem-line-row')
+    rows.forEach((r, i) => {
+      if (i === idx) {
+        r.classList.add('reading-active')
+      } else {
+        r.classList.remove('reading-active')
+      }
+    })
+  }
+
+  window.toggleLoopPlay = function(checked) {
+    isLoop = checked
+  }
+
+  window.toggleSpeechRate = function(checked) {
+    speechRate = checked ? 0.85 : 1.0
+  }
+
+  // ── 切换当前展示诗篇 ──
+  window.switchPoem = function(id) {
+    window.stopSpeaking()
+    currentPoemId = id
+
+    // 更新左侧列表激活态
+    document.querySelectorAll('.poem-list-card').forEach(card => {
+      if (card.getAttribute('data-id') === id) {
+        card.classList.add('active')
+        card.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+      } else {
+        card.classList.remove('active')
+      }
+    })
+
+    renderCurrentPoem()
+  }
+
+  // ── 视图模式与挑战模式切换 ──
+  window.setViewMode = function(mode) {
+    currentViewMode = mode
+    document.querySelectorAll('.view-mode-btn').forEach(btn => btn.classList.remove('active'))
+    document.getElementById(`btn-view-${mode}`).classList.add('active')
+
+    const sheet = document.getElementById('poem-display-sheet')
+    sheet.classList.remove('view-pinyin-mode', 'view-rhythm-mode', 'view-text-mode')
+    sheet.classList.add(`view-${mode}-mode`)
+
+    renderPoemLines()
+  }
+
+  window.setReciteMode = function(mode) {
+    currentReciteMode = mode
+    document.querySelectorAll('.challenge-pill').forEach(btn => btn.classList.remove('active'))
+    document.getElementById(`btn-mode-${mode}`).classList.add('active')
+    renderPoemLines()
+  }
+
+  // ── 核心渲染函数 ──
+  function renderCurrentPoem() {
+    const poem = poemsData.find(p => p.id === currentPoemId) || poemsData[0]
+
+    // 头部元数据
+    document.getElementById('poem-grade-tag').innerText = poem.gradeFull
+    document.getElementById('poem-theme-tag').innerText = poem.theme
+    document.getElementById('poem-title-heading').innerHTML = `<ruby>${poem.title} <rt>${poem.titlePinyin}</rt></ruby>`
+    document.getElementById('poem-author-heading').innerText = `〔${poem.dynasty}〕· ${poem.author}`
+
+    // 底部伴读手册
+    document.getElementById('poem-translation-text').innerText = poem.translation
+    document.getElementById('poem-appreciation-text').innerText = poem.appreciation
+
+    // 重点生字词字典
+    const kwGrid = document.getElementById('poem-keywords-grid')
+    kwGrid.innerHTML = poem.keywords.map(kw => `
+      <div class="keyword-item">
+        <span class="keyword-word">${kw.word}：</span>
+        <span class="keyword-explain">${kw.explain}</span>
+      </div>
+    `).join('')
+
+    // 背诵打卡状态
+    updateCheckinUI()
+
+    // 渲染诗句
+    renderPoemLines()
+  }
+
+  function renderPoemLines() {
+    const poem = poemsData.find(p => p.id === currentPoemId) || poemsData[0]
+    const container = document.getElementById('poem-lines-body')
+    container.innerHTML = ''
+
+    poem.lines.forEach((line, lineIdx) => {
+      const row = document.createElement('div')
+      row.className = 'poem-line-row'
+      row.onclick = () => window.speakText(line.text)
+
+      if (currentReciteMode === 'mask') {
+        // 遮挡背诵模式
+        const maskBar = document.createElement('div')
+        maskBar.className = 'poem-mask-bar'
+        maskBar.innerText = `🙈 第 ${lineIdx + 1} 句（点击揭开背诵）`
+        maskBar.onclick = (e) => {
+          e.stopPropagation()
+          maskBar.innerText = line.text
+          maskBar.style.background = '#dcfce7'
+          maskBar.style.color = '#15803d'
+          window.speakText(line.text)
+        }
+        row.appendChild(maskBar)
+      } else if (currentReciteMode === 'blank') {
+        // 诗眼挖空模式（挖空末尾押韵字或关键词）
+        line.tokens.forEach((tk, tkIdx) => {
+          const isPunctuation = /[，。？！、]/.test(tk.char)
+          const isTargetBlank = (!isPunctuation) && (tkIdx === line.tokens.length - 2 || tkIdx === 1)
+
+          if (isTargetBlank) {
+            const blank = document.createElement('span')
+            blank.className = 'poem-blank-box'
+            blank.innerText = '❓'
+            blank.onclick = (e) => {
+              e.stopPropagation()
+              blank.className = 'poem-blank-box revealed'
+              blank.innerText = tk.char
+              window.speakText(tk.char)
+            }
+            row.appendChild(blank)
+          } else {
+            row.appendChild(createCharTokenElement(tk))
+          }
+        })
+      } else {
+        // 点读研习模式：拼音 / 节拍 / 纯字
+        if (currentViewMode === 'rhythm') {
+          // 节拍模式展示
+          const parts = line.rhythm.split('／')
+          parts.forEach((pt, pIdx) => {
+            const span = document.createElement('span')
+            span.style.fontSize = '2.2rem'
+            span.style.fontFamily = "'Kaiti', 'STKaiti', serif"
+            span.style.fontWeight = 'bold'
+            span.innerText = pt
+            row.appendChild(span)
+
+            if (pIdx < parts.length - 1) {
+              const pause = document.createElement('span')
+              pause.className = 'poem-rhythm-pause'
+              pause.innerText = '／'
+              row.appendChild(pause)
+            }
+          })
+        } else {
+          // 拼音对照模式与纯字水墨模式
+          line.tokens.forEach(tk => {
+            row.appendChild(createCharTokenElement(tk))
+          })
+        }
+      }
+
+      container.appendChild(row)
+    })
+  }
+
+  function createCharTokenElement(tk) {
+    const isPunctuation = /[，。？！、]/.test(tk.char)
+    const box = document.createElement('div')
+    box.className = 'poem-char-box'
+
+    if (!isPunctuation) {
+      box.onclick = (e) => {
+        e.stopPropagation()
+        window.openCharModal(tk.char, tk.pinyin)
+      }
+    }
+
+    const py = document.createElement('span')
+    py.className = 'poem-char-pinyin'
+    py.innerText = tk.pinyin
+
+    const hz = document.createElement('span')
+    hz.className = 'poem-char-hanzi'
+    hz.innerText = tk.char
+
+    box.appendChild(py)
+    box.appendChild(hz)
+    return box
+  }
+
+  // ── 单字田字格弹窗 ──
+  window.openCharModal = function(char, pinyin) {
+    document.getElementById('modal-char').innerText = char
+    document.getElementById('modal-pinyin').innerText = pinyin
+    document.getElementById('modal-explain').innerText = `汉字“${char}”，拼音 ${pinyin}。点击下方按钮可反复朗读。`
+    document.getElementById('char-modal').style.display = 'flex'
+    window.speakText(`${char}，拼音 ${pinyin}`)
+  }
+
+  window.closeCharModal = function() {
+    document.getElementById('char-modal').style.display = 'none'
+  }
+
+  window.speakModalChar = function() {
+    const char = document.getElementById('modal-char').innerText
+    const pinyin = document.getElementById('modal-pinyin').innerText
+    window.speakText(`${char}，拼音 ${pinyin}`)
+  }
+
+  // ── 背诵打卡 ──
+  window.checkInPoem = function() {
+    setCheckedInPoem(currentPoemId)
+    updateCheckinUI()
+    window.speakText('恭喜你，背诵成功，获得一颗闪耀国学小星星！')
+  }
+
+  function updateCheckinUI() {
+    const data = getCheckedInPoems()
+    const status = document.getElementById('checkin-status-text')
+    const btn = document.getElementById('btn-checkin')
+    if (data[currentPoemId]) {
+      const date = new Date(data[currentPoemId]).toLocaleDateString()
+      status.innerText = `🎉 恭喜！乐乐/月亮已于 ${date} 成功背诵通关！`
+      status.style.color = '#059669'
+      btn.innerText = '✅ 已背诵通过 (点击可再次打卡)'
+      btn.style.background = '#059669'
+    } else {
+      status.innerText = '✨ 乐乐与月亮，这首诗你背熟了吗？'
+      status.style.color = '#9d174d'
+      btn.innerText = '⭐ 点击打卡：我已熟练背诵！'
+      btn.style.background = 'linear-gradient(135deg, #db2777 0%, #be185d 100%)'
+    }
+  }
+
+  // ── 全屏晨读模式 ──
+  document.getElementById('btn-fullscreen-reader').onclick = function() {
+    const poem = poemsData.find(p => p.id === currentPoemId) || poemsData[0]
+    document.getElementById('fs-poem-title').innerText = poem.title
+    document.getElementById('fs-poem-author').innerText = `〔${poem.dynasty}〕${poem.author}`
+
+    const wrap = document.getElementById('fs-lines-container')
+    wrap.innerHTML = poem.lines.map(l => `
+      <div class="fs-line-row">${l.text}</div>
+    `).join('')
+
+    document.getElementById('fullscreen-reader').style.display = 'flex'
+  }
+
+  window.exitFullscreenReader = function() {
+    document.getElementById('fullscreen-reader').style.display = 'none'
+  }
+
+  // ── 筛选与检索逻辑 ──
+  function filterPoems() {
+    const activeGradeTab = document.querySelector('.grade-tab-pill.active')?.getAttribute('data-grade') || 'all'
+    const activeTheme = document.getElementById('theme-select').value
+    const searchText = document.getElementById('poem-search-input').value.trim().toLowerCase()
+
+    let visibleCount = 0
+    let firstVisibleId = null
+
+    document.querySelectorAll('.poem-list-card').forEach(card => {
+      const cardGrade = card.getAttribute('data-grade')
+      const cardTheme = card.getAttribute('data-theme')
+      const cardSearch = card.getAttribute('data-search').toLowerCase()
+      const id = card.getAttribute('data-id')
+
+      const matchGrade = activeGradeTab === 'all' || cardGrade === activeGradeTab
+      const matchTheme = activeTheme === '全部主题' || cardTheme === activeTheme
+      const matchSearch = !searchText || cardSearch.includes(searchText)
+
+      if (matchGrade && matchTheme && matchSearch) {
+        card.style.display = 'block'
+        visibleCount++
+        if (!firstVisibleId) firstVisibleId = id
+      } else {
+        card.style.display = 'none'
+      }
+    })
+
+    document.getElementById('poem-count-display').innerText = `共 ${visibleCount} 首`
+
+    // 如果当前选中的诗被过滤隐藏了，自动跳到第一个可见的诗
+    const currentCard = document.querySelector(`.poem-list-card[data-id="${currentPoemId}"]`)
+    if (currentCard && currentCard.style.display === 'none' && firstVisibleId) {
+      window.switchPoem(firstVisibleId)
+    }
+  }
+
+  // 事件监听绑定
+  document.addEventListener('DOMContentLoaded', () => {
+    // 学段胶囊切换
+    document.querySelectorAll('.grade-tab-pill').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.grade-tab-pill').forEach(b => b.classList.remove('active'))
+        btn.classList.add('active')
+        filterPoems()
+      })
+    })
+
+    // 主题下拉
+    document.getElementById('theme-select').addEventListener('change', filterPoems)
+
+    // 搜索框
+    const searchInput = document.getElementById('poem-search-input')
+    const clearBtn = document.getElementById('btn-search-clear')
+
+    searchInput.addEventListener('input', () => {
+      clearBtn.style.display = searchInput.value ? 'inline-block' : 'none'
+      filterPoems()
+    })
+
+    clearBtn.addEventListener('click', () => {
+      searchInput.value = ''
+      clearBtn.style.display = 'none'
+      filterPoems()
+    })
+
+    // 初始化渲染首篇
+    renderCurrentPoem()
+  })
+</script>
