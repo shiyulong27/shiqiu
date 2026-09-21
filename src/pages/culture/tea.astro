@@ -1,0 +1,873 @@
+---
+import Base from '../../layouts/Base.astro'
+import { teaCultureData } from '../../data/teaCultureData.js'
+
+const base = import.meta.env.BASE_URL
+const { meta, teaCategories, teaBenefits, evalSteps, famousRegions, priceTiers, teaEtiquette, quiz } = teaCultureData
+---
+
+<Base title="一片树叶的故事 · 中华茶文化全景百科 · 十丘万象" wide={true}>
+  <div class="tea-container">
+    <!-- 顶部全景导航与导言 -->
+    <header class="tea-header">
+      <div class="tea-nav-bar">
+        <a href={base} class="tea-back-btn">← 返回【十丘】知识总门户</a>
+        <div class="tea-nav-links">
+          <a href={`${base}culture/wuxia/`} class="tea-sub-nav">🗡️ 华夏经典武侠</a>
+          <a href={`${base}geography/heritage/`} class="tea-sub-nav">🏯 中华世界遗产</a>
+          <a href={`${base}chinese/poems/`} class="tea-sub-nav">🎙️ 国学古诗点读</a>
+          <a href={`${base}chinese/solar-terms/`} class="tea-sub-nav">🌾 二十四节气</a>
+          <a href={`${base}games/chess/`} class="tea-sub-nav">♟️ 经典棋类通识</a>
+        </div>
+      </div>
+
+      <div class="tea-hero">
+        <div class="tea-title-wrap">
+          <span class="tea-badge">🍵 神州茶韵 · 一片神奇东方的树叶</span>
+          <h1 class="tea-main-title">{meta.title}</h1>
+          <p class="tea-subtitle">{meta.subtitle}</p>
+        </div>
+
+        <div class="tea-top-actions">
+          <button id="btn-open-tea-quiz" class="tea-btn tea-btn-emerald">
+            <span class="btn-icon">🏆</span> 茶道通识小院士挑战
+          </button>
+        </div>
+      </div>
+
+      <!-- 茶类过滤条 -->
+      <div class="tea-controls-deck">
+        <div class="tea-category-tabs">
+          <button class="tea-cat-tab active" data-cat="all">
+            <span class="tab-icon">🌟</span>
+            <span>六大茶系全景</span>
+          </button>
+          {teaCategories.map((c) => (
+            <button class="tea-cat-tab" data-cat={c.id}>
+              <span class="tab-dot" style={`background: ${c.colorTheme};`}></span>
+              <span>{c.name.split(' ')[0]}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </header>
+
+    <main class="tea-main-content">
+      <!-- 模块一：六大茶类全解 -->
+      <section class="tea-section">
+        <div class="tea-section-title">
+          <h2>🌿 中国六大茶类体系全图鉴</h2>
+          <p class="tea-section-sub">从完全不发酵的清鲜绿茶，到微生物后发酵的醇厚黑茶，领略发酵工艺之美</p>
+        </div>
+
+        <div class="tea-categories-grid">
+          {teaCategories.map((c) => (
+            <article class="tea-cat-card" data-id={c.id} style={`--cat-color: ${c.colorTheme};`}>
+              <div class="cat-card-header">
+                <div class="cat-color-badge" style={`background: ${c.colorTheme};`}></div>
+                <div>
+                  <h3 class="cat-name">{c.name}</h3>
+                  <span class="cat-ferm">发酵度：<b>{c.fermentation}</b> · 茶性：{c.nature}</span>
+                </div>
+              </div>
+
+              <div class="cat-rep-box">
+                <span class="rep-label">代表名茶：</span>
+                <span class="rep-val">{c.representative}</span>
+              </div>
+
+              <div class="cat-brew-grid">
+                <div class="brew-item">
+                  <span class="brew-icon">🌡️</span>
+                  <div>
+                    <small>冲泡水温</small>
+                    <b>{c.waterTemp}</b>
+                  </div>
+                </div>
+                <div class="brew-item">
+                  <span class="brew-icon">🫖</span>
+                  <div>
+                    <small>适宜茶具</small>
+                    <b>{c.utensil}</b>
+                  </div>
+                </div>
+              </div>
+
+              <p class="cat-features">{c.features}</p>
+
+              <div class="cat-taste-box">
+                <span class="taste-icon">👅</span>
+                <span><b>风味特征：</b>{c.tasteNote}</span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <!-- 模块二：辨茶好坏五步秘籍 -->
+      <section class="tea-section">
+        <div class="tea-section-title">
+          <h2>🔍 专业鉴茶五步秘籍（看 · 闻 · 摸 · 品 · 观）</h2>
+          <p class="tea-section-sub">教孩子像国家评茶师一样，通过感官全方位鉴别优质好茶，识破劣质染色茶与香精茶</p>
+        </div>
+
+        <div class="tea-eval-grid">
+          {evalSteps.map((s, idx) => (
+            <div class="tea-eval-card">
+              <div class="eval-num-circle">{idx + 1}</div>
+              <div class="eval-content">
+                <h3 class="eval-step-title">{s.step}</h3>
+                <span class="eval-action-tag">动作：{s.action}</span>
+                <p class="eval-standard">{s.standard}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <!-- 模块三：核心黄金产区 vs 次级产区 -->
+      <section class="tea-section">
+        <div class="tea-section-title">
+          <h2>🗺️ 名茶黄金核心产区 vs 次级产区对比</h2>
+          <p class="tea-section-sub">橘生淮南则为橘，名茶好坏七分在产区微气候（烂石砾壤、高山云雾、茶果间作）</p>
+        </div>
+
+        <div class="regions-table-container">
+          <table class="regions-table">
+            <thead>
+              <tr>
+                <th width="18%">名茶名称</th>
+                <th width="32%">黄金核心微产区（顶级）</th>
+                <th width="24%">次级 / 外山产区</th>
+                <th width="26%">核心产区为何品质最高？</th>
+              </tr>
+            </thead>
+            <tbody>
+              {famousRegions.map((r) => (
+                <tr>
+                  <td class="td-tea-name"><b>{r.teaName}</b></td>
+                  <td class="td-core">👑 {r.coreZone}</td>
+                  <td class="td-sec">{r.secondaryZone}</td>
+                  <td class="td-why">{r.whyCoreIsBest}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 模块四：价格档次与选茶避坑指南 -->
+      <section class="tea-section">
+        <div class="tea-section-title">
+          <h2>💰 茶叶市场价位档次与选购避坑指南</h2>
+          <p class="tea-section-sub">几十元一斤与几千元一斤究竟差在哪里？读懂采摘时节、手工非遗与微产区溢价</p>
+        </div>
+
+        <div class="price-tiers-grid">
+          {priceTiers.map((p, idx) => (
+            <div class="price-tier-card">
+              <div class="tier-badge">梯度 0{idx + 1}</div>
+              <h3 class="tier-name">{p.tier}</h3>
+              <div class="tier-range">{p.range}</div>
+              <p class="tier-features">{p.features}</p>
+            </div>
+          ))}
+        </div>
+
+        <!-- 茶道礼仪 -->
+        <div class="tea-etiquette-deck">
+          <div class="etiquette-header">
+            <span class="etiquette-icon">🤝</span>
+            <h3>中华茶席文明礼仪：叩指礼与茶倒七分</h3>
+          </div>
+          <div class="etiquette-content-grid">
+            <div class="eti-box">
+              <h4>👉 叩指礼的讲究</h4>
+              <p>{teaEtiquette.fingerKowtow}</p>
+            </div>
+            <div class="eti-box">
+              <h4>🍵 茶倒七分满的智慧</h4>
+              <p>{teaEtiquette.sevenTenthsRule}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- 弹窗：亲子茶文化答题挑战 -->
+    <div id="tea-quiz-modal" class="tea-modal-backdrop">
+      <div class="tea-modal-container quiz-modal-container">
+        <button id="btn-close-tea-quiz" class="tea-modal-close" aria-label="关闭">&times;</button>
+        <div class="quiz-modal-header">
+          <span class="quiz-icon">🏆</span>
+          <div>
+            <h2>🍵 中华茶道与茶文化百科 · 亲子挑战赛</h2>
+            <p>共 8 道茶系、产区、鉴茶与茶礼通识题，测测你对神州茶文化的精妙认知！</p>
+          </div>
+        </div>
+
+        <div id="tea-quiz-score-card" class="quiz-score-card" style="display: none;"></div>
+
+        <div class="quiz-questions-list">
+          {quiz.map((q, qIndex) => (
+            <div class="tea-quiz-card" data-correct={q.answerIndex} data-expl={q.explanation}>
+              <div class="quiz-q-title">
+                <span class="quiz-q-num">{qIndex + 1}.</span>
+                <span>{q.question}</span>
+              </div>
+              <div class="quiz-options-grid">
+                {q.options.map((opt, oIndex) => (
+                  <button class="tea-quiz-opt" data-index={oIndex}>
+                    <span class="opt-letter">{['A', 'B', 'C', 'D'][oIndex]}.</span>
+                    <span class="opt-text">{opt}</span>
+                  </button>
+                ))}
+              </div>
+              <div class="tea-quiz-feedback" style="display: none;"></div>
+            </div>
+          ))}
+        </div>
+
+        <div class="quiz-modal-actions">
+          <button id="btn-submit-tea-quiz" class="tea-btn tea-btn-emerald">提交答卷测评成绩</button>
+          <button id="btn-reset-tea-quiz" class="tea-btn tea-btn-gray">重新开始挑战</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<script src="../../client/tea-ui.js"></script>
+
+<style>
+  .tea-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 1.5rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    color: #1e293b;
+  }
+
+  .tea-header {
+    margin-bottom: 2.5rem;
+    background: linear-gradient(135deg, #14532d 0%, #166534 50%, #15803d 100%);
+    color: #fff;
+    border-radius: 20px;
+    padding: 2rem 2.5rem;
+    box-shadow: 0 12px 36px rgba(20, 83, 45, 0.25);
+  }
+
+  .tea-nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.8rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 1rem;
+  }
+
+  .tea-back-btn {
+    color: #bbf7d0;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+  .tea-back-btn:hover {
+    color: #ffffff;
+  }
+
+  .tea-nav-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .tea-sub-nav {
+    color: #dcfce7;
+    text-decoration: none;
+    font-size: 0.85rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.35rem 0.8rem;
+    border-radius: 20px;
+    transition: all 0.2s;
+  }
+  .tea-sub-nav:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
+  }
+
+  .tea-hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .tea-badge {
+    display: inline-block;
+    background: rgba(187, 247, 208, 0.25);
+    color: #bbf7d0;
+    font-size: 0.85rem;
+    padding: 0.25rem 0.8rem;
+    border-radius: 12px;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+  }
+
+  .tea-main-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin: 0.2rem 0;
+  }
+
+  .tea-subtitle {
+    font-size: 1.05rem;
+    color: #dcfce7;
+    max-width: 720px;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .tea-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.4rem;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tea-btn-emerald {
+    background: #10b981;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+  }
+  .tea-btn-emerald:hover {
+    background: #059669;
+    transform: translateY(-2px);
+  }
+  .tea-btn-gray {
+    background: #e2e8f0;
+    color: #334155;
+  }
+
+  .tea-controls-deck {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.8rem 1.2rem;
+    border-radius: 16px;
+  }
+
+  .tea-category-tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  .tea-cat-tab {
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #dcfce7;
+    padding: 0.45rem 0.9rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s;
+  }
+  .tea-cat-tab:hover {
+    background: rgba(255, 255, 255, 0.25);
+    color: #fff;
+  }
+  .tea-cat-tab.active {
+    background: #ffffff;
+    color: #14532d;
+    font-weight: 700;
+    border-color: #ffffff;
+  }
+  .tab-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  /* 标题 */
+  .tea-section {
+    margin-bottom: 3.5rem;
+  }
+  .tea-section-title {
+    margin-bottom: 1.8rem;
+  }
+  .tea-section-title h2 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 0.3rem 0;
+  }
+  .tea-section-sub {
+    color: #64748b;
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  /* 1. 六大茶类卡片网格 */
+  .tea-categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1.5rem;
+  }
+  .tea-cat-card {
+    background: #ffffff;
+    border-radius: 18px;
+    border: 1px solid #e2e8f0;
+    border-top: 5px solid var(--cat-color);
+    padding: 1.6rem;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-direction: column;
+  }
+  .cat-card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+  .cat-color-badge {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+  }
+  .cat-name {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0;
+  }
+  .cat-ferm {
+    font-size: 0.78rem;
+    color: #64748b;
+  }
+  .cat-rep-box {
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.85rem;
+    margin-bottom: 0.8rem;
+  }
+  .rep-label {
+    font-weight: 700;
+    color: #334155;
+  }
+  .rep-val {
+    color: #0f172a;
+  }
+  .cat-brew-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+    margin-bottom: 0.8rem;
+  }
+  .brew-item {
+    background: #f1f5f9;
+    border-radius: 8px;
+    padding: 0.4rem 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+  }
+  .brew-item small {
+    display: block;
+    color: #64748b;
+  }
+  .brew-item b {
+    color: #1e293b;
+    font-size: 0.78rem;
+  }
+  .cat-features {
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.5;
+    margin: 0 0 1rem 0;
+  }
+  .cat-taste-box {
+    margin-top: auto;
+    background: #f0fdf4;
+    border: 1px solid #dcfce7;
+    border-radius: 10px;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.82rem;
+    color: #166534;
+    display: flex;
+    gap: 0.4rem;
+    line-height: 1.4;
+  }
+
+  /* 2. 鉴茶五步法 */
+  .tea-eval-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.2rem;
+  }
+  .tea-eval-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.4rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tea-eval-card:hover, .tea-eval-card.highlighted {
+    border-color: #10b981;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.1);
+  }
+  .eval-num-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #10b981;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 0.8rem;
+  }
+  .eval-step-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 0.3rem 0;
+  }
+  .eval-action-tag {
+    display: inline-block;
+    background: #ecfdf5;
+    color: #065f46;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    margin-bottom: 0.6rem;
+  }
+  .eval-standard {
+    margin: 0;
+    font-size: 0.82rem;
+    color: #475569;
+    line-height: 1.5;
+  }
+
+  /* 3. 产区对比表格 */
+  .regions-table-container {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    overflow-x: auto;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+  }
+  .regions-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+  }
+  .regions-table th {
+    background: #f8fafc;
+    color: #334155;
+    font-weight: 700;
+    text-align: left;
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .regions-table td {
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid #f1f5f9;
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .td-tea-name {
+    color: #0f172a;
+    font-size: 0.95rem;
+  }
+  .td-core {
+    color: #15803d;
+    font-weight: 700;
+  }
+  .td-sec {
+    color: #64748b;
+  }
+  .td-why {
+    color: #475569;
+    font-size: 0.82rem;
+  }
+
+  /* 4. 价格档位 */
+  .price-tiers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  .price-tier-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 1.4rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  }
+  .tier-badge {
+    display: inline-block;
+    background: #f1f5f9;
+    color: #475569;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    margin-bottom: 0.4rem;
+  }
+  .tier-name {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #0f172a;
+    margin: 0 0 0.4rem 0;
+  }
+  .tier-range {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #166534;
+    margin-bottom: 0.6rem;
+  }
+  .tier-features {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #475569;
+    line-height: 1.5;
+  }
+
+  .tea-etiquette-deck {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    border: 1px solid #bbf7d0;
+    border-radius: 18px;
+    padding: 1.8rem;
+  }
+  .etiquette-header {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+  }
+  .etiquette-icon {
+    font-size: 2rem;
+  }
+  .etiquette-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: #14532d;
+  }
+  .etiquette-content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .eti-box h4 {
+    margin: 0 0 0.4rem 0;
+    color: #166534;
+    font-size: 1rem;
+  }
+  .eti-box p {
+    margin: 0;
+    font-size: 0.88rem;
+    color: #14532d;
+    line-height: 1.6;
+  }
+
+  /* 弹窗通用样式 */
+  .tea-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1.5rem;
+  }
+  .tea-modal-backdrop.active {
+    display: flex;
+  }
+  .tea-modal-container {
+    background: #ffffff;
+    border-radius: 20px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 2rem;
+    position: relative;
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.2);
+  }
+  .tea-modal-close {
+    position: absolute;
+    top: 1.2rem;
+    right: 1.2rem;
+    background: #f1f5f9;
+    border: none;
+    font-size: 1.5rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #475569;
+  }
+
+  .quiz-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 1.2rem;
+  }
+  .quiz-icon {
+    font-size: 2.8rem;
+  }
+  .quiz-modal-header h2 {
+    font-size: 1.4rem;
+    margin: 0 0 0.3rem 0;
+    color: #0f172a;
+  }
+  .quiz-modal-header p {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin: 0;
+  }
+
+  .quiz-score-card {
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    border: 1px solid #86efac;
+    border-radius: 14px;
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  .score-badge {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #14532d;
+    margin-bottom: 0.4rem;
+  }
+  .score-honor {
+    font-size: 0.95rem;
+    color: #166534;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .quiz-questions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  .tea-quiz-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 1.2rem;
+  }
+  .tea-quiz-card.correct {
+    border-color: #10b981;
+    background: #f0fdf4;
+  }
+  .tea-quiz-card.wrong {
+    border-color: #ef4444;
+    background: #fef2f2;
+  }
+
+  .quiz-q-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 0.8rem;
+  }
+  .quiz-options-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+  .tea-quiz-opt {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+    font-size: 0.85rem;
+    color: #334155;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.2s;
+  }
+  .tea-quiz-opt:hover {
+    border-color: #10b981;
+    background: #f0fdf4;
+  }
+  .tea-quiz-opt.selected {
+    border-color: #10b981;
+    background: #dcfce7;
+    color: #14532d;
+    font-weight: 700;
+  }
+  .tea-quiz-feedback {
+    margin-top: 0.8rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    line-height: 1.4;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+  }
+  .quiz-modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 1.2rem;
+  }
+
+  @media (max-width: 768px) {
+    .tea-container {
+      padding: 1rem;
+    }
+    .tea-header {
+      padding: 1.5rem;
+    }
+    .tea-main-title {
+      font-size: 1.6rem;
+    }
+    .tea-categories-grid {
+      grid-template-columns: 1fr;
+    }
+    .etiquette-content-grid {
+      grid-template-columns: 1fr;
+    }
+    .quiz-options-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
