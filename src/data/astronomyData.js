@@ -433,7 +433,144 @@ export const solarSystemData = {
   ]
 }
 
-// 4. 天文小院士亲子挑战题库 (Astronomy Quiz Teasers)
+// 4. 真实深空天体、恒星生死演化与宇宙尺度全景 (Deep Space & Stellar Evolution)
+export const deepSpaceData = {
+  deepSpaceObjects: [
+    {
+      id: 'pillars-of-creation',
+      name: '《创生之柱》 (Pillars of Creation)',
+      catalog: 'M16 · 鹰状星云核心',
+      type: '恒星孵化场',
+      distance: '约 6500 光年',
+      constellation: '巨蛇座',
+      telescope: '詹姆斯·韦伯空间望远镜 (JWST) 近红外/中红外',
+      description: '数光年高耸的巨型星际气体与尘埃冷分子柱，在恒星紫外线雕刻下拔地而起，内部正不断孕育出大量初生婴儿恒星。',
+      secret: '这些柱子顶端致密的局部气体由于引力坍缩点燃了核聚变，正在宣告新恒星的诞生！',
+      image: '/images/astronomy/pillars-of-creation.webp'
+    },
+    {
+      id: 'orion-nebula',
+      name: '猎户座大星云 (Orion Nebula)',
+      catalog: 'Messier 42 (M42)',
+      type: '弥散发射星云',
+      distance: '约 1344 光年',
+      constellation: '猎户座',
+      telescope: '哈勃空间望远镜 (HST) 超清全景',
+      description: '离地球最近的大规模恒星形成区，中央炽热的“四合星团”照亮了整片绚烂的电离氢气云，内部包含数百个正在孕育的原行星盘。',
+      secret: '在这里我们能直接观察到 46 亿年前太阳和八大行星刚刚从星云中凝聚诞生的原始模样！',
+      image: '/images/astronomy/orion-nebula.webp'
+    },
+    {
+      id: 'crab-nebula',
+      name: '蟹状星云 (Crab Nebula)',
+      catalog: 'Messier 1 (M1)',
+      type: '超新星爆发遗迹',
+      distance: '约 6500 光年',
+      constellation: '金牛座',
+      telescope: '哈勃与钱德拉 X 射线望远镜',
+      description: '中国北宋天文学家于公元 1054 年记录的“天关客星”超新星爆发后遗留的膨胀气体云，中心为一颗每秒自转 30 圈的高密度脉冲星。',
+      secret: '中心脉冲星直径仅 20 公里，但质量超过太阳，一茶匙物质就重达数亿吨！',
+      image: '/images/astronomy/crab-nebula.webp'
+    },
+    {
+      id: 'andromeda-galaxy',
+      name: '仙女座大星系 (Andromeda Galaxy)',
+      catalog: 'Messier 31 (M31)',
+      type: '巨型旋涡星系',
+      distance: '约 250 万光年',
+      constellation: '仙女座',
+      telescope: '哈勃空间望远镜',
+      description: '本星系群中最大的星系，包含上万亿颗恒星，肉眼在晴朗黑夜即可隐约看见，是人类裸眼所能望见的最遥远宇宙天体。',
+      secret: '它正以每秒 110 公里的速度奔向银河系，预计 40 亿年后与银河系融合成一个全新的椭圆星系！',
+      image: '/images/astronomy/andromeda-galaxy.webp'
+    },
+    {
+      id: 'sombrero-galaxy',
+      name: '草帽星系 (Sombrero Galaxy)',
+      catalog: 'Messier 104 (M104)',
+      type: '螺旋星系',
+      distance: '约 2900 万光年',
+      constellation: '室女座',
+      telescope: '哈勃空间望远镜 (ACS)',
+      description: '拥有极其壮丽明亮的核球与侧面视角的倾斜尘埃暗带，宛如一顶漂浮在宇宙深处的墨西哥宽边草帽。',
+      secret: '中心潜伏着一个质量高达太阳 10 亿倍的超大质量黑洞！',
+      image: '/images/astronomy/sombrero-galaxy.webp'
+    },
+    {
+      id: 'hubble-ultra-deep-field',
+      name: '哈勃超深场 (Hubble Ultra Deep Field)',
+      catalog: 'HUDF / 宇宙破晓之窗',
+      type: '极端纵深星系场',
+      distance: '最远达 130 亿光年',
+      constellation: '天炉座狭小天区',
+      telescope: '哈勃空间望远镜累计曝光 100 万秒',
+      description: '对着看似空无一物的一小块黑夜虚空曝光数百小时，画面中竟密密麻麻充盈着上万个古老星系，彻底重塑了人类对宇宙广袤的认知！',
+      secret: '这里捕捉到了大爆炸后仅数亿年时诞生的第一代婴儿星系所发出的古老微光！',
+      image: '/images/astronomy/hubble-ultra-deep-field.webp'
+    },
+    {
+      id: 'black-hole-m87',
+      name: 'M87* 超大质量黑洞',
+      catalog: '人类首张真实黑洞照片',
+      type: '时空奇点与事件视界',
+      distance: '约 5500 万光年',
+      constellation: '室女座 M87 中心',
+      telescope: '事件视界望远镜阵列 (EHT)',
+      description: '2019年人类历史上第一次拍摄到的黑洞真实图像。中心为光线无法逃逸的黑洞阴影，外围为引力极度弯曲的炽热气体吸积环。',
+      secret: '它的质量达到太阳的 65 亿倍，事件视界半径甚至超越了太阳系冥王星轨道的数倍！',
+      image: '/images/astronomy/black-hole-m87.webp'
+    },
+    {
+      id: 'black-hole-sgr-a',
+      name: '银河系中心黑洞 (人马座 A*)',
+      catalog: 'Sagittarius A*',
+      type: '银河引力心脏',
+      distance: '约 2.7 万光年',
+      constellation: '人马座',
+      telescope: '事件视界望远镜 (EHT) 2022公布',
+      description: '整座银河系千亿恒星共同绕转的核心！质量约为太阳的 430 万倍，引力牢牢束缚着银河各旋臂。',
+      secret: '几颗明亮恒星以每秒数千公里的惊人速度绕其飞掠，完美验证了广义相对论的时空弯曲预言！',
+      image: '/images/astronomy/black-hole-sgr-a.webp'
+    }
+  ],
+
+  // 恒星从生到死的演化六阶段
+  stellarEvolution: [
+    { step: 1, title: '星际分子云坍缩', badge: '诞生前夜', temp: '10~20 K', duration: '数百万年', desc: '在数光年的低温氢气云中，引力打破平衡导致气体向中心凝聚收缩。' },
+    { step: 2, title: '原恒星与点火', badge: '婴儿啼鸣', temp: '核心超 1000 万 K', duration: '数十万年', desc: '核心温度突破一千万度，氢核聚变猛烈点火！辐射压与引力达成精妙平衡。' },
+    { step: 3, title: '主序星黄金期', badge: '恒星壮年', temp: '表面 3000~40000 K', duration: '太阳约 100 亿年', desc: '恒星一生中最稳定阶段。太阳每秒聚变 6 亿吨氢，亏损质量化为光热滋养地球！' },
+    { step: 4, title: '红巨星膨胀期', badge: '燃料告急', temp: '核心数亿度，表面发红', duration: '数千万年', desc: '核心氢耗尽，外层急剧膨胀上千倍！50亿年后太阳将变成红巨星吞噬水星金星。' },
+    { step: 5, title: '命运分水岭：超新星 vs 行星状星云', badge: '毁灭与新生', temp: '数十亿度爆发', duration: '数秒坍缩', desc: '太阳级恒星抛出气体壳化为行星状星云；大质量恒星则爆发毁天灭地的超新星！' },
+    { step: 6, title: '终极残骸：白矮星 · 中子星 · 黑洞', badge: '宇宙墓碑', temp: '致密奇点', duration: '近乎永久', desc: '太阳最终留下地球大小的白矮星；超大质量则坍缩为高速自转中子星或无底洞黑洞！' }
+  ],
+
+  // 宇宙尺度阶梯
+  cosmicScaleLadder: [
+    { scale: '38.4 万公里', lightTime: '1.28 光秒', name: '地月系统', desc: '飞船航行约 3 天，光线一眨眼即可到达。' },
+    { scale: '1.5 亿公里', lightTime: '8 分 20 秒', name: '日地距离 (1 AU)', desc: '我们所见的日光是 8 分钟前太阳发出的。' },
+    { scale: '45 亿公里', lightTime: '约 4.1 光时', name: '海王星轨道', desc: '太阳系最远大行星边缘。' },
+    { scale: '约 1 光年', lightTime: '1 年 (9.46万亿公里)', name: '奥尔特云', desc: '长周期彗星大本营，太阳引力束缚极限。' },
+    { scale: '4.22 光年', lightTime: '4.22 年', name: '比邻星', desc: '距离太阳系最近的邻居恒星系统。' },
+    { scale: '10 万光年', lightTime: '10 万年', name: '银河系直径', desc: '包含数千亿恒星的旋涡星系。' },
+    { scale: '250 万光年', lightTime: '250 万年', name: '仙女座星系 (M31)', desc: '肉眼可见最遥远深空天体。' },
+    { scale: '930 亿光年', lightTime: '可观测极限', name: '可观测宇宙', desc: '以地球为中心光所能到达的最大物理视界，包含数万亿星系！' }
+  ],
+
+  // 航天探索重器
+  humanExploration: [
+    { name: '中国空间站“天宫”', role: '近地轨道国家太空实验室', feat: '神舟飞船交会对接、问天与梦天舱、宇航员太空科研驻留', image: '/images/astronomy/tiangong-space-station.webp' },
+    { name: '中国天眼 (FAST)', role: '500米口径球面射电望远镜', feat: '世界最大单口径射电望远镜，发现脉冲星突破900颗', image: '/images/astronomy/fast-telescope.webp' },
+    { name: '旅行者 1 号“暗淡蓝点”', role: '飞向星际空间的人类使者', feat: '在60亿公里外拍下地球仅占0.12像素的微小暗淡蓝点', image: '/images/astronomy/pale-blue-dot.webp' }
+  ]
+};
+
+export const deepSpaceObjects = deepSpaceData.deepSpaceObjects;
+export const stellarEvolution = deepSpaceData.stellarEvolution;
+export const cosmicScaleLadder = deepSpaceData.cosmicScaleLadder;
+export const humanExploration = deepSpaceData.humanExploration;
+
+
+// 5. 天文小院士亲子挑战题库 (Astronomy Quiz Teasers)
 export const astronomyQuiz = [
   {
     id: 1,
@@ -458,24 +595,24 @@ export const astronomyQuiz = [
   },
   {
     id: 4,
-    question: '杜甫名诗《赠卫八处士》中有“人生不相见，动如参与商”。诗中的“参”和“商”在天文学中分别指哪两颗星宿？',
-    options: ['织女星与牛郎星', '西方参宿与东方心宿（商星）', '北极星与南极老人星', '太阳与月亮'],
+    question: '人类历史上第一张直接拍摄到的黑洞真实照片（M87*）是由哪个国际合作望远镜阵列公布的？',
+    options: ['哈勃望远镜', '事件视界望远镜 (EHT)', '开普勒望远镜', '中国天眼 (FAST)'],
     answer: 1,
-    explain: '“参”是西方白虎七宿中的参宿（猎户座亮星），“商”是东方青龙七宿中的心宿（天蝎座大火星）。因为它们一个在西一个在东，此出彼没，永远不可能同时出现在天空中！'
+    explain: '2019年4月，全球8台射电望远镜联合组成的“事件视界望远镜（EHT）”发布了人类首张黑洞照片，证实了爱因斯坦广义相对论的预言！'
   },
   {
     id: 5,
     question: '太阳系中有一颗著名的气态巨行星拥有极其壮丽宽阔的“草帽光环”，且自身平均密度比水还要小，它是哪一颗？',
     options: ['木星', '土星', '天王星', '海王星'],
     answer: 1,
-    explain: '土星拥有最宽广耀眼的光环（由碎冰块和岩石组成），且土星的平均密度只有约 0.69 克/立方厘米，比水（1.0 克/立方厘米）还小，如果有一个超级大水盆，土星能漂浮在上面！'
+    explain: '土星拥有最宽广耀眼的光环（由碎冰块和岩石组成），且土星的平均密度只有约 0.69 克/立方厘米，比水还小！'
   },
   {
     id: 6,
-    question: '农历每个月的初一，月亮正好运行在太阳与地球之间，在地球上完全看不见月亮，这种月相在古代被称为什么？',
-    options: ['朔月（新月）', '望月（满月）', '上弦月', '残月'],
-    answer: 0,
-    explain: '农历初一月亮以暗面对着地球，称为“朔月”或“新月”；到了农历十五十六，地球在太阳与月亮中间，月亮整面反光照向地球，称为“望月”或“满月”。'
+    question: '像太阳这样中等质量的恒星在生命演化末期耗尽燃料后，最终会坍缩留下的致密恒星残骸是什么？',
+    options: ['黑洞', '中子星', '白矮星', '红巨星'],
+    answer: 2,
+    explain: '太阳这样质量的恒星在红巨星阶段后会抛去外层气体壳，核心坍缩形成一颗只有地球大小但密度极高的白矮星；只有大于8倍太阳质量的巨星才会爆发成中子星或黑洞！'
   },
   {
     id: 7,
@@ -491,4 +628,5 @@ export const astronomyQuiz = [
     answer: 2,
     explain: '仙女座大星系 (M31) 距离我们约 250 万光年！这意味着今夜我们肉眼看到的微弱星光，是它在 250 万年前（人类刚开始直立行走的旧石器时代初期）发射出来的！'
   }
-]
+];
+

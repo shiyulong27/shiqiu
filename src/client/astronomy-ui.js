@@ -9,12 +9,13 @@ import {
 } from '../data/astronomyData.js'
 
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. 三重视角切换控制器 (Ancient / Modern / Solar)
+  // 1. 四重视角切换控制器 (Ancient / Modern / Solar / Deep)
   const viewTabs = document.querySelectorAll('.astro-view-tab')
   const viewSections = {
     ancient: document.getElementById('view-ancient'),
     modern: document.getElementById('view-modern'),
-    solar: document.getElementById('view-solar')
+    solar: document.getElementById('view-solar'),
+    deep: document.getElementById('view-deep')
   }
 
   viewTabs.forEach(tab => {
@@ -358,4 +359,54 @@ document.addEventListener('DOMContentLoaded', () => {
     utter.rate = 0.95
     window.speechSynthesis.speak(utter)
   }
+
+  // 8. 真实深空天体全屏灯箱
+  const deepCards = document.querySelectorAll('.deep-card')
+  const astroLightbox = document.getElementById('astro-lightbox-modal')
+  const astroLightboxImg = document.getElementById('astro-lightbox-img')
+  const astroLightboxCaption = document.getElementById('astro-lightbox-caption')
+  const closeAstroLightbox = document.getElementById('btn-close-astro-lightbox')
+
+  if (astroLightbox) {
+    deepCards.forEach(card => {
+      card.addEventListener('click', () => {
+        const img = card.getAttribute('data-img')
+        const title = card.getAttribute('data-title')
+        const desc = card.getAttribute('data-desc')
+        const secret = card.getAttribute('data-secret')
+        if (img && astroLightboxImg) {
+          astroLightboxImg.src = img
+          astroLightboxImg.alt = title
+          if (astroLightboxCaption) {
+            astroLightboxCaption.innerHTML = `<strong>${title}</strong><br><span style="font-size:0.85rem; color:#94a3b8;">${desc}</span><br><span style="font-size:0.8rem; color:#fde047;">💡 ${secret}</span>`
+          }
+          astroLightbox.style.display = 'flex'
+        }
+      })
+    })
+
+    if (closeAstroLightbox) {
+      closeAstroLightbox.addEventListener('click', () => {
+        astroLightbox.style.display = 'none'
+      })
+    }
+
+    astroLightbox.addEventListener('click', (e) => {
+      if (e.target === astroLightbox) {
+        astroLightbox.style.display = 'none'
+      }
+    })
+  }
+
+  // 键盘 ESC 快捷关闭
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (astroLightbox && astroLightbox.style.display === 'flex') {
+        astroLightbox.style.display = 'none'
+        return
+      }
+      const modals = document.querySelectorAll('.astro-modal:not(.hidden)')
+      modals.forEach(m => m.classList.add('hidden'))
+    }
+  })
 })
