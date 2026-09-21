@@ -1,0 +1,850 @@
+---
+import Base from '../../layouts/Base.astro'
+import {
+  heritageStats,
+  heritageList
+} from '../../data/worldHeritageData.js'
+
+const base = import.meta.env.BASE_URL
+---
+
+<Base title="华夏世界自然与文化遗产全景长卷 · 中华世界名胜古迹" wide={true}>
+  <div class="heritage-container">
+    <!-- 顶部导航与品牌区 -->
+    <header class="heritage-header">
+      <div class="heritage-nav-bar">
+        <a href={base} class="heritage-back-btn">← 返回【十丘】知识总门户</a>
+        <div class="heritage-nav-links">
+          <a href={`${base}geography/explore/`} class="heritage-sub-nav">🧭 中国地理万里探索地图</a>
+          <a href={`${base}geography/`} class="heritage-sub-nav">🗺️ 中国地理省份通识</a>
+          <a href={`${base}chinese/poems/`} class="heritage-sub-nav">🎙️ 国学古诗山河点读</a>
+          <a href={`${base}timeline/`} class="heritage-sub-nav">📜 上下五千年长卷</a>
+          <a href={`${base}astronomy/`} class="heritage-sub-nav">🌌 浩瀚星空长卷</a>
+          <a href={`${base}science/`} class="heritage-sub-nav">🚀 华夏科学探索</a>
+        </div>
+      </div>
+
+      <div class="heritage-hero">
+        <div class="heritage-title-wrap">
+          <span class="heritage-badge">🏯 华夏五千年山河壮锦 · 59 项联合国世界遗产</span>
+          <h1 class="heritage-main-title">中华世界自然与文化遗产全景长卷</h1>
+          <p class="heritage-subtitle">四大双重遗产 · 万里长城与故宫 · 良渚与兵马俑 · 历代名家山河诗词跨时空联动</p>
+        </div>
+
+        <div class="heritage-top-actions">
+          <button id="btn-open-heritage-quiz" class="heritage-btn heritage-btn-amber">
+            <span class="btn-icon">🏆</span> 世界遗产通识挑战
+          </button>
+        </div>
+      </div>
+
+      <!-- 核心统计概览卡片 -->
+      <div class="heritage-stats-banner">
+        <div class="stat-pill stat-total">
+          <span class="stat-num">{heritageStats.totalCount}</span>
+          <span class="stat-label">世界遗产总数 (世界第2)</span>
+        </div>
+        <div class="stat-pill stat-mixed">
+          <span class="stat-num">{heritageStats.mixedCount}</span>
+          <span class="stat-label">文化与自然双重遗产</span>
+        </div>
+        <div class="stat-pill stat-cultural">
+          <span class="stat-num">{heritageStats.culturalCount}</span>
+          <span class="stat-label">世界文化遗产</span>
+        </div>
+        <div class="stat-pill stat-natural">
+          <span class="stat-num">{heritageStats.naturalCount}</span>
+          <span class="stat-label">世界自然遗产</span>
+        </div>
+      </div>
+
+      <!-- 多维筛选与打卡足迹栏 -->
+      <div class="heritage-controls-deck">
+        <div class="filter-type-group">
+          <button class="type-filter-btn active" data-type="all">全部精选名录</button>
+          <button class="type-filter-btn" data-type="mixed">⛰️ 双重遗产 ({heritageStats.mixedCount})</button>
+          <button class="type-filter-btn" data-type="cultural">🏛️ 文化遗产</button>
+          <button class="type-filter-btn" data-type="natural">🌲 自然遗产</button>
+        </div>
+
+        <div class="filter-right-inputs">
+          <select id="heritage-region-select" class="heritage-select">
+            <option value="all">全中国大区</option>
+            <option value="华东">华东地区</option>
+            <option value="华北">华北地区</option>
+            <option value="西南">西南地区</option>
+            <option value="西北">西北地区</option>
+            <option value="华中">华中地区</option>
+            <option value="华南">华南地区</option>
+          </select>
+
+          <input type="text" id="heritage-search-input" class="heritage-search-box" placeholder="🔍 搜索遗产名或省份..." />
+        </div>
+      </div>
+
+      <!-- 足迹打卡仪表盘 -->
+      <div class="footprint-tracker-bar">
+        <div class="tracker-left">
+          <span class="tracker-icon">🚩</span>
+          <span class="tracker-text">亲子山河足迹簿：已点亮 <strong id="footprint-stamped-count">0</strong> / {heritageList.length} 处代表性中华世界遗产</span>
+        </div>
+        <div class="tracker-tip">
+          💡 点击卡片上的“点亮足迹”，记录乐乐和月亮探索祖国大好河山的每一步！
+        </div>
+      </div>
+    </header>
+
+    <!-- 遗产全景卡片网格 -->
+    <main class="heritage-main-content">
+      <div class="sub-block-title">
+        <span class="block-num">01</span>
+        <h3>中华代表性世界遗产长卷 (共展示 <span id="heritage-visible-count">{heritageList.length}</span> 处，点击查看详卷与诗词)</h3>
+      </div>
+
+      <div class="heritage-cards-grid">
+        {heritageList.map(h => (
+          <div class="heritage-card"
+               data-id={h.id}
+               data-type={h.type}
+               data-region={h.region}
+               data-name={h.name}
+               data-province={h.province}
+               style={`--card-accent: ${h.badgeColor}`}>
+            <div class="card-top-row">
+              <span class="card-icon">{h.icon}</span>
+              <div class="card-badges">
+                <span class="type-badge">{h.typeZh}</span>
+                <span class="year-badge">{h.year}年</span>
+              </div>
+            </div>
+
+            <h3 class="card-name">{h.name}</h3>
+            <div class="card-loc">
+              <span>📍 {h.province} · {h.city}</span>
+              <span class="region-tag">{h.region}</span>
+            </div>
+
+            <p class="card-highlight">{h.highlight}</p>
+
+            <!-- 诗词联动摘录 -->
+            {h.poems.length > 0 && (
+              <div class="card-poem-box">
+                <span class="poem-mark">📜 诗词联动：</span>
+                <span class="poem-author">{h.poems[0].author} {h.poems[0].title}</span>
+                <div class="poem-line">“{h.poems[0].text}”</div>
+              </div>
+            )}
+
+            <div class="card-footer-row">
+              <button class="btn-stamp-footprint" title="点击记录足迹">
+                📍 点亮足迹
+              </button>
+              <span class="card-detail-hint">展开详卷 ➔</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </main>
+
+    <!-- 模态弹窗 1：遗产详卷与诗词联动 (Detail Modal) -->
+    <div id="heritage-detail-modal" class="heritage-modal hidden">
+      <div class="modal-overlay"></div>
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <span id="heritage-detail-tag" class="modal-tag">遗产详卷</span>
+            <h3 id="heritage-detail-title" class="modal-title">名胜详情</h3>
+          </div>
+          <div class="modal-btn-group">
+            <button id="heritage-detail-voice" class="modal-voice-btn" title="语音朗读">🔊 朗读</button>
+            <button id="heritage-detail-close" class="modal-close-btn">&times;</button>
+          </div>
+        </div>
+        <div id="heritage-detail-body" class="modal-body"></div>
+      </div>
+    </div>
+
+    <!-- 模态弹窗 2：世界遗产通识亲子挑战 (Quiz Modal) -->
+    <div id="heritage-quiz-modal" class="heritage-modal hidden">
+      <div class="modal-overlay"></div>
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <span class="modal-tag">通识闯关</span>
+            <h3 class="modal-title">🏆 中华世界遗产通识挑战赛</h3>
+          </div>
+          <button id="heritage-quiz-close" class="modal-close-btn">&times;</button>
+        </div>
+        <div id="heritage-quiz-body" class="modal-body"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../client/world-heritage-ui.js"></script>
+</Base>
+
+<style>
+  .heritage-container {
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem 5rem;
+    color: #f8fafc;
+  }
+
+  /* 顶部导航与品牌栏 */
+  .heritage-header {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.95));
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+    margin-bottom: 2.5rem;
+  }
+
+  .heritage-nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 2rem;
+  }
+
+  .heritage-back-btn {
+    font-size: 0.95rem;
+    color: #fbbf24;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .heritage-back-btn:hover {
+    color: #fde68a;
+  }
+
+  .heritage-nav-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+
+  .heritage-sub-nav {
+    font-size: 0.85rem;
+    color: #cbd5e1;
+    text-decoration: none;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0.35rem 0.75rem;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .heritage-sub-nav:hover {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fff;
+  }
+
+  /* 英雄区 */
+  .heritage-hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .heritage-badge {
+    display: inline-block;
+    background: rgba(245, 158, 11, 0.2);
+    border: 1px solid rgba(245, 158, 11, 0.4);
+    color: #fbbf24;
+    font-size: 0.85rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+  }
+
+  .heritage-main-title {
+    font-size: 2.3rem;
+    font-weight: 800;
+    margin: 0 0 0.5rem;
+    background: linear-gradient(135deg, #ffffff 30%, #fbbf24 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .heritage-subtitle {
+    font-size: 1rem;
+    color: #94a3b8;
+    margin: 0;
+  }
+
+  .heritage-top-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .heritage-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+  .heritage-btn-amber {
+    background: linear-gradient(135deg, #d97706, #b45309);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(217, 119, 6, 0.3);
+  }
+  .heritage-btn-amber:hover {
+    filter: brightness(1.15);
+    transform: translateY(-2px);
+  }
+
+  /* 统计卡片条 */
+  .heritage-stats-banner {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .stat-pill {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 0.3rem;
+  }
+  .stat-label {
+    font-size: 0.8rem;
+    color: #94a3b8;
+  }
+  .stat-total .stat-num { color: #f59e0b; }
+  .stat-mixed .stat-num { color: #10b981; }
+  .stat-cultural .stat-num { color: #ef4444; }
+  .stat-natural .stat-num { color: #06b6d4; }
+
+  /* 筛选控制栏 */
+  .heritage-controls-deck {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 1.5rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .filter-type-group {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .type-filter-btn {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #cbd5e1;
+    padding: 0.6rem 1.1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  .type-filter-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+  }
+  .type-filter-btn.active {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  }
+
+  .filter-right-inputs {
+    display: flex;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+
+  .heritage-select {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #f1f5f9;
+    padding: 0.6rem 1rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    outline: none;
+    cursor: pointer;
+  }
+  .heritage-search-box {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #f1f5f9;
+    padding: 0.6rem 1.2rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    outline: none;
+    min-width: 220px;
+  }
+  .heritage-search-box:focus {
+    border-color: #f59e0b;
+  }
+
+  /* 足迹仪表盘 */
+  .footprint-tracker-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px dashed rgba(245, 158, 11, 0.3);
+    border-radius: 12px;
+    padding: 0.8rem 1.2rem;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+  .tracker-left {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+    color: #fef08a;
+  }
+  .tracker-left strong {
+    font-size: 1.2rem;
+    color: #f59e0b;
+  }
+  .tracker-tip {
+    font-size: 0.8rem;
+    color: #cbd5e1;
+  }
+
+  /* 标题与网格 */
+  .sub-block-title {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 1.8rem;
+  }
+  .block-num {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 800;
+    padding: 0.25rem 0.6rem;
+    border-radius: 8px;
+  }
+  .sub-block-title h3 {
+    font-size: 1.3rem;
+    margin: 0;
+    color: #f1f5f9;
+  }
+
+  .heritage-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .heritage-card {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 1.6rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .heritage-card:hover {
+    border-color: var(--card-accent);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+  }
+  .heritage-card.is-stamped {
+    border-color: #f59e0b;
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.25);
+  }
+
+  .card-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+  }
+  .card-icon {
+    font-size: 2.2rem;
+  }
+  .card-badges {
+    display: flex;
+    gap: 0.4rem;
+  }
+  .type-badge {
+    font-size: 0.75rem;
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--card-accent);
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+  .year-badge {
+    font-size: 0.75rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+  }
+  .card-name {
+    font-size: 1.35rem;
+    margin: 0 0 0.4rem;
+    color: #fff;
+    font-weight: 700;
+  }
+  .card-loc {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+  }
+  .region-tag {
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+  }
+  .card-highlight {
+    font-size: 0.88rem;
+    color: #cbd5e1;
+    line-height: 1.5;
+    margin: 0 0 1rem;
+  }
+
+  .card-poem-box {
+    background: rgba(0, 0, 0, 0.35);
+    border-left: 3px solid #fbbf24;
+    padding: 0.6rem 0.8rem;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 1.2rem;
+  }
+  .poem-mark {
+    font-size: 0.75rem;
+    color: #fbbf24;
+    font-weight: 600;
+  }
+  .poem-author {
+    font-size: 0.75rem;
+    color: #94a3b8;
+  }
+  .poem-line {
+    font-size: 0.88rem;
+    color: #fef08a;
+    font-style: italic;
+    margin-top: 0.2rem;
+  }
+
+  .card-footer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 0.8rem;
+  }
+  .btn-stamp-footprint {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #cbd5e1;
+    padding: 0.35rem 0.8rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-stamp-footprint:hover {
+    background: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+    border-color: #f59e0b;
+  }
+  .is-stamped .btn-stamp-footprint {
+    background: rgba(245, 158, 11, 0.25);
+    color: #fbbf24;
+    border-color: #f59e0b;
+  }
+  .card-detail-hint {
+    font-size: 0.8rem;
+    color: #38bdf8;
+    font-weight: 600;
+  }
+
+  /* 模态弹窗 */
+  .heritage-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+  .heritage-modal.hidden {
+    display: none !important;
+  }
+  .modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+  }
+  .modal-card {
+    position: relative;
+    background: #0f172a;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 650px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+    color: #e2e8f0;
+  }
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 1.5rem;
+  }
+  .modal-tag {
+    font-size: 0.8rem;
+    background: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-weight: 600;
+  }
+  .modal-title {
+    font-size: 1.4rem;
+    margin: 0.3rem 0 0;
+    color: #fff;
+  }
+  .modal-btn-group {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .modal-voice-btn {
+    background: rgba(245, 158, 11, 0.2);
+    border: 1px solid #f59e0b;
+    color: #fef08a;
+    padding: 0.3rem 0.7rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: all 0.2s;
+  }
+  .modal-voice-btn:hover {
+    background: #f59e0b;
+    color: #000;
+  }
+  .modal-close-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.8rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+  }
+  .modal-close-btn:hover {
+    color: #fff;
+  }
+
+  /* 模态内容 */
+  :global(.heritage-modal-content .modal-info-block) {
+    margin-bottom: 1.2rem;
+  }
+  :global(.heritage-modal-content .unesco-quote) {
+    background: rgba(255, 255, 255, 0.05);
+    border-left: 3px solid #38bdf8;
+    padding: 0.6rem 0.8rem;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.9rem;
+    color: #e0f2fe;
+    line-height: 1.6;
+    margin: 0.4rem 0 0;
+  }
+  :global(.modal-poem-box) {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    margin-top: 0.4rem;
+  }
+  :global(.poem-title-bar) {
+    font-size: 0.85rem;
+    color: #fbbf24;
+    margin-bottom: 0.2rem;
+  }
+  :global(.poem-quote-text) {
+    font-size: 0.95rem;
+    color: #fef08a;
+    margin: 0;
+    font-style: italic;
+  }
+
+  /* 答题模态内部样式 */
+  :global(.quiz-card-box) {
+    padding: 0.5rem;
+  }
+  :global(.quiz-progress-bar) {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-bottom: 0.6rem;
+    font-weight: 600;
+  }
+  :global(.quiz-question-text) {
+    font-size: 1.15rem;
+    color: #fff;
+    margin: 0 0 1.2rem;
+    line-height: 1.5;
+  }
+  :global(.quiz-options-list) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    margin-bottom: 1.2rem;
+  }
+  :global(.quiz-opt-btn) {
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    color: #e2e8f0;
+    text-align: left;
+    cursor: pointer;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    transition: all 0.2s;
+  }
+  :global(.quiz-opt-btn:hover:not(:disabled)) {
+    background: rgba(51, 65, 85, 0.9);
+    border-color: #f59e0b;
+  }
+  :global(.quiz-opt-btn.correct) {
+    background: rgba(16, 185, 129, 0.25) !important;
+    border-color: #10b981 !important;
+    color: #6ee7b7 !important;
+    font-weight: 700;
+  }
+  :global(.quiz-opt-btn.wrong) {
+    background: rgba(239, 68, 68, 0.25) !important;
+    border-color: #ef4444 !important;
+    color: #fca5a5 !important;
+  }
+  :global(.quiz-feedback) {
+    padding: 0.8rem 1rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  :global(.quiz-feedback.correct) {
+    background: rgba(16, 185, 129, 0.15);
+    border-left: 4px solid #10b981;
+    color: #a7f3d0;
+  }
+  :global(.quiz-feedback.wrong) {
+    background: rgba(239, 68, 68, 0.15);
+    border-left: 4px solid #ef4444;
+    color: #fecaca;
+  }
+  :global(.quiz-btn-next) {
+    background: linear-gradient(135deg, #d97706, #b45309);
+    color: #fff;
+    border: none;
+    padding: 0.7rem 1.4rem;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    float: right;
+  }
+
+  :global(.quiz-finish-card) {
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+  :global(.quiz-finish-icon) {
+    font-size: 3.5rem;
+    margin-bottom: 0.5rem;
+  }
+  :global(.quiz-badge-award) {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #facc15;
+    background: rgba(234, 179, 8, 0.15);
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(234, 179, 8, 0.3);
+    margin: 1.2rem 0;
+  }
+  :global(.quiz-btn-restart) {
+    background: linear-gradient(135deg, #d97706, #b45309);
+    color: #fff;
+    border: none;
+    padding: 0.75rem 1.8rem;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  @media (max-width: 768px) {
+    .heritage-header {
+      padding: 1.2rem;
+    }
+    .heritage-main-title {
+      font-size: 1.8rem;
+    }
+    .heritage-controls-deck {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .filter-right-inputs {
+      flex-direction: column;
+    }
+    .heritage-cards-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
