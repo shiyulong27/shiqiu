@@ -9,7 +9,7 @@ import fs from 'fs';
 import path from 'path';
 import { chromium } from 'playwright';
 
-const brainDir = 'C:/Users/liwei/.gemini/antigravity/brain/77e928f4-e97c-4d6f-85ae-2299355652a6';
+const brainDir = fs.existsSync('public/exercises/math_data.js') ? path.resolve('public/exercises') : 'C:/Users/liwei/.gemini/antigravity/brain/77e928f4-e97c-4d6f-85ae-2299355652a6';
 
 // ─────────────────────────────────────────────────────────────
 // 工具：动态载入 window.XXX 数据库文件
@@ -29,7 +29,7 @@ const STAGE_DATASETS = [
     label: '一年级上册 (G1S1)',
     files: [
       { file: 'quiz_data.js',         var: 'QUIZ_DATABASE',         subject: '语文一上', expected: 30 },
-      { file: 'math_data.js',         var: 'MATH_DATABASE',         subject: '数学一上', expected: 20 },
+      { file: 'math_data.js',         var: 'MATH_DATABASE',         subject: '数学一上', expected: 40 },
       { file: 'english_data.js',      var: 'ENGLISH_DATABASE',      subject: '英语一上', expected: 16 },
     ],
   },

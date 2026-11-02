@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>一年级上册·全真通关大考卷</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <script src="quiz_data.js"></script>
+  <script src="math_data.js"></script>
+  <script src="original_papers.js"></script>
+  <script src="original_paper_interactions.js"></script>
+  <script src="original_paper_ui.js"></script>
+  <script src="english_data.js"></script>
+  <script src="quiz_data_g1s2.js"></script>
+  <script src="math_data_g1s2.js"></script>
+  <script src="english_data_g1s2.js"></script>
+  <script src="quiz_data_g2s1.js"></script>
+  <script src="math_data_g2s1.js"></script>
+  <script src="english_data_g2s1.js"></script>
+  <script src="quiz_data_g2s2.js"></script>
+  <script src="math_data_g2s2.js"></script>
+  <script src="english_data_g2s2.js"></script>
+  <script src="quiz_grading.js"></script>
+  <style>
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white !important; padding: 0 !important; }
+      .sheet { box-shadow: none !important; border: none !important; width: 100% !important; max-width: 100% !important; padding: 0 !important; }
+      .print-only { display: inline-block !important; }
+      .screen-btn { display: none !important; }
+      .choice-options { display: flex !important; justify-content: flex-start !important; }
+      .opt-btn { color: #000 !important; background: white !important; border: 1px solid #aaa !important; box-shadow: none !important; outline: none !important; opacity: 1 !important; }
+      .matching-svg line { display: none !important; }
+      .matching-container .left-card, .matching-container .right-card { outline: none !important; background: white !important; }
+      .inner-dot { background: transparent !important; }
+      .q-group, .matching-container { break-inside: avoid; }
+    }
+    .print-only { display: none; }
+    ruby {
+      ruby-position: over;
+      font-size: 1.15rem;
+    }
+    rt {
+      font-size: 0.68rem;
+      font-family: Arial, "PingFang SC", sans-serif;
+      color: #0284c7;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .tianzige {
+      width: 50px;
+      height: 50px;
+      position: relative;
+      border: 2px solid #ef4444;
+      background-color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "KaiTi", "楷体", "STKaiti", serif;
+      font-size: 26px;
+      font-weight: bold;
+      color: #1e293b;
+      user-select: none;
+    }
+    .tianzige::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 50%;
+      height: 100%;
+      border-left: 1px dashed #fca5a5;
+    }
+    .tianzige::after {
+      content: '';
+      position: absolute;
+      top: 50%; left: 0;
+      width: 100%;
+      border-top: 1px dashed #fca5a5;
+    }
+    .tianzige > span {
+      position: relative;
+      z-index: 2;
+    }
+    .item-selected {
+      outline: 3px solid #0284c7 !important;
+      background-color: #e0f2fe !important;
+    }
+    .item-linked { outline: 2px solid #0284c7; background-color: #e0f2fe; }
+    .opt-btn.answer-selected { outline: 2px solid #0284c7; background-color: #e0f2fe; }
+    .opt-btn.answer-correct { background-color: #d1fae5; outline: 2px solid #10b981; }
+    .opt-btn.answer-wrong { background-color: #ffe4e6; outline: 2px solid #f43f5e; }
+    .matching-container .left-card, .matching-container .right-card { touch-action: manipulation; }
+    .item-matched {
+      outline: 2px solid #10b981 !important;
+      background-color: #d1fae5 !important;
+      opacity: 0.95;
+    }
+    .item-matched-wrong {
+      outline: 2px solid #f43f5e !important;
+      background-color: #ffe4e6 !important;
+      opacity: 0.95;
+    }
+    .shake-anim {
+      animation: shake 0.35s ease-in-out;
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25%, 75% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+    }
+    .matching-line-anim {
+      stroke-dasharray: 800;
+      stroke-dashoffset: 800;
+      animation: drawConnLine 0.28s ease-out forwards;
+    }
+    @keyframes drawConnLine {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+  </style>
+</head>
+<body class="bg-amber-50/40 text-slate-800 p-2 sm:p-6 antialiased min-h-screen">
+  <div class="max-w-4xl mx-auto bg-white rounded-3xl border-2 border-amber-200 shadow-xl p-5 sm:p-10 sheet">
+    
+    <!-- 顶部控制栏 -->
+    <div class="bg-amber-100/70 border border-amber-200 rounded-2xl p-3 mb-6 flex flex-wrap justify-between items-center gap-3 no-print">
+      <div class="flex items-center gap-2">
+        <a id="back-to-hub-btn" href="index.html" class="px-3 py-1.5 bg-white border border-amber-300 hover:bg-amber-50 rounded-xl text-xs font-bold text-amber-900 shadow-2xs transition flex items-center gap-1">
+          <span>🏠</span> 返回大厅
+        </a>
+        <div class="inline-flex bg-white p-1 rounded-xl border border-amber-300 shadow-2xs">
+          <button id="btn-lele" onclick="switchStudent('乐乐')" class="px-3 py-1 rounded-lg text-xs font-bold transition bg-amber-500 text-white shadow-xs">
+            👦 乐乐
+          </button>
+          <button id="btn-yueliang" onclick="switchStudent('月亮')" class="px-3 py-1 rounded-lg text-xs font-bold text-slate-600 hover:text-amber-700 transition">
+            👧 月亮
+          </button>
+        </div>
+      </div>
+
+      <!-- 实时计时器 -->
+      <div class="flex items-center gap-2 bg-white px-3.5 py-1.5 rounded-xl border border-amber-200 shadow-2xs">
+        <span class="text-xs text-slate-500 font-medium">⏱️ 答题计时：</span>
+        <span id="timer-display" class="font-mono text-base font-black text-amber-600 tracking-wider">00:00</span>
+      </div>
+
+      <!-- 操作按钮 -->
+      <div class="flex items-center gap-2">
+        <button onclick="openMistakeVault()" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-800 border border-rose-300 rounded-xl text-xs font-bold shadow-2xs transition flex items-center gap-1.5">
+          <span>📖</span> 错题本 <span id="top-mistake-count" class="bg-rose-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold">0</span>
+        </button>
+        <button onclick="submitExam()" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-xs transition flex items-center gap-1">
+          <span>✅</span> 交卷结分
+        </button>
+        <button onclick="window.print()" class="px-3 py-1.5 bg-sky-500 hover:bg-sky-600 text-white rounded-xl text-xs font-bold shadow-xs transition flex items-center gap-1">
+          <span>🖨️</span> 打印试卷
+        </button>
+        <button onclick="confirmReset()" class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-medium transition">
+          🔄 重置
+        </button>
+      </div>
+    </div>
+
+    <!-- 试卷卷头（动态注入） -->
+    <div class="border-b-2 border-dashed border-amber-300 pb-5 mb-6">
+      <div class="flex flex-wrap justify-between items-center gap-2">
+        <div>
+          <div class="flex items-center gap-2">
+            <span id="subject-badge" class="inline-flex items-center gap-1.5 bg-amber-100 text-amber-900 text-xs px-3 py-0.5 rounded-full font-bold">
+              <span>📖</span> 统编人教版 · 一年级上册语文
+            </span>
+            <span id="paper-tag" class="text-xs px-2.5 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-800">
+              基础夯实
+            </span>
+            <span id="paper-unit" class="text-xs text-slate-500 font-medium"></span>
+          </div>
+          <h1 id="paper-title" class="text-2xl sm:text-3xl font-black text-slate-900 mt-2 flex items-center gap-2">
+            <!-- 标题 -->
+          </h1>
+          <p id="paper-desc" class="text-xs sm:text-sm text-slate-500 mt-1">
+            <!-- 简介 -->
+          </p>
+        </div>
+      </div>
+
+      <!-- 考生考号栏 -->
+      <div class="mt-4 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-3 flex flex-wrap justify-between items-center text-xs sm:text-sm gap-3">
+        <div class="flex flex-wrap items-center gap-4 sm:gap-6 font-medium text-slate-700">
+          <span><ruby>答<rt>dá</rt></ruby><ruby>题<rt>tí</rt></ruby><ruby>人<rt>rén</rt></ruby>：<span id="print-student-name" class="border-b-2 border-slate-400 px-4 inline-block font-bold text-amber-800">乐乐</span></span>
+          <span><ruby>班<rt>bān</rt></ruby><ruby>级<rt>jí</rt></ruby>：<span class="border-b-2 border-slate-400 px-3 inline-block min-w-[50px]"></span></span>
+          <span><ruby>试<rt>shì</rt></ruby><ruby>卷<rt>juàn</rt></ruby><ruby>得<rt>dé</rt></ruby><ruby>分<rt>fēn</rt></ruby>：<span class="text-rose-600 font-bold text-lg" id="score-text">待交卷</span> / 100</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="font-bold text-amber-900 text-xs">大星奖励：</span>
+          <div id="star-bar" class="flex gap-0.5 text-base sm:text-lg">
+            <span class="star-icon text-slate-300">⭐</span>
+            <span class="star-icon text-slate-300">⭐</span>
+            <span class="star-icon text-slate-300">⭐</span>
+            <span class="star-icon text-slate-300">⭐</span>
+            <span class="star-icon text-slate-300">⭐</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 试卷核心答题区域 -->
+    <p class="text-xs text-slate-600 mb-4 no-print">交卷前可以修改答案；点击“交卷结分”后统一判分并查看解析。</p>
+    <div id="quiz-container" class="space-y-8"></div>
+
+    <!-- 历史答题荣誉榜 -->
+    <div class="border-t-2 border-dashed border-amber-300 pt-8 mt-10 no-print">
+      <div class="flex flex-wrap justify-between items-center mb-4 gap-2">
+        <h3 class="text-lg font-black text-slate-800 flex items-center gap-2">
+          <span>🏆</span> 乐乐与月亮 · 历史答题荣誉榜
+        </h3>
+        <div class="flex items-center gap-2">
+          <button onclick="filterRecords('全部')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-100 text-amber-900 hover:bg-amber-200">全部</button>
+          <button onclick="filterRecords('乐乐')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">只看乐乐</button>
+          <button onclick="filterRecords('月亮')" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">只看月亮</button>
+          <button onclick="clearHistory()" class="px-2.5 py-1 rounded-lg text-xs text-rose-500 hover:bg-rose-50 border border-rose-200">清空记录</button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-xs">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <thead class="bg-amber-50/80 text-slate-700 font-bold border-b border-slate-200">
+            <tr>
+              <th class="p-3">答题人</th>
+              <th class="p-3">科目</th>
+              <th class="p-3">试卷名称</th>
+              <th class="p-3">最终得分</th>
+              <th class="p-3">答题用时</th>
+              <th class="p-3">交卷时间</th>
+              <th class="p-3">薄弱考点诊断</th>
+              <th class="p-3">荣誉称号</th>
+            </tr>
+          </thead>
+          <tbody id="history-table-body" class="divide-y divide-slate-100 text-slate-600"></tbody>
+        </table>
+      </div>
+      <p id="empty-record-hint" class="text-center text-xs text-slate-400 py-4 hidden">暂无交卷记录，点击右上角【✅ 交卷结分】记录本次成绩！</p>
+    </div>
+
+  </div>
+
+  <!-- 交卷结算弹窗 -->
+  <div id="result-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50 hidden no-print">
+    <div class="bg-white rounded-3xl border-4 border-amber-300 shadow-2xl max-w-md w-full p-5 sm:p-6 text-center transform scale-95 transition-all max-h-[90vh] overflow-y-auto">
+      <div class="sticky top-0 z-10 flex justify-end bg-white mb-1">
+        <button type="button" onclick="closeModal()" aria-label="关闭成绩报告" class="min-h-[44px] px-3 rounded-xl text-sm font-bold text-slate-600 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-sky-500">✕ 关闭</button>
+      </div>
+      <div class="text-4xl sm:text-5xl mb-1 animate-bounce">🎉</div>
+      <h3 class="text-xl sm:text-2xl font-black text-slate-900 mb-0.5">挑战完成！成绩报告单</h3>
+      <p id="modal-paper-name" class="text-xs text-slate-500 mb-3"></p>
+
+      <div class="bg-amber-50 border border-amber-200 rounded-2xl p-3.5 mb-4 text-left space-y-1.5 text-xs sm:text-sm">
+        <div class="flex justify-between items-center">
+          <span class="text-slate-500">答题小勇士：</span>
+          <span id="modal-student" class="font-bold text-amber-900 text-base">乐乐</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-slate-500">最终得分：</span>
+          <span class="font-black text-rose-600 text-2xl"><span id="modal-score">0</span> <span class="text-xs font-normal">分</span></span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-slate-500">答题用时：</span>
+          <span id="modal-time" class="font-mono font-bold text-sky-700">00:00</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-slate-500">获得称号：</span>
+          <span id="modal-badge" class="font-bold text-amber-700">👑 满分小状元</span>
+        </div>
+      </div>
+
+      <!-- 查漏补缺处方笺 -->
+      <div class="text-left bg-rose-50/70 border border-rose-200 rounded-2xl p-3.5 mb-4">
+        <div class="font-bold text-rose-900 text-xs sm:text-sm flex items-center gap-1.5 mb-2">
+          <span>🩺</span> 智能查漏补缺诊断报告：
+        </div>
+        <div id="diagnostic-content" class="text-xs text-slate-700 space-y-2"></div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-2">
+        <button onclick="openMistakeVault(); closeModal();" class="flex-1 py-2.5 bg-rose-500 hover:bg-rose-600 text-white rounded-xl font-bold text-xs sm:text-sm shadow transition flex items-center justify-center gap-1">
+          <span>📖</span> 查看与攻克错题本
+        </button>
+        <button onclick="closeModal()" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl font-bold text-xs sm:text-sm shadow transition">
+          存入荣誉榜并查看
+        </button>
+        <button onclick="resetAndRestart()" class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-medium text-xs transition">
+          重做一次
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 错题本 / 错题库 专属弹窗 -->
+  <div id="mistake-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50 hidden no-print">
+    <div class="bg-white rounded-3xl border-4 border-rose-300 shadow-2xl max-w-2xl w-full p-5 sm:p-6 text-left transform scale-95 transition-all max-h-[90vh] flex flex-col">
+      <div class="flex justify-between items-center pb-3 border-b border-rose-100">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">📖</span>
+          <div>
+            <h3 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+              错题本 · 查漏补缺攻坚库
+            </h3>
+            <p class="text-xs text-slate-500">交卷后的错题与未答题已自动收录，攻克弄懂后可直接移出</p>
+          </div>
+        </div>
+        <button onclick="closeMistakeVault()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold flex items-center justify-center transition">✕</button>
+      </div>
+
+      <!-- 错题筛选与统计 -->
+      <div class="py-3 flex flex-wrap justify-between items-center gap-2 border-b border-slate-100 text-xs">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <button onclick="filterMistakeStudent('全部')" id="mfilter-all" class="px-2.5 py-1 rounded-lg font-bold bg-rose-500 text-white">全部学员</button>
+          <button onclick="filterMistakeStudent('乐乐')" id="mfilter-lele" class="px-2.5 py-1 rounded-lg font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">👦 乐乐</button>
+          <button onclick="filterMistakeStudent('月亮')" id="mfilter-yueliang" class="px-2.5 py-1 rounded-lg font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">👧 月亮</button>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-slate-500">待攻克：<strong id="mistake-count-text" class="text-rose-600 font-bold text-sm">0</strong> 道</span>
+          <button onclick="clearAllVaultMistakes()" class="text-slate-400 hover:text-rose-600 px-2 py-0.5 border border-slate-200 rounded text-[11px] transition">清空全部错题</button>
+        </div>
+      </div>
+
+      <!-- 错题卡片滚动区 -->
+      <div id="mistake-list-container" class="flex-1 overflow-y-auto py-3 space-y-3.5 pr-1 text-xs sm:text-sm">
+        <!-- 动态注入错题卡片 -->
+      </div>
+
+      <!-- 底部关闭按钮 -->
+      <div class="pt-3 border-t border-slate-100 flex justify-end">
+        <button onclick="closeMistakeVault()" class="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl font-bold text-xs transition">
+          返回继续答题
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentStudent = '乐乐';
+    let currentSubject = 'chinese';
+    let currentPaper = null;
+    let selectedLeftCard = null;
+    let score = 0;
+    const matchedPairs = new Set();
+    const mistakesMade = new Map();
+    let examSubmitted = false;
+    const selectedAnswers = {};
+    const poemAcknowledgements = {};
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    let timerSeconds = 0;
+    let timerInterval = null;
+    let currentGrade = 1;
+    let currentSemester = 1;
+
+    function getQueryParams() {
+      const params = new URLSearchParams(window.location.search);
+      const stage = params.get('stage');
+      let g = parseInt(params.get('grade'));
+      let s = parseInt(params.get('semester'));
+      if (stage === 'g2s2' || s === 4 || (g === 2 && s === 2)) {
+        g = 2;
+        s = 2;
+      } else if (stage === 'g2s1' || s === 3 || (g === 2 && s === 1)) {
+        g = 2;
+        s = 1;
+      } else if (stage === 'g1s2' || s === 2 || (g === 1 && s === 2)) {
+        g = 1;
+        s = 2;
+      } else {
+        g = 1;
+        s = 1;
+      }
+      return {
+        grade: g,
+        semester: s,
+        subject: params.get('subject') || 'chinese',
+        paper: parseInt(params.get('paper')) || 1
+      };
+    }
+
+    function initPage() {
+      const { grade, semester, subject, paper } = getQueryParams();
+      currentGrade = grade;
+      currentSemester = semester;
+      currentSubject = subject;
+
+      let semText = '';
+      let db = [];
+      let badgeHtml = '';
+      let defaultTitle = '';
+
+      if (currentGrade === 2 && currentSemester === 2) {
+        semText = '二年级下册';
+        if (subject === 'math') {
+          db = window.MATH_DATABASE_G2S2 || [];
+          badgeHtml = '<span>📐</span> 人教版 · 二年级下册数学';
+          defaultTitle = '数学大考卷';
+        } else if (subject === 'english') {
+          db = window.ENGLISH_DATABASE_G2S2 || [];
+          badgeHtml = '<span>🔤</span> 人教新起点 · 二年级下册英语';
+          defaultTitle = '英语大考卷';
+        } else {
+          db = window.QUIZ_DATABASE_G2S2 || [];
+          badgeHtml = '<span>📖</span> 统编人教版 · 二年级下册语文';
+          defaultTitle = '语文大考卷';
+        }
+      } else if (currentGrade === 2) {
+        semText = '二年级上册';
+        if (subject === 'math') {
+          db = window.MATH_DATABASE_G2S1 || [];
+          badgeHtml = '<span>📐</span> 人教版 · 二年级上册数学';
+          defaultTitle = '数学大考卷';
+        } else if (subject === 'english') {
+          db = window.ENGLISH_DATABASE_G2S1 || [];
+          badgeHtml = '<span>🔤</span> 人教新起点 · 二年级上册英语';
+          defaultTitle = '英语大考卷';
+        } else {
+          db = window.QUIZ_DATABASE_G2S1 || [];
+          badgeHtml = '<span>📖</span> 统编人教版 · 二年级上册语文';
+          defaultTitle = '语文大考卷';
+        }
+      } else if (currentSemester === 2) {
+        semText = '一年级下册';
+        if (subject === 'math') {
+          db = window.MATH_DATABASE_G1S2 || [];
+          badgeHtml = '<span>📐</span> 人教版 · 一年级下册数学';
+          defaultTitle = '数学大考卷';
+        } else if (subject === 'english') {
+          db = window.ENGLISH_DATABASE_G1S2 || [];
+          badgeHtml = '<span>🔤</span> 人教新起点 · 一年级下册英语';
+          defaultTitle = '英语大考卷';
+        } else {
+          db = window.QUIZ_DATABASE_G1S2 || [];
+          badgeHtml = '<span>📖</span> 统编人教版 · 一年级下册语文';
+          defaultTitle = '语文大考卷';
+        }
+      } else {
+        semText = '一年级上册';
+        if (subject === 'math') {
+          db = window.MATH_DATABASE || [];
+          badgeHtml = '<span>📐</span> 人教版 · 一年级上册数学';
+          defaultTitle = '数学大考卷';
+        } else if (subject === 'english') {
+          db = window.ENGLISH_DATABASE || [];
+          badgeHtml = '<span>🔤</span> 人教新起点 · 一年级上册英语';
+          defaultTitle = '英语大考卷';
+        } else {
+          db = window.QUIZ_DATABASE || [];
+          badgeHtml = '<span>📖</span> 统编人教版 · 一年级上册语文';
+          defaultTitle = '语文大考卷';
+        }
+      }
+
+      document.getElementById('back-to-hub-btn').href = `index.html?grade=${currentGrade}&semester=${currentSemester}&subject=${subject}`;
+      document.getElementById('subject-badge').innerHTML = badgeHtml;
+
+      currentPaper = db.find(q => q.id === paper) || db[0] || { title: defaultTitle, unit: "基础单元", desc: "综合练习", timeLimit: 25, sections: [] };
+      
+      document.title = `${currentPaper.title} - ${semText}`;
+      document.getElementById('paper-title').innerHTML = `<span>🎒</span> ${currentPaper.title}`;
+      document.getElementById('paper-unit').innerText = currentPaper.unit;
+      document.getElementById('paper-tag').className = `text-xs px-2.5 py-0.5 rounded-full font-bold ${currentPaper.tagColor || 'bg-amber-100 text-amber-800'}`;
+      document.getElementById('paper-tag').innerText = currentPaper.tag || '闯关测试';
+      document.getElementById('paper-desc').innerText = `（${currentPaper.desc} · ${currentPaper.source ? `${currentPaper.source.scoreNote ? '练习赋分' : currentPaper.source.omissions ? '节选原始分值' : '原卷'}：${currentPaper.maxScore}分，成绩折算百分制` : '满分：100分'} · 建议答题时间：${currentPaper.timeLimit}分钟）`;
+      if (currentPaper.source) {
+        document.getElementById('subject-badge').textContent = currentPaper.textbook + ' · 一年级上册';
+        const sourceInfo = document.createElement('p');
+        sourceInfo.className = 'text-xs text-slate-500 mt-2';
+        sourceInfo.textContent = currentPaper.adaptation + (currentPaper.source.scoreNote ? ' ' + currentPaper.source.scoreNote : '') + ' 来源：';
+        const link = document.createElement('a');link.href = currentPaper.source.readableUrl || currentPaper.source.url;
+        link.textContent = currentPaper.source.kind;link.target = '_blank';link.rel = 'noopener noreferrer';
+        link.className = 'text-sky-700 underline';sourceInfo.appendChild(link);
+        document.getElementById('paper-desc').after(sourceInfo);
+      }
+      document.getElementById('modal-paper-name').innerText = currentPaper.title;
+
+      renderSections(currentPaper.sections);
+      startTimer();
+      renderHistoryTable();
+      updateMistakeBadge();
+    }
+
+    function renderSections(sections) {
+      selectedLeftCard = null;
+      selectedMatchingCard = null;
+      matchingConnections = [];
+      renderMatchingLines();
+
+      const container = document.getElementById('quiz-container');
+      container.innerHTML = '';
+
+      const bgColors = [
+        'bg-sky-50/30 border-sky-200 text-sky-900',
+        'bg-amber-50/30 border-amber-200 text-amber-900',
+        'bg-purple-50/30 border-purple-200 text-purple-900',
+        'bg-emerald-50/30 border-emerald-200 text-emerald-900',
+        'bg-indigo-50/30 border-indigo-200 text-indigo-900',
+        'bg-rose-50/30 border-rose-200 text-rose-900',
+        'bg-teal-50/30 border-teal-200 text-teal-900',
+        'bg-orange-50/40 border-orange-200 text-orange-950'
+      ];
+
+      sections.forEach((sec, idx) => {
+        const theme = bgColors[idx % bgColors.length];
+        const secDiv = document.createElement('div');
+        secDiv.className = `border rounded-2xl p-4 sm:p-5 ${theme}`;
+
+        let headerHtml = `
+          <h2 class="text-base font-black mb-3 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="bg-amber-500 text-white w-6 h-6 rounded-full inline-flex items-center justify-center text-xs font-bold">${sec.num}</span>
+              <span>${sec.title}</span>
+              <span class="text-xs font-normal text-slate-600">（共${sec.score}分）</span>
+            </div>
+            ${sec.tip ? `<span class="text-[10px] bg-white/80 border px-2 py-0.5 rounded no-print">${sec.tip}</span>` : ''}
+          </h2>
+        `;
+
+        let contentHtml = '';
+
+        if (sec.type === 'matching') {
+          const leftPairs = sec.pairs;
+          const shuffled = sec.shuffledAnswers.map(ans => leftPairs.find(p => p.answer === ans) || leftPairs[0]);
+
+          contentHtml = `
+            ${sec.visual ? `<div class="mb-4 flex justify-center">${sec.visual}</div>` : ''}
+            <p class="text-xs text-slate-600 mb-3 no-print">先点左边一项，再点右边一项即可连线。点已连的卡片可以取消重连；交卷前可以修改，交卷后统一判分。</p>
+            <div class="matching-container relative grid grid-cols-2 gap-3 sm:gap-8">
+              <svg class="matching-svg absolute inset-0 w-full h-full pointer-events-none z-10" style="overflow: visible;"></svg>
+              <div class="space-y-2.5 z-20">
+                ${leftPairs.map(p => `
+                  <div role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();handleMatchingClick(this,'left');}" data-target="${p.target}" data-answer="${p.answer || p.target}" onclick="handleMatchingClick(this, 'left')" class="left-card cursor-pointer border border-slate-200 hover:border-sky-400 bg-white rounded-xl p-2 flex items-center justify-between transition shadow-2xs">
+                    <div class="flex items-center gap-2.5">
+                      <span class="text-2xl">${p.visual || p.emoji}</span>
+                      <span class="text-xs text-slate-600 font-medium">${sec.hideLabels ? `图 ${leftPairs.indexOf(p) + 1}` : p.label}</span>
+                    </div>
+                    <div class="dot-anchor w-3.5 h-3.5 rounded-full border-2 border-sky-400 flex items-center justify-center shrink-0"><span class="inner-dot w-1.5 h-1.5 rounded-full bg-transparent transition-colors"></span></div>
+                  </div>
+                `).join('')}
+              </div>
+              <div class="space-y-2.5 z-20">
+                ${shuffled.map(p => `
+                  <div role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();handleMatchingClick(this,'right');}" data-answer="${p.answer}" onclick="handleMatchingClick(this, 'right')" class="right-card cursor-pointer border border-slate-200 hover:border-rose-400 bg-white rounded-xl p-1.5 flex items-center justify-between transition shadow-2xs">
+                    <div class="dot-anchor w-3.5 h-3.5 rounded-full border-2 border-rose-400 flex items-center justify-center shrink-0"><span class="inner-dot w-1.5 h-1.5 rounded-full bg-transparent transition-colors"></span></div>
+                    ${currentSubject === 'english' ? `
+                      <div class="flex items-center gap-2">
+                        ${sec.hidePinyin ? '' : `<span class="text-xs text-slate-500 font-medium">${p.pinyin}</span>`}
+                        <div class="min-w-[64px] px-3 py-1 bg-emerald-50 border-2 border-emerald-400 text-emerald-900 rounded-xl font-bold font-sans text-xs sm:text-sm text-center">
+                          ${p.char}
+                        </div>
+                      </div>
+                    ` : currentSubject === 'math' ? `
+                      <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold text-indigo-500">${p.pinyin}</span>
+                        <div class="min-w-[48px] px-2.5 py-1 bg-indigo-50 border-2 border-indigo-400 text-indigo-900 rounded-xl font-black font-mono text-sm sm:text-base text-center">
+                          ${p.char}
+                        </div>
+                      </div>
+                    ` : (p.char && p.char.length > 1) ? `
+                      <div class="flex items-center gap-2">
+                        ${sec.hidePinyin ? '' : `<span class="text-xs font-bold text-sky-600">${p.pinyin}</span>`}
+                        <div class="min-w-[56px] px-3 py-1 bg-rose-50 border-2 border-rose-400 text-rose-950 rounded-xl font-bold font-serif text-sm sm:text-base text-center">
+                          ${p.char}
+                        </div>
+                      </div>
+                    ` : `
+                      <div class="flex items-center gap-2">
+                        ${sec.hidePinyin ? '' : `<span class="text-xs font-bold text-sky-600">${p.pinyin}</span>`}
+                        <div class="tianzige rounded"><span>${p.char}</span></div>
+                      </div>
+                    `}
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        } else if (sec.type === 'choice') {
+          const isGrid4 = sec.items.length === 4 && sec.items[0].ancient;
+          const isGridCols2 = sec.items.length === 4;
+
+          contentHtml = `
+            <div class="grid ${isGrid4 ? 'grid-cols-2 sm:grid-cols-4' : isGridCols2 ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1'} gap-3">
+              ${sec.items.map(item => `
+                <div class="q-group bg-white border border-slate-200 rounded-xl p-3 flex flex-col justify-between" data-qid="${item.qid}" data-qtitle="${escapeHtml(item.title)}" data-tip="${escapeHtml(item.tip)}">
+                  <div>
+                    ${item.ancient ? `<div class="text-3xl text-amber-800 font-bold mb-1 text-center">${item.ancient}</div><div class="text-[10px] text-slate-400 mb-1 text-center">${item.desc}</div>` : ''}
+                    ${item.prompt ? `<div class="text-sm font-medium mb-1.5 leading-snug">${item.prompt}</div>` : ''}
+                    ${item.visual ? `<div class="item-visual my-2 flex flex-wrap gap-2 justify-center items-center">${item.visual}</div>` : ''}
+                  </div>
+                  <span class="print-only text-xs font-bold text-slate-800 border-b border-dashed border-slate-400 px-4">（   ）</span>
+                  <div class="choice-options flex flex-wrap gap-2 ${item.ancient ? 'justify-center' : 'justify-end'} mt-2">
+                    ${window.QUIZ_GRADING.shuffle(item.options.map((opt, index) => ({ ...opt, index }))).map((opt, position) => `
+                      <button type="button" aria-pressed="false" data-option-index="${opt.index}" data-correct="${opt.correct}" onclick="handleOptionClick(this)" class="opt-btn px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-bold transition">
+                        <span class="print-only">${String.fromCharCode(65 + position)}.</span>${escapeHtml(opt.text)}
+                      </button>
+                    `).join('')}
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        } else if (sec.type === 'response') {
+          contentHtml = window.ORIGINAL_PAPER_UI.render(sec);
+        } else if (sec.type === 'poem') {
+          contentHtml = `
+            <div class="max-w-md mx-auto bg-white border rounded-xl p-4 text-center space-y-2 text-base font-bold text-slate-800">
+              <p>${sec.text}</p>
+              <div class="mt-3 flex justify-center gap-3 no-print pt-2">
+                ${sec.buttons.map((b, i) => `
+                  <button id="btn-poem-${idx}-${i}" onclick="handlePoemPart('poem-${idx}-${i}', this)" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white rounded-lg text-xs font-bold transition">
+                    ${b.label}
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+          `;
+        }
+
+        secDiv.innerHTML = headerHtml + contentHtml;
+        container.appendChild(secDiv);
+        if (sec.type === 'response') window.ORIGINAL_PAPER_UI.bind(secDiv, selectedAnswers, () => examSubmitted);
+      });
+    }
+
+    function playSound(type) {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        if (ctx.state === 'suspended') ctx.resume();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        if (type === 'ding') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
+          gain.gain.setValueAtTime(0.2, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.35);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.35);
+        } else if (type === 'cheer') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+          osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
+          osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2);
+          osc.frequency.setValueAtTime(1046.50, ctx.currentTime + 0.3);
+          gain.gain.setValueAtTime(0.25, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.6);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.6);
+        } else {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(200, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(120, ctx.currentTime + 0.2);
+          gain.gain.setValueAtTime(0.2, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.25);
+          osc.start();
+          osc.stop(ctx.currentTime + 0.25);
+        }
+      } catch (e) {}
+    }
+
+    let selectedMatchingCard = null; // { el, side }
+    let matchingConnections = []; // { leftEl, rightEl, color, container }
+    const MATCH_COLORS = ['#0284c7', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4', '#f97316'];
+
+    function handleMatchingClick(el, side) {
+      if (examSubmitted) return;
+      if (matchingConnections.some(c => c.leftEl === el || c.rightEl === el)) {
+        unmatchPair(el);
+        return;
+      }
+      if (!selectedMatchingCard) {
+        el.classList.add('item-selected');
+        selectedMatchingCard = { el, side };
+        return;
+      }
+      if (selectedMatchingCard.side === side) {
+        const previous = selectedMatchingCard.el;
+        previous.classList.remove('item-selected');
+        selectedMatchingCard = previous === el ? null : { el, side };
+        if (selectedMatchingCard) el.classList.add('item-selected');
+        return;
+      }
+      const leftEl = side === 'right' ? selectedMatchingCard.el : el;
+      const rightEl = side === 'right' ? el : selectedMatchingCard.el;
+      const color = MATCH_COLORS[matchingConnections.length % MATCH_COLORS.length];
+      [leftEl, rightEl].forEach(card => {
+        card.classList.remove('item-selected');
+        card.classList.add('item-linked');
+        card.querySelector('.inner-dot').style.backgroundColor = color;
+      });
+      matchingConnections.push({ leftEl, rightEl, color, container: leftEl.closest('.matching-container') });
+      selectedMatchingCard = null;
+      renderMatchingLines();
+    }
+
+    function unmatchPair(el) {
+      if (examSubmitted) return;
+      const idx = matchingConnections.findIndex(c => c.leftEl === el || c.rightEl === el);
+      if (idx < 0) return;
+      const [conn] = matchingConnections.splice(idx, 1);
+      [conn.leftEl, conn.rightEl].forEach(card => {
+        card.classList.remove('item-linked', 'item-matched', 'item-matched-wrong');
+        card.querySelector('.inner-dot').style.backgroundColor = '';
+      });
+      renderMatchingLines();
+    }
+
+    function selectLeft(el) { handleMatchingClick(el, 'left'); }
+    function selectRight(el) { handleMatchingClick(el, 'right'); }
+
+    function renderMatchingLines() {
+      document.querySelectorAll('.matching-svg').forEach(svg => {
+        svg.innerHTML = '';
+      });
+
+      matchingConnections.forEach(conn => {
+        if (!conn.leftEl || !conn.rightEl || !conn.container) return;
+        const svg = conn.container.querySelector('.matching-svg');
+        if (!svg) return;
+
+        const cRect = conn.container.getBoundingClientRect();
+        const lDot = conn.leftEl.querySelector('.dot-anchor') || conn.leftEl;
+        const rDot = conn.rightEl.querySelector('.dot-anchor') || conn.rightEl;
+        const lRect = lDot.getBoundingClientRect();
+        const rRect = rDot.getBoundingClientRect();
+
+        const x1 = lRect.left + lRect.width / 2 - cRect.left;
+        const y1 = lRect.top + lRect.height / 2 - cRect.top;
+        const x2 = rRect.left + rRect.width / 2 - cRect.left;
+        const y2 = rRect.top + rRect.height / 2 - cRect.top;
+
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', x1);
+        line.setAttribute('y1', y1);
+        line.setAttribute('x2', x2);
+        line.setAttribute('y2', y2);
+        line.setAttribute('stroke', conn.color);
+        line.setAttribute('stroke-width', '3');
+        line.setAttribute('stroke-linecap', 'round');
+        line.setAttribute('stroke-opacity', '0.85');
+        if (examSubmitted && !conn.isCorrect) {
+          line.setAttribute('stroke-dasharray', '5,5');
+        }
+        line.classList.add('matching-line-anim');
+        svg.appendChild(line);
+      });
+    }
+
+    window.addEventListener('resize', renderMatchingLines);
+    window.addEventListener('beforeprint', renderMatchingLines);
+
+    function handleOptionClick(btn) {
+      if (examSubmitted) return;
+      const group = btn.closest('.q-group');
+      if (!group) return;
+      selectedAnswers[group.getAttribute('data-qid')] = Number(btn.getAttribute('data-option-index'));
+      group.setAttribute('data-answered', 'true');
+      group.querySelectorAll('.opt-btn').forEach(option => {
+        const selected = option === btn;
+        option.classList.toggle('answer-selected', selected);
+        option.setAttribute('aria-pressed', String(selected));
+      });
+    }
+
+    function handlePoemPart(part, btn) {
+      if (examSubmitted) return;
+      poemAcknowledgements[part] = !poemAcknowledgements[part];
+      btn.classList.toggle('item-selected', poemAcknowledgements[part]);
+    }
+
+    function updateStars() {
+      const stars = document.querySelectorAll('.star-icon');
+      const earned = Math.floor(score / 20);
+      stars.forEach((s, idx) => {
+        if (idx < earned) {
+          s.classList.remove('text-slate-300');
+          s.classList.add('text-amber-400');
+        } else {
+          s.classList.add('text-slate-300');
+          s.classList.remove('text-amber-400');
+        }
+      });
+    }
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timerSeconds++;
+        updateTimerDisplay();
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+      const secs = String(timerSeconds % 60).padStart(2, '0');
+      document.getElementById('timer-display').innerText = `${mins}:${secs}`;
+    }
+
+    function switchStudent(name) {
+      if (name === currentStudent) return;
+      if ((Object.keys(selectedAnswers).length || matchingConnections.length || Object.values(poemAcknowledgements).some(Boolean) || examSubmitted) && !confirm(`切换到 ${name} 将重新开始答题与计时，是否切换？`)) {
+        return;
+      }
+      currentStudent = name;
+      document.getElementById('print-student-name').innerText = name;
+      
+      const btnLele = document.getElementById('btn-lele');
+      const btnYueliang = document.getElementById('btn-yueliang');
+
+      if (name === '乐乐') {
+        btnLele.className = 'px-3.5 py-1 rounded-lg text-xs font-bold transition bg-amber-500 text-white shadow-xs';
+        btnYueliang.className = 'px-3.5 py-1 rounded-lg text-xs font-bold text-slate-600 hover:text-amber-700 transition';
+      } else {
+        btnYueliang.className = 'px-3.5 py-1 rounded-lg text-xs font-bold transition bg-amber-500 text-white shadow-xs';
+        btnLele.className = 'px-3.5 py-1 rounded-lg text-xs font-bold text-slate-600 hover:text-amber-700 transition';
+      }
+      playSound('ding');
+      resetAll();
+      updateMistakeBadge();
+    }
+
+    function confirmReset() {
+      if (confirm('确定要清空当前答题进度，重新开始吗？')) {
+        resetAll();
+      }
+    }
+
+    function resetAll() {
+      score = 0;
+      examSubmitted = false;
+      timerSeconds = 0;
+      matchedPairs.clear();
+      mistakesMade.clear();
+      Object.keys(selectedAnswers).forEach(key => delete selectedAnswers[key]);
+      Object.keys(poemAcknowledgements).forEach(key => delete poemAcknowledgements[key]);
+      renderSections(currentPaper.sections);
+      document.getElementById('score-text').innerText = '待交卷';
+      updateStars();
+      updateTimerDisplay();
+      startTimer();
+    }
+
+    // 错题本（持久化到 LocalStorage）
+    const VAULT_STORAGE_KEY = 'shiqiu_mistake_vault';
+
+    function getMistakesFromVault() {
+      try {
+        const data = localStorage.getItem(VAULT_STORAGE_KEY);
+        return data ? JSON.parse(data) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function saveMistakeToVault(record) {
+      const list = getMistakesFromVault();
+      const filtered = list.filter(item => !(item.student === record.student && item.grade === record.grade && item.semester === record.semester && item.subject === record.subject && item.paperId === record.paperId && item.qid === record.qid));
+      filtered.unshift(record);
+      localStorage.setItem(VAULT_STORAGE_KEY, JSON.stringify(filtered));
+      updateMistakeBadge();
+    }
+
+    function removeMistakeFromVault(id) {
+      const list = getMistakesFromVault();
+      const filtered = list.filter(item => item.id !== id);
+      localStorage.setItem(VAULT_STORAGE_KEY, JSON.stringify(filtered));
+    }
+
+    function clearAllVaultMistakes() {
+      if (confirm('确定要清空错题本中的所有错题记录吗？')) {
+        localStorage.removeItem(VAULT_STORAGE_KEY);
+        renderMistakeList();
+        updateMistakeBadge();
+      }
+    }
+
+    function updateMistakeBadge() {
+      const list = getMistakesFromVault();
+      const studentCount = list.filter(item => item.student === currentStudent).length;
+      const countEl = document.getElementById('top-mistake-count');
+      if (countEl) countEl.innerText = studentCount;
+      const vaultCountEl = document.getElementById('mistake-count-text');
+      if (vaultCountEl) vaultCountEl.innerText = list.length;
+    }
+
+    let currentMistakeStudentFilter = '全部';
+
+    function openMistakeVault() {
+      currentMistakeStudentFilter = currentStudent || '全部';
+      const btnAll = document.getElementById('mfilter-all');
+      const btnLele = document.getElementById('mfilter-lele');
+      const btnYueliang = document.getElementById('mfilter-yueliang');
+
+      [btnAll, btnLele, btnYueliang].forEach(b => { if (b) b.className = 'px-2.5 py-1 rounded-lg font-bold bg-slate-100 text-slate-700 hover:bg-slate-200'; });
+      if (currentMistakeStudentFilter === '全部' && btnAll) btnAll.className = 'px-2.5 py-1 rounded-lg font-bold bg-rose-500 text-white';
+      if (currentMistakeStudentFilter === '乐乐' && btnLele) btnLele.className = 'px-2.5 py-1 rounded-lg font-bold bg-amber-500 text-white';
+      if (currentMistakeStudentFilter === '月亮' && btnYueliang) btnYueliang.className = 'px-2.5 py-1 rounded-lg font-bold bg-purple-500 text-white';
+
+      renderMistakeList();
+      document.getElementById('mistake-modal').classList.remove('hidden');
+    }
+
+    function closeMistakeVault() {
+      document.getElementById('mistake-modal').classList.add('hidden');
+    }
+
+    function filterMistakeStudent(student) {
+      currentMistakeStudentFilter = student;
+      const btnAll = document.getElementById('mfilter-all');
+      const btnLele = document.getElementById('mfilter-lele');
+      const btnYueliang = document.getElementById('mfilter-yueliang');
+
+      [btnAll, btnLele, btnYueliang].forEach(b => { if (b) b.className = 'px-2.5 py-1 rounded-lg font-bold bg-slate-100 text-slate-700 hover:bg-slate-200'; });
+      if (student === '全部' && btnAll) btnAll.className = 'px-2.5 py-1 rounded-lg font-bold bg-rose-500 text-white';
+      if (student === '乐乐' && btnLele) btnLele.className = 'px-2.5 py-1 rounded-lg font-bold bg-amber-500 text-white';
+      if (student === '月亮' && btnYueliang) btnYueliang.className = 'px-2.5 py-1 rounded-lg font-bold bg-purple-500 text-white';
+
+      renderMistakeList();
+    }
+
+    function renderMistakeList() {
+      const container = document.getElementById('mistake-list-container');
+      if (!container) return;
+
+      const list = getMistakesFromVault();
+      const filtered = list.filter(m => currentMistakeStudentFilter === '全部' || m.student === currentMistakeStudentFilter);
+      
+      const countEl = document.getElementById('mistake-count-text');
+      if (countEl) countEl.innerText = filtered.length;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-10 space-y-2">
+            <div class="text-5xl">🎉</div>
+            <div class="font-bold text-slate-700 text-base">太棒啦！${currentMistakeStudentFilter === '全部' ? '' : currentMistakeStudentFilter}暂无错题记录</div>
+            <div class="text-xs text-slate-400">交卷后的错题与未答题会自动汇集在此，搞懂后随时移出！</div>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(m => `
+        <div class="bg-rose-50/40 border border-rose-200 rounded-2xl p-3.5 space-y-2.5 relative shadow-2xs">
+          <div class="flex flex-wrap justify-between items-center gap-2 text-xs">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="font-bold px-2 py-0.5 rounded-full ${m.student === '乐乐' ? 'bg-amber-100 text-amber-900' : 'bg-purple-100 text-purple-900'}">${m.student === '乐乐' ? '👦 乐乐' : '👧 月亮'}</span>
+              <span class="bg-white border px-2 py-0.5 rounded-full text-slate-600 font-medium">${m.paperTitle || '专项练习卷'}</span>
+              <span class="text-slate-400 text-[10px]">${m.date || ''}</span>
+            </div>
+            <button onclick="solveMistake('${m.id}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-2xs">
+              <span>✨</span> 我已搞懂(移出)
+            </button>
+          </div>
+
+          <div class="bg-white rounded-xl p-3 border border-rose-100 space-y-2">
+            <div class="font-bold text-slate-800 text-sm leading-snug">${m.prompt || m.title}</div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              <div class="bg-rose-50 border border-rose-200 rounded-lg p-2 text-rose-900 flex items-center gap-1.5">
+                <span class="font-bold shrink-0">❌ 你的作答：</span>
+                <span class="font-black text-rose-700 truncate">${escapeHtml(m.userAnswer || '未作答')}</span>
+              </div>
+              <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-2 text-emerald-900 flex items-center gap-1.5">
+                <span class="font-bold shrink-0">✅ 正确答案：</span>
+                <span class="font-black text-emerald-700 truncate">${m.correctAnswer || '无'}</span>
+              </div>
+            </div>
+
+            ${m.tip ? `
+              <div class="bg-amber-50/70 border border-amber-200 rounded-lg p-2 text-amber-950 text-xs flex items-start gap-1.5">
+                <span class="text-amber-600 font-bold shrink-0">💡 考点解析：</span>
+                <span class="text-slate-600 leading-relaxed">${m.tip}</span>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function solveMistake(id) {
+      playSound('ding');
+      removeMistakeFromVault(id);
+      renderMistakeList();
+      updateMistakeBadge();
+    }
+
+    const STORAGE_KEY = 'shiqiu_grade1_quiz_records';
+
+    function submitExam() {
+      if (examSubmitted) {
+        document.getElementById('result-modal').classList.remove('hidden');
+        return;
+      }
+      if (window.ORIGINAL_PAPER_UI.review(currentPaper, selectedAnswers, submitExam)) return;
+      const matches = {};
+      matchingConnections.forEach(conn => {
+        matches[conn.leftEl.getAttribute('data-target')] = conn.rightEl.getAttribute('data-answer');
+      });
+      const grading = window.QUIZ_GRADING.grade(currentPaper, selectedAnswers, matches, poemAcknowledgements);
+      if (grading.pendingReview) return;
+      score = grading.score;
+      examSubmitted = true;
+      document.getElementById('score-text').innerText = score;
+      updateStars();
+      if (selectedMatchingCard) selectedMatchingCard.el.classList.remove('item-selected');
+      selectedMatchingCard = null;
+      matchingConnections.forEach(conn => {
+        const target = conn.leftEl.getAttribute('data-target');
+        const result = grading.results.find(r => r.qid === 'match_' + target);
+        conn.isCorrect = result.isCorrect;
+        conn.color = result.isCorrect ? '#10b981' : '#f43f5e';
+        [conn.leftEl, conn.rightEl].forEach(card => {
+          card.classList.remove('item-linked');
+          card.classList.add(result.isCorrect ? 'item-matched' : 'item-matched-wrong');
+          card.querySelector('.inner-dot').style.backgroundColor = conn.color;
+        });
+      });
+      renderMatchingLines();
+      window.ORIGINAL_PAPER_UI.showResults(grading);
+      document.querySelectorAll('.q-group').forEach(group => {
+        const result = grading.results.find(r => r.qid === group.getAttribute('data-qid'));
+        group.querySelectorAll('.opt-btn').forEach(btn => {
+          btn.disabled = true;
+          btn.classList.remove('answer-selected');
+          if (btn.getAttribute('data-correct') === 'true') btn.classList.add('answer-correct');
+          else if (btn.getAttribute('aria-pressed') === 'true') btn.classList.add('answer-wrong');
+        });
+        const explanation = document.createElement('p');
+        explanation.className = 'text-xs text-slate-600 mt-2 no-print';
+        explanation.textContent = (result.unanswered ? '未作答。' : '') + result.tip;
+        group.appendChild(explanation);
+      });
+      grading.results.filter(r => !r.isCorrect).forEach(result => {
+        const mistake = {
+          ...result,
+          id: 'mistake_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8),
+          student: currentStudent, grade: currentGrade, semester: currentSemester,
+          subject: currentSubject, paperId: currentPaper.id, paperTitle: currentPaper.title,
+          date: new Date().toLocaleString('zh-CN', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }),
+          timestamp: Date.now()
+        };
+        mistakesMade.set(result.qid, mistake);
+        saveMistakeToVault(mistake);
+      });
+      clearInterval(timerInterval);
+      playSound('cheer');
+
+      const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+      const secs = String(timerSeconds % 60).padStart(2, '0');
+      const timeStr = `${mins}分${secs}秒`;
+
+      let badge = '💪 加油小当家';
+      if (score === 100) badge = '👑 满分小状元 ⭐⭐⭐⭐⭐';
+      else if (score >= 90) badge = '🥇 优秀小标兵 ⭐⭐⭐⭐';
+      else if (score >= 80) badge = '🥈 达标小勇士 ⭐⭐⭐';
+      else if (score >= 60) badge = '🥉 进步之星 ⭐⭐';
+
+      document.getElementById('modal-student').innerText = currentStudent;
+      document.getElementById('modal-score').innerText = score;
+      document.getElementById('modal-time').innerText = timeStr;
+      document.getElementById('modal-badge').innerText = badge;
+
+      const diagContainer = document.getElementById('diagnostic-content');
+      let diagBrief = '无失分，基础完美！';
+
+      if (mistakesMade.size === 0 && score === 100) {
+        diagContainer.innerHTML = `
+          <div class="p-2.5 bg-emerald-100/70 border border-emerald-300 rounded-xl text-emerald-900 font-medium">
+            🌟 <strong>太棒啦！全卷零失误！</strong><br>
+            所有板块全部熟练掌握，建议直接挑战下一套大卷！
+          </div>
+        `;
+      } else {
+        let html = `<p class="text-rose-800 font-bold mb-1">答对 ${grading.correct} 题，答错 ${grading.wrong} 题，未答 ${grading.unanswered} 题。请查看失分题目的解析：</p><ul class="space-y-1.5">`;
+        const diagList = [];
+        mistakesMade.forEach((val, key) => {
+          diagList.push(val.title);
+          html += `
+            <li class="bg-white p-2 rounded-lg border border-rose-100 shadow-2xs">
+              <span class="text-rose-600 font-bold">⚠️ ${val.title}</span><br>
+              <span class="text-slate-600 text-[11px]">${val.tip}</span>
+            </li>
+          `;
+        });
+        html += `</ul>`;
+        diagContainer.innerHTML = html;
+        diagBrief = `答错${grading.wrong}题，未答${grading.unanswered}题；` + diagList.slice(0, 2).join('、') + (diagList.length > 2 ? '等' : '');
+      }
+
+      document.getElementById('result-modal').classList.remove('hidden');
+
+      const subjectNameMap = { chinese: '语文', math: '数学', english: '英语' };
+
+      const newRecord = {
+        id: Date.now(),
+        grade: currentGrade,
+        semester: currentSemester,
+        subject: currentSubject,
+        subjectName: subjectNameMap[currentSubject] || '语文',
+        paperId: currentPaper.id,
+        student: currentStudent,
+        paper: currentPaper.title,
+        score: score,
+        ...(currentPaper.source ? { rawScore: grading.rawScore, maxScore: grading.maxScore, parentReviewed: grading.results.some(r => r.manual && !r.unanswered) } : {}),
+        timeSpent: timeStr,
+        date: new Date().toLocaleString('zh-CN', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }),
+        diagnostic: diagBrief,
+        badge: badge
+      };
+
+      const records = getRecords();
+      records.unshift(newRecord);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+      renderHistoryTable();
+    }
+
+    function closeModal() {
+      document.getElementById('result-modal').classList.add('hidden');
+    }
+
+    function resetAndRestart() {
+      closeModal();
+      resetAll();
+    }
+
+    function getRecords() {
+      try {
+        const data = localStorage.getItem(STORAGE_KEY);
+        return data ? JSON.parse(data) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    let currentFilter = '全部';
+    function filterRecords(name) {
+      currentFilter = name;
+      renderHistoryTable();
+    }
+
+    function renderHistoryTable() {
+      const records = getRecords();
+      const tbody = document.getElementById('history-table-body');
+      const emptyHint = document.getElementById('empty-record-hint');
+      tbody.innerHTML = '';
+
+      const filtered = records.filter(r => currentFilter === '全部' || r.student === currentFilter);
+
+      if (filtered.length === 0) {
+        emptyHint.classList.remove('hidden');
+      } else {
+        emptyHint.classList.add('hidden');
+        filtered.forEach(r => {
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-amber-50/40 transition';
+          const recGrade = Number(r.grade || 1);
+          const recSem = Number(r.semester || 1);
+          const semBadge = (recGrade === 2 && recSem === 2)
+            ? '<span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700 font-bold ml-1">二年级下</span>'
+            : recGrade === 2 
+            ? '<span class="text-[10px] px-1.5 py-0.5 rounded bg-indigo-100 text-indigo-700 font-bold ml-1">二年级上</span>' 
+            : (recSem === 2)
+            ? '<span class="text-[10px] px-1 py-0.5 rounded bg-purple-100 text-purple-700 font-bold ml-1">一年级下</span>' 
+            : '<span class="text-[10px] px-1 py-0.5 rounded bg-amber-100 text-amber-700 font-bold ml-1">一年级上</span>';
+          tr.innerHTML = `
+            <td class="p-3 font-bold ${r.student === '乐乐' ? 'text-amber-800' : 'text-purple-800'}">
+              ${r.student === '乐乐' ? '👦 乐乐' : '👧 月亮'}
+            </td>
+            <td class="p-3 font-bold text-xs ${r.subject === 'math' ? 'text-blue-600' : r.subject === 'english' ? 'text-emerald-600' : 'text-amber-600'}">
+              ${r.subjectName || '语文'} ${semBadge}
+            </td>
+            <td class="p-3 font-medium text-slate-700">${r.paper}</td>
+            <td class="p-3 font-black text-rose-600">${r.score} 分</td>
+            <td class="p-3 font-mono text-slate-600">${r.timeSpent}</td>
+            <td class="p-3 text-slate-400 text-xs">${r.date}</td>
+            <td class="p-3 text-xs text-rose-600 font-medium max-w-xs truncate" title="${r.diagnostic || ''}">${r.diagnostic || '无'}</td>
+            <td class="p-3 font-medium text-amber-700">${r.badge}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    }
+
+    function clearHistory() {
+      if (confirm('确定要清空历史成绩榜记录吗？')) {
+        localStorage.removeItem(STORAGE_KEY);
+        renderHistoryTable();
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', initPage);
+  </script>
+</body>
+</html>

@@ -59,13 +59,23 @@ const base = import.meta.env.BASE_URL
         })}
       </div>
 
-      <div style="display: flex; align-items: center; gap: 0.5rem;">
+      <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
         <button id="tab-btn-map" class="view-tab-btn active" style={`padding: 0.4rem 0.9rem; border-radius: 0.6rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: 1px solid ${currentGrade.themeColor}; background: #ecfdf5; color: ${currentGrade.themeColor};`}>
           🗺️ 动态交互脑图
         </button>
         <button id="tab-btn-words" class="view-tab-btn" style="padding: 0.4rem 0.9rem; border-radius: 0.6rem; font-size: 0.85rem; font-weight: 600; cursor: pointer; border: 1px solid #cbd5e1; background: #fff; color: #475569;">
           📜 学段核心清单与数学思想大典
         </button>
+        {currentGrade.id === 'grade1' && (
+          <a
+            href={`${base}exercises/index.html?grade=1&semester=1&subject=math`}
+            style="padding: 0.4rem 0.9rem; border-radius: 0.6rem; font-size: 0.85rem; font-weight: bold; text-decoration: none; border: 1px solid #f43f5e; background: #fff1f2; color: #e11d48; display: inline-flex; align-items: center; gap: 0.35rem; transition: all 0.2s;"
+            title="进入一年级数学全真大考场（含名校阅读理解与审题突破卷）"
+          >
+            <span>📝 一上大考场 (含审题突破)</span>
+            <span>→</span>
+          </a>
+        )}
       </div>
     </div>
 

@@ -2,11 +2,11 @@ import fs from 'fs';
 import path from 'path';
 import { chromium } from 'playwright';
 
-const brainDir = 'C:/Users/liwei/.gemini/antigravity/brain/77e928f4-e97c-4d6f-85ae-2299355652a6';
+const brainDir = fs.existsSync('public/exercises/math_data.js') ? path.resolve('public/exercises') : 'C:/Users/liwei/.gemini/antigravity/brain/77e928f4-e97c-4d6f-85ae-2299355652a6';
 
 // 1. 数据完整性静态校验
 console.log('=====================================================');
-console.log('🔍 阶段一：66 套试卷底层数据结构与 100 分满分严谨性静态校验');
+console.log('🔍 阶段一：全真大试卷底层数据结构与 100 分满分严谨性静态校验');
 console.log('=====================================================');
 
 // 动态载入数据文件 (由于在浏览器环境使用 window.XXX，在 Node 下通过模拟 window 读取)
@@ -23,7 +23,7 @@ const mathDb = loadDatabase('math_data.js', 'MATH_DATABASE');
 const englishDb = loadDatabase('english_data.js', 'ENGLISH_DATABASE');
 
 console.log(`✓ 语文数据文件解析成功: ${chineseDb.length} 套大卷 (预期: 30套)`);
-console.log(`✓ 数学数据文件解析成功: ${mathDb.length} 套大卷 (预期: 20套)`);
+console.log(`✓ 数学数据文件解析成功: ${mathDb.length} 套大卷 (预期: 40套)`);
 console.log(`✓ 英语数据文件解析成功: ${englishDb.length} 套大卷 (预期: 16套)`);
 
 let totalErrors = 0;

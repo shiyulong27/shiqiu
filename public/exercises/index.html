@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小学一至二年级 · 四学期语数英全科通关大考场（含原卷练习）</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <!-- 一年级上册数据 (66套) -->
+  <script src="quiz_data.js"></script>
+  <script src="math_data.js"></script>
+  <script src="original_papers.js"></script>
+  <script src="english_data.js"></script>
+  <!-- 一年级下册数据 (66套) -->
+  <script src="quiz_data_g1s2.js"></script>
+  <script src="math_data_g1s2.js"></script>
+  <script src="english_data_g1s2.js"></script>
+  <!-- 二年级上册数据 (66套) -->
+  <script src="quiz_data_g2s1.js"></script>
+  <script src="math_data_g2s1.js"></script>
+  <script src="english_data_g2s1.js"></script>
+  <!-- 二年级下册数据 (66套) -->
+  <script src="quiz_data_g2s2.js"></script>
+  <script src="math_data_g2s2.js"></script>
+  <script src="english_data_g2s2.js"></script>
+  <style>
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-amber-50/40 text-slate-800 p-3 sm:p-8 antialiased min-h-screen">
+  <div class="max-w-6xl mx-auto space-y-6 sm:space-y-8">
+    <a href="../" class="inline-flex text-sm font-bold text-amber-800 hover:underline">← 返回十丘首页</a>
+    
+    <!-- 顶部综合控制台：学段学期切换 + 学员选择 -->
+    <div class="flex flex-wrap items-center justify-between gap-3 bg-white/90 backdrop-blur-md p-3 sm:p-4 rounded-3xl border border-amber-200 shadow-sm">
+      <!-- 四学段胶囊无缝切换 -->
+      <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+        <span class="text-xs font-black text-slate-500 hidden sm:inline">选择学期：</span>
+        <button id="btn-stage-g1s1" onclick="switchStage(1, 1)" class="px-3 sm:px-4 py-2 rounded-2xl text-xs sm:text-sm font-black transition flex items-center gap-1 shadow-sm bg-amber-500 text-white border-2 border-amber-400">
+          <span>🎒</span> 一上 <span id="stage-count-g1s1" class="bg-amber-600/70 px-1.5 py-0.2 rounded-full text-[11px]">96套</span>
+        </button>
+        <button id="btn-stage-g1s2" onclick="switchStage(1, 2)" class="px-3 sm:px-4 py-2 rounded-2xl text-xs sm:text-sm font-black transition flex items-center gap-1 bg-white text-slate-700 hover:bg-slate-50 border-2 border-slate-200">
+          <span>🎒</span> 一下 <span class="bg-purple-100 text-purple-800 px-1.5 py-0.2 rounded-full text-[11px]">66套</span>
+        </button>
+        <button id="btn-stage-g2s1" onclick="switchStage(2, 1)" class="px-3 sm:px-4 py-2 rounded-2xl text-xs sm:text-sm font-black transition flex items-center gap-1 bg-white text-slate-700 hover:bg-slate-50 border-2 border-slate-200">
+          <span>🌟</span> 二上 <span class="bg-indigo-100 text-indigo-800 px-1.5 py-0.2 rounded-full text-[11px]">66套</span>
+        </button>
+        <button id="btn-stage-g2s2" onclick="switchStage(2, 2)" class="px-3 sm:px-4 py-2 rounded-2xl text-xs sm:text-sm font-black transition flex items-center gap-1 bg-white text-slate-700 hover:bg-slate-50 border-2 border-slate-200">
+          <span>🌟</span> 二下 <span class="bg-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded-full text-[11px]">66套</span>
+        </button>
+      </div>
+
+      <!-- 答题人员切换器与错题本 -->
+      <div class="flex items-center gap-2">
+        <span class="text-xs font-black text-slate-500 hidden sm:inline">答题小勇士：</span>
+        <div class="bg-slate-100 p-1 rounded-2xl border border-slate-200 flex items-center gap-1">
+          <button id="hub-btn-lele" onclick="switchStudent('乐乐')" class="px-3 sm:px-4 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition bg-amber-500 text-white shadow-xs">
+            👦 乐乐
+          </button>
+          <button id="hub-btn-yueliang" onclick="switchStudent('月亮')" class="px-3 sm:px-4 py-1.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-amber-700 transition">
+            👧 月亮
+          </button>
+        </div>
+        <button onclick="openMistakeVault()" class="px-3 sm:px-3.5 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-300 rounded-2xl text-xs sm:text-sm font-bold transition flex items-center gap-1.5 shadow-2xs">
+          <span>📖</span> 错题本 <span id="hub-mistake-count" class="bg-rose-500 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 三大主科考场切换导航 -->
+    <div class="flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar py-1">
+      <button id="tab-subject-chinese" onclick="switchSubject('chinese')" class="px-4 sm:px-6 py-2.5 sm:py-3 rounded-2xl text-xs sm:text-sm font-black transition flex items-center gap-2 shadow-md bg-amber-500 text-white border-2 border-amber-400">
+        <span>📕</span> 语文考场 <span id="badge-count-chinese" class="bg-amber-600/60 px-2 py-0.5 rounded-full text-xs">30套</span>
+      </button>
+      <button id="tab-subject-math" onclick="switchSubject('math')" class="px-4 sm:px-6 py-2.5 sm:py-3 rounded-2xl text-xs sm:text-sm font-black transition flex items-center gap-2 bg-white text-slate-700 hover:bg-indigo-50 border-2 border-slate-200">
+        <span>📐</span> 数学考场 <span id="badge-count-math" class="bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded-full text-xs">40套</span>
+      </button>
+      <button id="tab-subject-english" onclick="switchSubject('english')" class="px-4 sm:px-6 py-2.5 sm:py-3 rounded-2xl text-xs sm:text-sm font-black transition flex items-center gap-2 bg-white text-slate-700 hover:bg-emerald-50 border-2 border-slate-200">
+        <span>🔤</span> 英语考场 <span id="badge-count-english" class="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full text-xs">16套</span>
+      </button>
+    </div>
+
+    <!-- 顶部大头图看板（随学段与科目动态换色） -->
+    <div id="hero-banner" class="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden transition-all duration-300">
+      <div id="hero-bg-emoji" class="absolute -right-8 -bottom-8 opacity-15 text-9xl select-none">🎒</div>
+      
+      <div class="relative z-10">
+        <div>
+          <span id="hero-badge" class="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-xs text-amber-100 text-xs px-3 py-1 rounded-full font-bold">
+            <span>✨</span> 统编人教版 · 一年级上册全册
+          </span>
+          <h1 id="hero-title" class="text-2xl sm:text-4xl font-black mt-2 flex items-center gap-2.5">
+            <span>🏆</span> 30 套全真语文通关大考场 (上册)
+          </h1>
+          <p id="hero-desc" class="text-amber-100 text-xs sm:text-sm mt-1 max-w-2xl leading-relaxed">
+            专为 <strong>乐乐</strong> 与 <strong>月亮</strong> 定制 · 识字/拼音/课文/期末全覆盖 · 智能查漏补缺 · 一键电脑作答或 A4 纸质打印
+          </p>
+        </div>
+
+        <!-- 实时学习看板 -->
+        <div class="mt-8 grid grid-cols-2 sm:grid-cols-4 gap-3 text-slate-800">
+          <div class="bg-white/95 rounded-2xl p-3.5 shadow-sm">
+            <div class="text-[11px] text-slate-500 font-medium">已通关大卷</div>
+            <div class="text-xl sm:text-2xl font-black text-amber-600 mt-0.5" id="stat-completed">0 <span class="text-xs font-normal text-slate-400">/ 30 套</span></div>
+          </div>
+          <div class="bg-white/95 rounded-2xl p-3.5 shadow-sm">
+            <div class="text-[11px] text-slate-500 font-medium">已获星星数</div>
+            <div class="text-xl sm:text-2xl font-black text-amber-500 mt-0.5" id="stat-stars">0 <span class="text-xs font-normal text-slate-400">/ 150 ⭐</span></div>
+          </div>
+          <div class="bg-white/95 rounded-2xl p-3.5 shadow-sm">
+            <div class="text-[11px] text-slate-500 font-medium">平均测试得分</div>
+            <div class="text-xl sm:text-2xl font-black text-rose-600 mt-0.5" id="stat-avg">0 <span class="text-xs font-normal text-slate-400">分</span></div>
+          </div>
+          <div class="bg-white/95 rounded-2xl p-3.5 shadow-sm">
+            <div class="text-[11px] text-slate-500 font-medium">知识薄弱项诊断</div>
+            <div class="text-xs font-bold text-slate-700 mt-1 truncate" id="stat-weak">暂无失分，表现优异！</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 快速单元导航 Filter (动态渲染) -->
+    <div id="unit-filter-container" class="flex items-center gap-2 overflow-x-auto pb-2 text-xs font-bold text-slate-600 no-scrollbar">
+      <!-- 动态注入各单元 Filter 按钮 -->
+    </div>
+
+    <!-- 试卷卡片网格 -->
+    <div id="cards-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <!-- 动态注入试卷卡片 -->
+    </div>
+
+    <!-- 历史答题荣誉榜 -->
+    <div class="bg-white rounded-3xl border-2 border-amber-200 p-5 sm:p-6 shadow-sm">
+      <div class="flex flex-wrap justify-between items-center mb-4 gap-3">
+        <h3 class="text-lg font-black text-slate-800 flex items-center gap-2">
+          <span>🏆</span> 乐乐与月亮 · 历史总荣誉榜
+        </h3>
+        <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+          <!-- 学员筛选 -->
+          <button onclick="filterHistoryStudent('全部')" id="hfilter-stu-all" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500 text-white">全部学员</button>
+          <button onclick="filterHistoryStudent('乐乐')" id="hfilter-stu-lele" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">👦 乐乐</button>
+          <button onclick="filterHistoryStudent('月亮')" id="hfilter-stu-yueliang" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">👧 月亮</button>
+          <span class="text-slate-300">|</span>
+          <!-- 四学段筛选 -->
+          <button onclick="filterHistoryStage('全部')" id="hfilter-stage-all" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500 text-white">全部学段</button>
+          <button onclick="filterHistoryStage('g1s1')" id="hfilter-stage-g1s1" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">一年级上</button>
+          <button onclick="filterHistoryStage('g1s2')" id="hfilter-stage-g1s2" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">一年级下</button>
+          <button onclick="filterHistoryStage('g2s1')" id="hfilter-stage-g2s1" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">二年级上</button>
+          <button onclick="filterHistoryStage('g2s2')" id="hfilter-stage-g2s2" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">二年级下</button>
+          <span class="text-slate-300">|</span>
+          <!-- 学科筛选 -->
+          <button onclick="filterHistorySubject('全部')" id="hfilter-sub-all" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500 text-white">全部学科</button>
+          <button onclick="filterHistorySubject('chinese')" id="hfilter-sub-chinese" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">📕 语文</button>
+          <button onclick="filterHistorySubject('math')" id="hfilter-sub-math" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">📐 数学</button>
+          <button onclick="filterHistorySubject('english')" id="hfilter-sub-english" class="px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">🔤 英语</button>
+          <a href="record-merge.html" class="px-2.5 py-1 rounded-lg text-xs text-amber-800 hover:bg-amber-50 border border-amber-300 ml-1">备份与合并</a>
+          <button onclick="clearHistory()" class="px-2.5 py-1 rounded-lg text-xs text-rose-500 hover:bg-rose-50 border border-rose-200 ml-1">清空记录</button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto rounded-2xl border border-slate-200">
+        <table class="w-full text-left text-xs sm:text-sm">
+          <thead class="bg-amber-50/80 text-slate-700 font-bold border-b border-slate-200">
+            <tr>
+              <th class="p-3">答题人</th>
+              <th class="p-3">学段学期</th>
+              <th class="p-3">学科</th>
+              <th class="p-3">试卷名称</th>
+              <th class="p-3">最终得分</th>
+              <th class="p-3">答题用时</th>
+              <th class="p-3">交卷时间</th>
+              <th class="p-3">薄弱考点诊断</th>
+              <th class="p-3">获得荣誉</th>
+            </tr>
+          </thead>
+          <tbody id="history-table-body" class="divide-y divide-slate-100 text-slate-600"></tbody>
+        </table>
+      </div>
+      <p id="empty-record-hint" class="text-center text-xs text-slate-400 py-6 hidden">暂无交卷记录，快点击上方试卷开启第一次挑战吧！</p>
+    </div>
+
+  </div>
+
+  <script>
+    let currentGrade = 1;
+    let currentSemester = 1;
+    let currentSubject = 'chinese';
+    let currentStudent = '乐乐';
+    let currentUnitFilter = '全部';
+
+    let historyStudentFilter = '全部';
+    let historyStageFilter = '全部';
+    let historySubjectFilter = '全部';
+
+    const STORAGE_KEY = 'shiqiu_grade1_quiz_records';
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+
+    function getStageKey() {
+      if (currentGrade === 2) return currentSemester === 2 ? 'g2s2' : 'g2s1';
+      return currentSemester === 2 ? 'g1s2' : 'g1s1';
+    }
+
+    const STAGE_THEMES = {
+      g1s1: {
+        chinese: {
+          name: '语文',
+          badge: '统编人教版 · 一年级上册语文全册',
+          title: `${window.QUIZ_DATABASE.length} 套语文通关与原卷考场 (一年级上)`,
+          desc: '专为 乐乐 与 月亮 定制 · 识字/拼音/课文/期末全覆盖 · 智能查漏补缺 · 一键电脑作答或 A4 纸质打印',
+          emoji: '📖',
+          gradient: 'from-amber-500 via-orange-500 to-amber-600',
+          activeBtnBg: 'bg-amber-500 text-white border-amber-400',
+          activeFilterBg: 'bg-amber-500 text-white shadow-xs',
+          statColor: 'text-amber-600',
+          cardBtn: 'bg-amber-500 hover:bg-amber-600'
+        },
+        math: {
+          name: '数学',
+          badge: '人教版练习 + 北师大版原卷 · 一年级上册数学',
+          title: `${window.MATH_DATABASE.length} 套数学通关与原卷考场 (一年级上)`,
+          desc: `专为 乐乐 与 月亮 定制 · 基础夯实 20 套 + 思维培优进阶 20 套 + 北师大版原题 ${window.ORIGINAL_PAPERS.math.length} 套 · 智能查漏补缺 · 一键电脑作答或 A4 纸质打印`,
+          emoji: '📐',
+          gradient: 'from-indigo-600 via-blue-600 to-sky-600',
+          activeBtnBg: 'bg-indigo-600 text-white border-indigo-500',
+          activeFilterBg: 'bg-indigo-600 text-white shadow-xs',
+          statColor: 'text-indigo-600',
+          cardBtn: 'bg-indigo-600 hover:bg-indigo-700'
+        },
+        english: {
+          name: '英语',
+          badge: '人教新起点 · 一年级上册英语全册',
+          title: '16 套趣味英语通关大考场 (一年级上)',
+          desc: '专为 乐乐 与 月亮 定制 · 文具/五官/动物/数字/颜色/水果生活交际 · 智能查漏补缺 · 一键电脑作答或 A4 纸质打印',
+          emoji: '🔤',
+          gradient: 'from-emerald-600 via-teal-600 to-green-600',
+          activeBtnBg: 'bg-emerald-600 text-white border-emerald-500',
+          activeFilterBg: 'bg-emerald-600 text-white shadow-xs',
+          statColor: 'text-emerald-600',
+          cardBtn: 'bg-emerald-600 hover:bg-emerald-700'
+        }
+      },
+      g1s2: {
+        chinese: {
+          name: '语文',
+          badge: '统编人教版 · 一年级下册语文全册',
+          title: '30 套全真语文通关大考场 (一年级下)',
+          desc: '专为 乐乐 与 月亮 定制 · 春夏秋冬/小青蛙/偏旁归类/童谣/动物王国/期末冲刺 · 智能查漏补缺 · 一键电脑作答或 A4 纸质打印',
+          emoji: '🌸',
+          gradient: 'from-rose-500 via-pink-500 to-amber-500',
+          activeBtnBg: 'bg-rose-500 text-white border-rose-400',
+          activeFilterBg: 'bg-rose-500 text-white shadow-xs',
+          statColor: 'text-rose-600',
+          cardBtn: 'bg-rose-500 hover:bg-rose-600'
+        },
+        math: {
+          name: '数学',
+          badge: '人教版 · 一年级下册数学全册',
+          title: '20 套全真数学通关大考场 (一年级下)',
+          desc: '专为 乐乐 与 月亮 定制 · 认识图形(二)/20以内退位减/分类整理/100以内数与加减/认识人民币/找规律 · 智能查漏补缺 · 一键电脑作答或 A4 纸质打印',
+          emoji: '📐',
+          gradient: 'from-indigo-600 via-purple-600 to-pink-600',
+          activeBtnBg: 'bg-indigo-600 text-white border-indigo-500',
+          activeFilterBg: 'bg-indigo-600 text-white shadow-xs',
+          statColor: 'text-indigo-600',
+          cardBtn: 'bg-indigo-600 hover:bg-indigo-700'
+        },
+        english: {
+          name: '英语',
+          badge: '人教新起点 · 一年级下册英语全册',
+          title: '16 套趣味英语通关大考场 (一年级下)',
+          desc: '专为 乐乐 与 月亮 定制 · Classroom/Room/Toys/Food/Drinks/Clothes · 智能查漏补缺 · 一键电脑作答或 A4 纸质打印',
+          emoji: '🎒',
+          gradient: 'from-teal-600 via-emerald-600 to-cyan-600',
+          activeBtnBg: 'bg-teal-600 text-white border-teal-500',
+          activeFilterBg: 'bg-teal-600 text-white shadow-xs',
+          statColor: 'text-teal-600',
+          cardBtn: 'bg-teal-600 hover:bg-teal-700'
+        }
+      },
+      g2s1: {
+        chinese: {
+          name: '语文',
+          badge: '统编人教版 · 二年级上册语文全册',
+          title: '30 套全真语文通关大考场 (二年级上)',
+          desc: '专为 乐乐 与 月亮 定制 · 小蝌蚪/我是什么/部首查字法/曹冲称象/名胜古迹/智慧寓言/伟人事迹/期末冲刺 · 智能查漏补缺 · 一键电脑作答或 A4 纸质打印',
+          emoji: '📖',
+          gradient: 'from-amber-600 via-orange-600 to-rose-600',
+          activeBtnBg: 'bg-amber-600 text-white border-amber-500',
+          activeFilterBg: 'bg-amber-600 text-white shadow-xs',
+          statColor: 'text-amber-700',
+          cardBtn: 'bg-amber-600 hover:bg-amber-700'
+        },
+        math: {
+          name: '数学',
+          badge: '人教版 · 二年级上册数学全册',
+          title: '20 套全真数学通关大考场 (二年级上)',
+          desc: '专为 乐乐 与 月亮 定制 · 长度单位(米/厘米)/100以内笔算竖式/角的初步认识/表内乘法口诀(2~9)/认识时间/搭配推理 · 智能查漏补缺 · 一键电脑作答或 A4 纸质打印',
+          emoji: '📐',
+          gradient: 'from-blue-600 via-indigo-600 to-violet-700',
+          activeBtnBg: 'bg-indigo-600 text-white border-indigo-500',
+          activeFilterBg: 'bg-indigo-600 text-white shadow-xs',
+          statColor: 'text-indigo-600',
+          cardBtn: 'bg-indigo-600 hover:bg-indigo-700'
+        },
+        english: {
+          name: '英语',
+          badge: '人教新起点 · 二年级上册英语全册',
+          title: '16 套趣味英语通关大考场 (二年级上)',
+          desc: '专为 乐乐 与 月亮 定制 · Family/Boys and Girls/Parks/In the Community/Streets/Happy Holidays · 智能查漏补缺 · 一键电脑作答或 A4 纸质打印',
+          emoji: '🔤',
+          gradient: 'from-emerald-600 via-teal-700 to-cyan-700',
+          activeBtnBg: 'bg-emerald-600 text-white border-emerald-500',
+          activeFilterBg: 'bg-emerald-600 text-white shadow-xs',
+          statColor: 'text-emerald-600',
+          cardBtn: 'bg-emerald-600 hover:bg-emerald-700'
+        }
+      },
+      g2s2: {
+        chinese: {
+          name: '语文',
+          badge: '统编人教版 · 二年级下册语文全册',
+          title: '30 套全真语文通关大考场 (二年级下)',
+          desc: '专为 乐乐 与 月亮 定制 · 春回大地/雷锋奉献/传统文化美食/童心童趣/寓言哲理/大自然秘密/神话溯源 · 智能查漏补缺 · 一键电脑作答或 A4 纸质打印',
+          emoji: '🌸',
+          gradient: 'from-emerald-600 via-teal-600 to-cyan-700',
+          activeBtnBg: 'bg-emerald-600 text-white border-emerald-500',
+          activeFilterBg: 'bg-emerald-600 text-white shadow-xs',
+          statColor: 'text-emerald-700',
+          cardBtn: 'bg-emerald-600 hover:bg-emerald-700'
+        },
+        math: {
+          name: '数学',
+          badge: '人教版 · 二年级下册数学全册',
+          title: '20 套全真数学通关大考场 (二年级下)',
+          desc: '专为 乐乐 与 月亮 定制 · 数据收集/表内除法(一二)/图形平移旋转/两步脱式混合运算/有余数除法/万以内数/克与千克 · 智能查漏补缺 · 一键电脑作答或 A4 纸质打印',
+          emoji: '📐',
+          gradient: 'from-indigo-600 via-purple-600 to-pink-600',
+          activeBtnBg: 'bg-indigo-600 text-white border-indigo-500',
+          activeFilterBg: 'bg-indigo-600 text-white shadow-xs',
+          statColor: 'text-indigo-600',
+          cardBtn: 'bg-indigo-600 hover:bg-indigo-700'
+        },
+        english: {
+          name: '英语',
+          badge: '人教新起点 · 二年级下册英语全册',
+          title: '16 套趣味英语通关大考场 (二年级下)',
+          desc: '专为 乐乐 与 月亮 定制 · Playtime/Weather/Seasons/Time/My Day/My Week · 智能查漏补缺 · 一键电脑作答或 A4 纸质打印',
+          emoji: '⚽',
+          gradient: 'from-sky-600 via-blue-600 to-indigo-600',
+          activeBtnBg: 'bg-sky-600 text-white border-sky-500',
+          activeFilterBg: 'bg-sky-600 text-white shadow-xs',
+          statColor: 'text-sky-600',
+          cardBtn: 'bg-sky-600 hover:bg-sky-700'
+        }
+      }
+    };
+
+    function getTheme() {
+      const key = getStageKey();
+      const stageObj = STAGE_THEMES[key] || STAGE_THEMES['g1s1'];
+      return stageObj[currentSubject] || stageObj['chinese'];
+    }
+
+    function getActiveDatabase() {
+      if (currentGrade === 2 && currentSemester === 2) {
+        if (currentSubject === 'math') return window.MATH_DATABASE_G2S2 || [];
+        if (currentSubject === 'english') return window.ENGLISH_DATABASE_G2S2 || [];
+        return window.QUIZ_DATABASE_G2S2 || [];
+      }
+      if (currentGrade === 2) {
+        if (currentSubject === 'math') return window.MATH_DATABASE_G2S1 || [];
+        if (currentSubject === 'english') return window.ENGLISH_DATABASE_G2S1 || [];
+        return window.QUIZ_DATABASE_G2S1 || [];
+      }
+      if (currentSemester === 2) {
+        if (currentSubject === 'math') return window.MATH_DATABASE_G1S2 || [];
+        if (currentSubject === 'english') return window.ENGLISH_DATABASE_G1S2 || [];
+        return window.QUIZ_DATABASE_G1S2 || [];
+      }
+      if (currentSubject === 'math') return window.MATH_DATABASE || [];
+      if (currentSubject === 'english') return window.ENGLISH_DATABASE || [];
+      return window.QUIZ_DATABASE || [];
+    }
+
+    function getRecords() {
+      try {
+        const data = localStorage.getItem(STORAGE_KEY);
+        return data ? JSON.parse(data) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function parseQueryParams() {
+      const params = new URLSearchParams(window.location.search);
+      const stage = params.get('stage');
+      const g = parseInt(params.get('grade'));
+      const sem = parseInt(params.get('semester'));
+
+      if (stage === 'g2s2' || (g === 2 && sem === 2) || sem === 4) {
+        currentGrade = 2;
+        currentSemester = 2;
+      } else if (stage === 'g2s1' || g === 2 || sem === 3) {
+        currentGrade = 2;
+        currentSemester = 1;
+      } else if (stage === 'g1s2' || sem === 2) {
+        currentGrade = 1;
+        currentSemester = 2;
+      } else {
+        currentGrade = 1;
+        currentSemester = 1;
+      }
+
+      const sub = params.get('subject');
+      if (sub && ['chinese', 'math', 'english'].includes(sub)) {
+        currentSubject = sub;
+      }
+      const stu = params.get('student');
+      if (stu && ['乐乐', '月亮'].includes(stu)) {
+        currentStudent = stu;
+      }
+    }
+
+    function switchStage(grade, semester) {
+      currentGrade = grade;
+      currentSemester = semester;
+      currentUnitFilter = '全部';
+      updateStageButtonsUI();
+      updateSubjectTabsUI();
+      updateHeroBannerUI();
+      renderUnitFilters();
+      renderDashboard();
+      renderCards();
+      renderHistoryTable();
+    }
+
+    function updateStageButtonsUI() {
+      const key = getStageKey();
+      const btnG1S1 = document.getElementById('btn-stage-g1s1');
+      const btnG1S2 = document.getElementById('btn-stage-g1s2');
+      const btnG2S1 = document.getElementById('btn-stage-g2s1');
+      const btnG2S2 = document.getElementById('btn-stage-g2s2');
+
+      btnG1S1.className = key === 'g1s1'
+        ? 'px-3 sm:px-4 py-2 rounded-2xl text-xs sm:text-sm font-black transition flex items-center gap-1 shadow-sm bg-amber-500 text-white border-2 border-amber-400'
+        : 'px-3 sm:px-4 py-2 rounded-2xl text-xs sm:text-sm font-black transition flex items-center gap-1 bg-white text-slate-700 hover:bg-slate-50 border-2 border-slate-200';
+
+      btnG1S2.className = key === 'g1s2'
+        ? 'px-3 sm:px-4 py-2 rounded-2xl text-xs sm:text-sm font-black transition flex items-center gap-1 shadow-sm bg-purple-600 text-white border-2 border-purple-500'
+        : 'px-3 sm:px-4 py-2 rounded-2xl text-xs sm:text-sm font-black transition flex items-center gap-1 bg-white text-slate-700 hover:bg-slate-50 border-2 border-slate-200';
+
+      btnG2S1.className = key === 'g2s1'
+        ? 'px-3 sm:px-4 py-2 rounded-2xl text-xs sm:text-sm font-black transition flex items-center gap-1 shadow-sm bg-indigo-600 text-white border-2 border-indigo-500'
+        : 'px-3 sm:px-4 py-2 rounded-2xl text-xs sm:text-sm font-black transition flex items-center gap-1 bg-white text-slate-700 hover:bg-slate-50 border-2 border-slate-200';
+
+      btnG2S2.className = key === 'g2s2'
+        ? 'px-3 sm:px-4 py-2 rounded-2xl text-xs sm:text-sm font-black transition flex items-center gap-1 shadow-sm bg-emerald-600 text-white border-2 border-emerald-500'
+        : 'px-3 sm:px-4 py-2 rounded-2xl text-xs sm:text-sm font-black transition flex items-center gap-1 bg-white text-slate-700 hover:bg-slate-50 border-2 border-slate-200';
+    }
+
+    function switchSubject(sub) {
+      currentSubject = sub;
+      currentUnitFilter = '全部';
+      updateSubjectTabsUI();
+      updateHeroBannerUI();
+      renderUnitFilters();
+      renderDashboard();
+      renderCards();
+    }
+
+    function updateSubjectTabsUI() {
+      const theme = getTheme();
+      document.getElementById('stage-count-g1s1').innerText = `${window.QUIZ_DATABASE.length + window.MATH_DATABASE.length + window.ENGLISH_DATABASE.length}套`;
+      ['chinese', 'math', 'english'].forEach(sub => {
+        const btn = document.getElementById(`tab-subject-${sub}`);
+        const countBadge = document.getElementById(`badge-count-${sub}`);
+        
+        let count = 30;
+        if (sub === 'chinese') {
+          count = (currentGrade === 1 && currentSemester === 1) ? (window.QUIZ_DATABASE?.length || 30) : 30;
+        } else if (sub === 'math') {
+          count = (currentGrade === 1 && currentSemester === 1) ? (window.MATH_DATABASE?.length || 40) : 20;
+        } else if (sub === 'english') {
+          count = (currentGrade === 1 && currentSemester === 1) ? (window.ENGLISH_DATABASE?.length || 16) : 16;
+        }
+        countBadge.innerText = `${count}套`;
+
+        if (sub === currentSubject) {
+          btn.className = `px-4 sm:px-6 py-2.5 sm:py-3 rounded-2xl text-xs sm:text-sm font-black transition flex items-center gap-2 shadow-md ${theme.activeBtnBg} border-2`;
+        } else {
+          btn.className = 'px-4 sm:px-6 py-2.5 sm:py-3 rounded-2xl text-xs sm:text-sm font-black transition flex items-center gap-2 bg-white text-slate-700 hover:bg-slate-50 border-2 border-slate-200';
+        }
+      });
+    }
+
+    function updateHeroBannerUI() {
+      const theme = getTheme();
+      const banner = document.getElementById('hero-banner');
+      banner.className = `bg-gradient-to-r ${theme.gradient} rounded-3xl p-6 sm:p-10 text-white shadow-xl relative overflow-hidden transition-all duration-300`;
+      document.getElementById('hero-bg-emoji').innerText = theme.emoji;
+      document.getElementById('hero-badge').innerHTML = `<span>✨</span> ${theme.badge}`;
+      document.getElementById('hero-title').innerHTML = `<span>🏆</span> ${theme.title}`;
+      document.getElementById('hero-desc').innerHTML = theme.desc;
+    }
+
+    function switchStudent(name) {
+      currentStudent = name;
+      const btnLele = document.getElementById('hub-btn-lele');
+      const btnYueliang = document.getElementById('hub-btn-yueliang');
+
+      if (name === '乐乐') {
+        btnLele.className = 'px-3 sm:px-4 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition bg-amber-500 text-white shadow-xs';
+        btnYueliang.className = 'px-3 sm:px-4 py-1.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-amber-700 transition';
+      } else {
+        btnYueliang.className = 'px-3 sm:px-4 py-1.5 rounded-xl text-xs sm:text-sm font-bold transition bg-purple-600 text-white shadow-xs';
+        btnLele.className = 'px-3 sm:px-4 py-1.5 rounded-xl text-xs sm:text-sm font-bold text-slate-600 hover:text-amber-700 transition';
+      }
+      renderDashboard();
+      renderCards();
+      updateMistakeBadge();
+    }
+
+    function renderUnitFilters() {
+      const db = getActiveDatabase();
+      const container = document.getElementById('unit-filter-container');
+      container.innerHTML = '';
+
+      const uniqueUnits = ['全部', ...new Set(db.map(p => p.unit))];
+      const theme = getTheme();
+
+      uniqueUnits.forEach(unit => {
+        const count = unit === '全部' ? db.length : db.filter(p => p.unit === unit).length;
+        const btn = document.createElement('button');
+        btn.setAttribute('data-unit', unit);
+        btn.onclick = () => filterUnit(unit);
+
+        const isActive = currentUnitFilter === unit;
+        btn.className = isActive 
+          ? `unit-filter-btn px-4 py-2 rounded-xl ${theme.activeFilterBg} shrink-0`
+          : 'unit-filter-btn px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 shrink-0 text-slate-700';
+
+        let displayUnit = unit;
+        if (unit !== '全部') {
+          displayUnit = unit.replace(/^第.+?单元：/, '');
+        }
+
+        btn.innerText = `${displayUnit} (${count}套)`;
+        container.appendChild(btn);
+      });
+    }
+
+    function filterUnit(unit) {
+      currentUnitFilter = unit;
+      const theme = getTheme();
+      document.querySelectorAll('.unit-filter-btn').forEach(btn => {
+        if (btn.getAttribute('data-unit') === unit) {
+          btn.className = `unit-filter-btn px-4 py-2 rounded-xl ${theme.activeFilterBg} shrink-0`;
+        } else {
+          btn.className = 'unit-filter-btn px-4 py-2 rounded-xl bg-white border border-slate-200 hover:bg-slate-50 shrink-0 text-slate-700';
+        }
+      });
+      renderCards();
+    }
+
+    function renderDashboard() {
+      const db = getActiveDatabase();
+      const records = getRecords();
+      
+      // 按当前学生、当前学段、当前学科筛选
+      const studentSubjectRecords = records.filter(r => {
+        const matchStudent = r.student === currentStudent;
+        const recordSubject = r.subject || 'chinese';
+        const recordGrade = Number(r.grade || 1);
+        const recordSemester = Number(r.semester || 1);
+        return matchStudent && recordSubject === currentSubject && recordGrade === currentGrade && recordSemester === currentSemester;
+      });
+
+      const completedPaperIds = new Set(studentSubjectRecords.map(r => r.paperId || r.paper));
+      document.getElementById('stat-completed').innerHTML = `${completedPaperIds.size} <span class="text-xs font-normal text-slate-400">/ ${db.length} 套</span>`;
+
+      let totalStars = 0;
+      let totalScore = 0;
+      const mistakes = [];
+
+      studentSubjectRecords.forEach(r => {
+        totalScore += r.score;
+        totalStars += Math.floor(r.score / 20);
+        if (r.diagnostic && r.diagnostic !== '无' && r.diagnostic !== '无失分，基础完美！') {
+          mistakes.push(r.diagnostic);
+        }
+      });
+
+      document.getElementById('stat-stars').innerHTML = `${totalStars} <span class="text-xs font-normal text-slate-400">/ ${db.length * 5} ⭐</span>`;
+      
+      const avg = studentSubjectRecords.length > 0 ? Math.round(totalScore / studentSubjectRecords.length) : 0;
+      document.getElementById('stat-avg').innerHTML = `${avg} <span class="text-xs font-normal text-slate-400">分</span>`;
+
+      if (mistakes.length > 0) {
+        document.getElementById('stat-weak').innerText = `需复习：${mistakes[0]}`;
+        document.getElementById('stat-weak').className = 'text-xs font-bold text-rose-600 mt-1 truncate';
+      } else {
+        document.getElementById('stat-weak').innerText = studentSubjectRecords.length > 0 ? '表现优异，全卷掌握扎实！' : '尚未开始答题';
+        document.getElementById('stat-weak').className = 'text-xs font-bold text-emerald-600 mt-1 truncate';
+      }
+    }
+
+    function renderCards() {
+      const grid = document.getElementById('cards-grid');
+      grid.innerHTML = '';
+
+      const db = getActiveDatabase();
+      const records = getRecords();
+      const studentSubjectRecords = records.filter(r => {
+        const matchStudent = r.student === currentStudent;
+        const recordSubject = r.subject || 'chinese';
+        const recordGrade = Number(r.grade || 1);
+        const recordSemester = Number(r.semester || 1);
+        return matchStudent && recordSubject === currentSubject && recordGrade === currentGrade && recordSemester === currentSemester;
+      });
+
+      const filtered = db.filter(q => currentUnitFilter === '全部' || q.unit === currentUnitFilter);
+      const theme = getTheme();
+
+      filtered.forEach(paper => {
+        const record = studentSubjectRecords.find(r => (r.paperId && r.paperId === paper.id) || r.paper.includes(paper.title));
+
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-2xl border border-slate-200 p-5 shadow-xs hover:shadow-md transition flex flex-col justify-between';
+
+        let statusHtml = '';
+        if (record) {
+          const stars = '⭐'.repeat(Math.floor(record.score / 20));
+          statusHtml = `
+            <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-2.5 mb-4 flex justify-between items-center text-xs">
+              <div>
+                <span class="font-bold text-emerald-800">最高得分：${record.score}分</span>
+                <span class="text-slate-400 ml-1">(${record.timeSpent})</span>
+              </div>
+              <div>${stars}</div>
+            </div>
+          `;
+        } else {
+          statusHtml = `
+            <div class="bg-slate-50 border border-slate-200 rounded-xl p-2.5 mb-4 text-xs text-slate-400 flex justify-between items-center">
+              <span>⏳ ${currentStudent} 尚未作答</span>
+              <span class="text-amber-500 font-medium">满分100分</span>
+            </div>
+          `;
+        }
+
+        const quizHref = `quiz.html?grade=${currentGrade}&semester=${currentSemester}&subject=${currentSubject}&paper=${paper.id}`;
+
+        card.innerHTML = `
+          <div>
+            <div class="flex justify-between items-center gap-2 mb-2">
+              <span class="text-[11px] font-bold text-slate-400">${paper.unit}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-md font-bold ${paper.tagColor || 'bg-amber-100 text-amber-800'}">${paper.tag || '实战'}</span>
+            </div>
+            <h3 class="text-base font-black text-slate-900 mb-1 flex items-center gap-1.5">
+              <span>📝</span> ${paper.title}
+            </h3>
+            <p class="text-xs text-slate-500 mb-4 line-clamp-2">${paper.desc}</p>
+          </div>
+
+          <div>
+            ${statusHtml}
+            <div class="flex gap-2">
+              <a href="${quizHref}" class="flex-1 text-center py-2 ${theme.cardBtn} text-white rounded-xl text-xs font-bold transition shadow-2xs">
+                ${record ? '🔄 再次挑战' : '🚀 开始答题'}
+              </a>
+              <a href="${quizHref}" target="_blank" onclick="setTimeout(() => window.print(), 500)" class="px-3 py-2 bg-sky-50 hover:bg-sky-100 text-sky-700 border border-sky-200 rounded-xl text-xs font-bold transition flex items-center gap-1">
+                <span>🖨️</span> 打印
+              </a>
+            </div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    function filterHistoryStudent(name) {
+      historyStudentFilter = name;
+      updateHistoryFilterButtons();
+      renderHistoryTable();
+    }
+
+    function filterHistoryStage(stg) {
+      historyStageFilter = stg;
+      updateHistoryFilterButtons();
+      renderHistoryTable();
+    }
+
+    function filterHistorySubject(sub) {
+      historySubjectFilter = sub;
+      updateHistoryFilterButtons();
+      renderHistoryTable();
+    }
+
+    function updateHistoryFilterButtons() {
+      ['all', 'lele', 'yueliang'].forEach(k => {
+        const btn = document.getElementById(`hfilter-stu-${k}`);
+        const val = k === 'all' ? '全部' : k === 'lele' ? '乐乐' : '月亮';
+        btn.className = historyStudentFilter === val
+          ? 'px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500 text-white'
+          : 'px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200';
+      });
+
+      ['all', 'g1s1', 'g1s2', 'g2s1', 'g2s2'].forEach(k => {
+        const btn = document.getElementById(`hfilter-stage-${k}`);
+        const val = k === 'all' ? '全部' : k;
+        btn.className = historyStageFilter === val
+          ? 'px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500 text-white'
+          : 'px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200';
+      });
+
+      ['all', 'chinese', 'math', 'english'].forEach(k => {
+        const btn = document.getElementById(`hfilter-sub-${k}`);
+        const val = k === 'all' ? '全部' : k;
+        btn.className = historySubjectFilter === val
+          ? 'px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-500 text-white'
+          : 'px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 hover:bg-slate-200';
+      });
+    }
+
+    function renderHistoryTable() {
+      const records = getRecords();
+      const tbody = document.getElementById('history-table-body');
+      const emptyHint = document.getElementById('empty-record-hint');
+      tbody.innerHTML = '';
+
+      const filtered = records.filter(r => {
+        const matchStu = historyStudentFilter === '全部' || r.student === historyStudentFilter;
+        
+        const recGrade = Number(r.grade || 1);
+        const recSem = Number(r.semester || 1);
+        const recordStage = (recGrade === 2 && recSem === 2) ? 'g2s2' : (recGrade === 2 ? 'g2s1' : (recSem === 2 ? 'g1s2' : 'g1s1'));
+        const matchStage = historyStageFilter === '全部' || recordStage === historyStageFilter;
+
+        const recSub = r.subject || 'chinese';
+        const matchSub = historySubjectFilter === '全部' || recSub === historySubjectFilter;
+
+        return matchStu && matchStage && matchSub;
+      });
+
+      if (filtered.length === 0) {
+        emptyHint.classList.remove('hidden');
+      } else {
+        emptyHint.classList.add('hidden');
+        filtered.forEach(r => {
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-amber-50/40 transition';
+
+          const recGrade = Number(r.grade || 1);
+          const recSem = Number(r.semester || 1);
+          const stageBadge = (recGrade === 2 && recSem === 2)
+            ? '<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-xs">二年级下</span>'
+            : recGrade === 2
+            ? '<span class="px-2 py-0.5 rounded bg-indigo-100 text-indigo-800 font-bold text-xs">二年级上</span>'
+            : (recSem === 2)
+            ? '<span class="px-2 py-0.5 rounded bg-purple-100 text-purple-800 font-bold text-xs">一年级下</span>'
+            : '<span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold text-xs">一年级上</span>';
+
+          const recSub = r.subject || 'chinese';
+          const subBadge = recSub === 'math' 
+            ? '<span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold text-xs">📐 数学</span>'
+            : recSub === 'english'
+            ? '<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-xs">🔤 英语</span>'
+            : '<span class="px-2 py-0.5 rounded bg-amber-100 text-amber-800 font-bold text-xs">📕 语文</span>';
+
+          tr.innerHTML = `
+            <td class="p-3 font-bold ${r.student === '乐乐' ? 'text-amber-800' : 'text-purple-800'}">
+              ${r.student === '乐乐' ? '👦 乐乐' : '👧 月亮'}
+            </td>
+            <td class="p-3">${stageBadge}</td>
+            <td class="p-3">${subBadge}</td>
+            <td class="p-3 font-medium text-slate-700">${r.paper}</td>
+            <td class="p-3 font-black text-rose-600">${r.score} 分</td>
+            <td class="p-3 font-mono text-slate-600">${r.timeSpent}</td>
+            <td class="p-3 text-slate-400 text-xs">${r.date}</td>
+            <td class="p-3 text-xs text-rose-600 font-medium max-w-xs truncate" title="${r.diagnostic || ''}">${r.diagnostic || '无'}</td>
+            <td class="p-3 font-medium text-amber-700">${r.badge}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    }
+
+    function clearHistory() {
+      if (confirm('确定要清空历史成绩榜记录吗？')) {
+        localStorage.removeItem(STORAGE_KEY);
+        renderDashboard();
+        renderCards();
+        renderHistoryTable();
+      }
+    }
+
+    // 错题本（持久化到 LocalStorage）
+    const VAULT_STORAGE_KEY = 'shiqiu_mistake_vault';
+
+    function getMistakesFromVault() {
+      try {
+        const data = localStorage.getItem(VAULT_STORAGE_KEY);
+        return data ? JSON.parse(data) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function removeMistakeFromVault(id) {
+      const list = getMistakesFromVault();
+      const filtered = list.filter(item => item.id !== id);
+      localStorage.setItem(VAULT_STORAGE_KEY, JSON.stringify(filtered));
+    }
+
+    function clearAllVaultMistakes() {
+      if (confirm('确定要清空错题本中的所有错题记录吗？')) {
+        localStorage.removeItem(VAULT_STORAGE_KEY);
+        renderMistakeList();
+        updateMistakeBadge();
+      }
+    }
+
+    function updateMistakeBadge() {
+      const list = getMistakesFromVault();
+      const studentCount = list.filter(item => item.student === currentStudent).length;
+      const countEl = document.getElementById('hub-mistake-count');
+      if (countEl) countEl.innerText = studentCount;
+      const vaultCountEl = document.getElementById('hub-vault-count-text');
+      if (vaultCountEl) vaultCountEl.innerText = list.length;
+    }
+
+    let currentMistakeStudentFilter = '全部';
+
+    function openMistakeVault() {
+      currentMistakeStudentFilter = currentStudent || '全部';
+      const btnAll = document.getElementById('hmfilter-all');
+      const btnLele = document.getElementById('hmfilter-lele');
+      const btnYueliang = document.getElementById('hmfilter-yueliang');
+
+      [btnAll, btnLele, btnYueliang].forEach(b => { if (b) b.className = 'px-2.5 py-1 rounded-lg font-bold bg-slate-100 text-slate-700 hover:bg-slate-200'; });
+      if (currentMistakeStudentFilter === '全部' && btnAll) btnAll.className = 'px-2.5 py-1 rounded-lg font-bold bg-rose-500 text-white';
+      if (currentMistakeStudentFilter === '乐乐' && btnLele) btnLele.className = 'px-2.5 py-1 rounded-lg font-bold bg-amber-500 text-white';
+      if (currentMistakeStudentFilter === '月亮' && btnYueliang) btnYueliang.className = 'px-2.5 py-1 rounded-lg font-bold bg-purple-500 text-white';
+
+      renderMistakeList();
+      document.getElementById('hub-mistake-modal').classList.remove('hidden');
+    }
+
+    function closeMistakeVault() {
+      document.getElementById('hub-mistake-modal').classList.add('hidden');
+    }
+
+    function filterMistakeStudent(student) {
+      currentMistakeStudentFilter = student;
+      const btnAll = document.getElementById('hmfilter-all');
+      const btnLele = document.getElementById('hmfilter-lele');
+      const btnYueliang = document.getElementById('hmfilter-yueliang');
+
+      [btnAll, btnLele, btnYueliang].forEach(b => { if (b) b.className = 'px-2.5 py-1 rounded-lg font-bold bg-slate-100 text-slate-700 hover:bg-slate-200'; });
+      if (student === '全部' && btnAll) btnAll.className = 'px-2.5 py-1 rounded-lg font-bold bg-rose-500 text-white';
+      if (student === '乐乐' && btnLele) btnLele.className = 'px-2.5 py-1 rounded-lg font-bold bg-amber-500 text-white';
+      if (student === '月亮' && btnYueliang) btnYueliang.className = 'px-2.5 py-1 rounded-lg font-bold bg-purple-500 text-white';
+
+      renderMistakeList();
+    }
+
+    function renderMistakeList() {
+      const container = document.getElementById('hub-mistake-list-container');
+      if (!container) return;
+
+      const list = getMistakesFromVault();
+      const filtered = list.filter(m => currentMistakeStudentFilter === '全部' || m.student === currentMistakeStudentFilter);
+      
+      const countEl = document.getElementById('hub-vault-count-text');
+      if (countEl) countEl.innerText = filtered.length;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-10 space-y-2">
+            <div class="text-5xl">🎉</div>
+            <div class="font-bold text-slate-700 text-base">太棒啦！${currentMistakeStudentFilter === '全部' ? '' : currentMistakeStudentFilter}暂无错题记录</div>
+            <div class="text-xs text-slate-400">日常答题做错的题目会自动汇集在此，搞懂后随时移出！</div>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = filtered.map(m => `
+        <div class="bg-rose-50/40 border border-rose-200 rounded-2xl p-3.5 space-y-2.5 relative shadow-2xs">
+          <div class="flex flex-wrap justify-between items-center gap-2 text-xs">
+            <div class="flex items-center gap-1.5 flex-wrap">
+              <span class="font-bold px-2 py-0.5 rounded-full ${m.student === '乐乐' ? 'bg-amber-100 text-amber-900' : 'bg-purple-100 text-purple-900'}">${m.student === '乐乐' ? '👦 乐乐' : '👧 月亮'}</span>
+              <span class="bg-white border px-2 py-0.5 rounded-full text-slate-600 font-medium">${m.paperTitle || '专项练习卷'}</span>
+              <span class="text-slate-400 text-[10px]">${m.date || ''}</span>
+            </div>
+            <button onclick="solveMistake('${m.id}')" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1 shadow-2xs">
+              <span>✨</span> 我已搞懂(移出)
+            </button>
+          </div>
+
+          <div class="bg-white rounded-xl p-3 border border-rose-100 space-y-2">
+            <div class="font-bold text-slate-800 text-sm leading-snug">${m.prompt || m.title}</div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+              <div class="bg-rose-50 border border-rose-200 rounded-lg p-2 text-rose-900 flex items-center gap-1.5">
+                <span class="font-bold shrink-0">❌ 你的作答：</span>
+                <span class="font-black text-rose-700 truncate">${escapeHtml(m.userAnswer || '未作答')}</span>
+              </div>
+              <div class="bg-emerald-50 border border-emerald-200 rounded-lg p-2 text-emerald-900 flex items-center gap-1.5">
+                <span class="font-bold shrink-0">✅ 正确答案：</span>
+                <span class="font-black text-emerald-700 truncate">${m.correctAnswer || '无'}</span>
+              </div>
+            </div>
+
+            ${m.tip ? `
+              <div class="bg-amber-50/70 border border-amber-200 rounded-lg p-2 text-amber-950 text-xs flex items-start gap-1.5">
+                <span class="text-amber-600 font-bold shrink-0">💡 考点解析：</span>
+                <span class="text-slate-600 leading-relaxed">${m.tip}</span>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function solveMistake(id) {
+      removeMistakeFromVault(id);
+      renderMistakeList();
+      updateMistakeBadge();
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      parseQueryParams();
+      updateStageButtonsUI();
+      updateSubjectTabsUI();
+      updateHeroBannerUI();
+      renderUnitFilters();
+      renderDashboard();
+      renderCards();
+      renderHistoryTable();
+      updateMistakeBadge();
+    });
+  </script>
+
+  <!-- 错题本 / 错题库 专属弹窗 -->
+  <div id="hub-mistake-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 z-50 hidden no-print">
+    <div class="bg-white rounded-3xl border-4 border-rose-300 shadow-2xl max-w-2xl w-full p-5 sm:p-6 text-left transform scale-95 transition-all max-h-[90vh] flex flex-col">
+      <div class="flex justify-between items-center pb-3 border-b border-rose-100">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">📖</span>
+          <div>
+            <h3 class="text-lg sm:text-xl font-black text-slate-900 flex items-center gap-2">
+              错题本 · 查漏补缺攻坚库
+            </h3>
+            <p class="text-xs text-slate-500">做错的题目已自动收录，搞懂攻克后可移出</p>
+          </div>
+        </div>
+        <button onclick="closeMistakeVault()" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 font-bold flex items-center justify-center transition">✕</button>
+      </div>
+
+      <!-- 错题筛选与统计 -->
+      <div class="py-3 flex flex-wrap justify-between items-center gap-2 border-b border-slate-100 text-xs">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <button onclick="filterMistakeStudent('全部')" id="hmfilter-all" class="px-2.5 py-1 rounded-lg font-bold bg-rose-500 text-white">全部学员</button>
+          <button onclick="filterMistakeStudent('乐乐')" id="hmfilter-lele" class="px-2.5 py-1 rounded-lg font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">👦 乐乐</button>
+          <button onclick="filterMistakeStudent('月亮')" id="hmfilter-yueliang" class="px-2.5 py-1 rounded-lg font-bold bg-slate-100 text-slate-700 hover:bg-slate-200">👧 月亮</button>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-slate-500">待攻克：<strong id="hub-vault-count-text" class="text-rose-600 font-bold text-sm">0</strong> 道</span>
+          <button onclick="clearAllVaultMistakes()" class="text-slate-400 hover:text-rose-600 px-2 py-0.5 border border-slate-200 rounded text-[11px] transition">清空全部错题</button>
+        </div>
+      </div>
+
+      <!-- 错题卡片滚动区 -->
+      <div id="hub-mistake-list-container" class="flex-1 overflow-y-auto py-3 space-y-3.5 pr-1 text-xs sm:text-sm">
+        <!-- 动态注入错题卡片 -->
+      </div>
+
+      <!-- 底部关闭按钮 -->
+      <div class="pt-3 border-t border-slate-100 flex justify-end">
+        <button onclick="closeMistakeVault()" class="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-xl font-bold text-xs transition">
+          关闭
+        </button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

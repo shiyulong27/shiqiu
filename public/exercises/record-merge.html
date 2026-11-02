@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>答题记录备份与合并 · 十丘</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 24px 16px; background: #fffaf0; color: #283344; font: 16px/1.65 system-ui, sans-serif; }
+    main { max-width: 860px; margin: auto; }
+    h1 { font-size: 28px; line-height: 1.35; margin: 16px 0; }
+    h2 { font-size: 19px; margin: 0 0 12px; }
+    section { margin-top: 20px; padding: 22px; border: 1px solid #eed8ae; border-radius: 16px; background: white; }
+    a { color: #946019; }
+    p { margin: 10px 0; }
+    .muted { color: #647084; font-size: 14px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0; }
+    button { border: 1px solid #c8ccd2; border-radius: 9px; padding: 10px 15px; background: white; color: #283344; font: inherit; cursor: pointer; }
+    button.primary { color: white; background: #966014; border-color: #966014; font-weight: 650; }
+    button:disabled { cursor: default; opacity: .45; }
+    button:focus-visible, a:focus-visible, textarea:focus-visible { outline: 3px solid #428ad1; outline-offset: 3px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { text-align: left; padding: 10px 6px; border-bottom: 1px solid #e9e9e9; }
+    .table-wrap { overflow-x: auto; }
+    textarea { display: block; width: 100%; min-height: 130px; padding: 12px; margin-top: 10px; border: 1px solid #bec4cd; border-radius: 8px; font: 13px/1.6 monospace; }
+    #status { min-height: 48px; padding: 12px 16px; border-radius: 10px; background: #fff2d5; white-space: pre-wrap; }
+    #status.error { background: #fff0f0; color: #a32f2f; }
+    #status.success { background: #edf8ed; color: #245b35; }
+    summary { cursor: pointer; }
+    [hidden] { display: none !important; }
+    @media (max-width: 500px) { section { padding: 16px; } h1 { font-size: 24px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <a href="index.html">← 返回练习大厅</a>
+    <h1>答题记录备份与合并</h1>
+    <p>请在以前答题的同一个 Chrome、同一个用户配置中打开此页。先读取并预览，再把来源地址的成绩与错题本合入当前地址。</p>
+    <p class="muted">来源地址只读取。完全相同的记录去重，不同作答全部保留。合并前自动保存双方原始数据备份，读取或保存失败时停止合并。</p>
+    <div id="status" role="status" aria-live="polite">正在读取当前地址的记录……</div>
+
+    <section>
+      <h2>1. 读取来源地址，查看合并预览</h2>
+      <p>保存到：<strong id="current-origin"></strong></p>
+      <p>读取自：<strong id="source-origin"></strong></p>
+      <div class="actions">
+        <button id="read-peer" type="button">读取来源地址记录</button>
+        <button id="download-current" type="button">下载当前记录备份</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>记录</th><th>当前地址</th><th>来源 / 导入</th><th>合并后</th><th>新增</th></tr></thead>
+          <tbody id="counts"></tbody>
+        </table>
+      </div>
+      <p id="students" class="muted"></p>
+      <p class="muted">若读到 0 条，请先确认以前是用 <b>127.0.0.1</b> 还是 <b>localhost</b> 打开；它们也各自保存数据。<a id="other-host" hidden>切换到另一种地址检查</a>。跨主机名迁移时，请从有记录的地址下载备份，再到目标地址导入。</p>
+      <div class="actions">
+        <button id="download-preview" type="button" disabled>下载双方合并前备份</button>
+        <button id="merge" type="button" class="primary" disabled>备份并合并到当前地址</button>
+      </div>
+      <p class="muted">合并是一次迁移，后续答题请固定使用保存到的地址。它不会持续同步不同端口。</p>
+    </section>
+
+    <section>
+      <h2>2. 从备份文件导入</h2>
+      <label for="backup-file">选择本工具导出的 JSON 备份</label>
+      <p><input id="backup-file" type="file" accept="application/json,.json"></p>
+      <details>
+        <summary>也可以粘贴备份内容</summary>
+        <label for="backup-text" class="muted">备份 JSON</label>
+        <textarea id="backup-text" spellcheck="false" placeholder="在这里粘贴备份 JSON"></textarea>
+        <button id="preview-import" type="button">预览导入内容</button>
+      </details>
+      <p class="muted">导入会与当前记录合并。选择文件和预览都不会写入答题记录。</p>
+    </section>
+
+    <section>
+      <h2>3. 合并前的本地备份</h2>
+      <p class="muted">备份保存在当前浏览器、当前地址中；建议同时下载文件保存。恢复前会再次备份当前记录。</p>
+      <label for="backup-list">选择备份</label>
+      <select id="backup-list" style="max-width:100%;padding:8px"></select>
+      <div class="actions">
+        <button id="download-saved" type="button" disabled>下载选中的备份</button>
+        <button id="restore" type="button" disabled>恢复选中备份中的原始状态</button>
+      </div>
+    </section>
+  </main>
+  <script type="module" src="record-merge.js"></script>
+</body>
+</html>
