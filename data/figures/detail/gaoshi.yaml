@@ -1,0 +1,242 @@
+# 高适全景详卷（schema v1）
+schema_version: 1
+id: gaoshi
+
+profile:
+  courtesy_name: 达夫
+  art_name: ""
+  aliases: [高常侍, 渤海县侯]
+  gender: 男
+  ethnicity: 汉族
+  ancestry: 渤海蓨县（今河北景县）
+  birthplace: 沧州或宋州
+  death_place: 长安
+  offices: [封丘尉, 河西节度使掌书记, 淮南节度使, 彭州刺史, 蜀州刺史, 西川节度使, 刑部侍郎, 散骑常侍]
+  fields: [文学, 政治]
+  roles: [诗人, 政治家]
+  summary: 盛唐边塞诗派巨擘，与岑参并称「高岑」；中年与李白、杜甫同游梁宋吹台，安史之乱后奋起勤王，由一介布衣节节升迁至西川节度使、散骑常侍，为唐代诗人功名之冠。
+
+timeline:
+  - stage: 梁宋落拓与边塞求仕
+    stage_order: 1
+    title: 客居梁宋，耕钓自适
+    date:
+      text: 约735—744年之间
+      year: 735
+      range_end: 744
+      precision: 范围
+    place: 宋州（今河南商丘）
+    summary: 早年不事生产，落拓梁宋间，以求仕不遇而常感愤激；期间北游蓟门，感边塞军情作《燕歌行》。
+    source_ids: [src-jts-vol111, src-qts-gaoshi]
+  - stage: 梁宋落拓与边塞求仕
+    stage_order: 2
+    title: 吹台同游：李白、杜甫、高适梁宋订交
+    date:
+      text: 约744—745年
+      year: 744
+      range_end: 745
+      precision: 范围
+    place: 汴州（开封）与宋州吹台
+    summary: 李白赐金放还后东游梁宋，与杜甫、高适相会于开封吹台（古禹王台），纵酒登台怀古、赋诗唱和，结为盛唐诗坛最著名之三人挚交。
+    source_ids: [src-jts-vol111, src-qts-gaoshi]
+  - stage: 梁宋落拓与边塞求仕
+    stage_order: 3
+    title: 举有道科，授封丘尉后辞官入河西幕府
+    date:
+      text: 约749—754年
+      year: 749
+      range_end: 754
+      precision: 范围
+    place: 封丘、武威（河西）
+    summary: 举有道科中第授封丘尉，叹「拜迎长官心欲碎，鞭挞黎庶令人悲」而辞官；天宝十一载入哥舒翰河西幕府任掌书记，与岑参多有唱和。
+    source_ids: [src-jts-vol111]
+  - stage: 勤王显赫与西川政绩
+    stage_order: 4
+    title: 谏肃宗讨永王璘，出任淮南节度使
+    date:
+      text: 756—757年
+      year: 756
+      range_end: 757
+      precision: 范围
+    place: 灵武、扬州
+    summary: 安史之乱爆发后追随肃宗，陈永王璘必败之势，受赏识迁谏议大夫、淮南节度使。因曾上疏助肃宗平永王，与涉永王案被捕之李白形成命运分途。
+    source_ids: [src-jts-vol111]
+  - stage: 勤王显赫与西川政绩
+    stage_order: 5
+    title: 刺彭州、蜀州并镇西川，屡济成都草堂杜甫
+    date:
+      text: 759—764年
+      year: 759
+      range_end: 764
+      precision: 范围
+    place: 彭州、蜀州、成都
+    summary: 历任彭州、蜀州刺史，广德元年迁西川节度使；在蜀期间屡次写诗并馈赠钱米接济流寓成都草堂的杜甫。
+    source_ids: [src-jts-vol111, src-qts-dufu]
+  - stage: 勤王显赫与西川政绩
+    stage_order: 6
+    title: 入朝为刑部侍郎、散骑常侍，卒于长安
+    date:
+      text: 765年
+      year: 765
+      precision: 精确
+    place: 长安
+    summary: 永泰元年召还京师，授刑部侍郎、转左散骑常侍，进封渤海县侯，同年正月卒于长安。
+    source_ids: [src-jts-vol111]
+
+works:
+  - work_id: yange-xing
+    title: 燕歌行
+    genre: 七言歌行
+    date:
+      text: 约738年
+      year: 738
+      precision: 约
+    place: 蓟北幽燕一带
+    context: 感于开元末边将轻敌骄奢与士卒苦战而作，被誉为盛唐边塞诗第一压卷之作。
+    attribution: 确凿
+    excerpt: 汉家烟尘在东北，汉将辞家破残贼。男儿本自重横行，天子非常赐颜色。战士军前半死生，美人帐下犹歌舞！
+    text_display: excerpt
+    themes: [边塞, 战争]
+    source_ids: [src-qts-gaoshi]
+  - work_id: bie-dongda
+    title: 别董大二首（其一）
+    genre: 七言绝句
+    date:
+      text: 约747年
+      year: 747
+      precision: 约
+    place: 睢阳（今河南商丘）
+    context: 在宋州送别失意琴师董庭兰（董大），写出千古劝慰名句。
+    attribution: 确凿
+    excerpt: 千里黄云白日曛，北风吹雁雪纷纷。莫愁前路无知己，天下谁人不识君。
+    text_display: full
+    themes: [送别, 励志]
+    source_ids: [src-qts-gaoshi]
+  - work_id: fengqiu-zuo
+    title: 封丘作
+    genre: 五言古诗
+    date:
+      text: 约750年
+      year: 750
+      precision: 约
+    place: 封丘（今河南封丘）
+    context: 任封丘县尉时不满卑官折腰迎送与鞭挞百姓，抒发辞官之志。
+    attribution: 确凿
+    excerpt: 我本渔樵孟诸野，一生自是悠悠者。乍可狂歌草泽中，宁堪作吏风尘下！只言小邑无所为，公门百事皆有期。拜迎官长心欲碎，鞭挞黎庶令人悲。
+    text_display: full
+    themes: [仕途, 感怀]
+    source_ids: [src-qts-gaoshi]
+  - work_id: renri-ji-duer-shiyi
+    title: 人日寄杜二拾遗
+    genre: 七言古诗
+    date:
+      text: 761年
+      year: 761
+      precision: 精确
+    place: 蜀州（今四川崇州）
+    context: 上元二年人日（正月初七）任蜀州刺史时，寄诗怀念流寓成都草堂的挚友杜甫。
+    attribution: 确凿
+    excerpt: 人日题诗寄草堂，遥怜故人思故乡。柳条弄色不忍见，梅花满枝空断肠。身在南蕃无所预，心怀百忧复千虑。
+    text_display: full
+    themes: [怀友, 羁旅]
+    source_ids: [src-qts-gaoshi]
+
+footprints:
+  - name: 宋州吹台
+    modern_name: 河南省开封市禹王台 / 商丘
+    lng: null
+    lat: null
+    coord_precision: 县级
+    visit_date:
+      text: 约744—745年
+      year: 744
+      range_end: 745
+      precision: 范围
+    kind: 游历
+    route_order: 1
+    memorial_only: false
+    source_ids: [src-jts-vol111]
+  - name: 河西武威
+    modern_name: 甘肃省武威市
+    lng: null
+    lat: null
+    coord_precision: 县级
+    visit_date:
+      text: 约752—755年
+      year: 752
+      range_end: 755
+      precision: 范围
+    kind: 任职
+    route_order: 2
+    memorial_only: false
+    source_ids: [src-jts-vol111]
+  - name: 蜀州与成都
+    modern_name: 四川省崇州市、成都市
+    lng: null
+    lat: null
+    coord_precision: 县级
+    visit_date:
+      text: 759—764年
+      year: 759
+      range_end: 764
+      precision: 范围
+    kind: 任职
+    route_order: 3
+    memorial_only: false
+    source_ids: [src-jts-vol111]
+
+relations:
+  - relation_type: 挚友
+    target_id: libai
+    direction: 双向
+    period:
+      text: 744年同游梁宋，纵酒赋诗
+      year: 744
+      precision: 约
+    evidence: 天宝三载李白离京后，与高适、杜甫同游梁宋、登吹台怀古，此后各赴命运；李白因永王璘案下狱后，二人在政局上分途而情谊犹存。
+    source_ids: [src-jts-vol111]
+  - relation_type: 挚友
+    target_id: dufu
+    direction: 双向
+    period:
+      text: 744年梁宋初会至765年高适卒，二十余年交情不绝
+      year: 744
+      range_end: 765
+      precision: 范围
+    evidence: 与杜甫同游梁宋，入蜀后高适任彭州、蜀州刺史及西川节度使，多次寄诗并资济成都草堂杜甫；杜甫晚年作《追酬故高蜀州人日见寄》痛悼故人。
+    source_ids: [src-jts-vol111, src-qts-gaoshi]
+  - relation_type: 社群
+    target_id: cencan
+    direction: 双向
+    period:
+      text: 开元天宝至安史之乱时期，同为盛唐边塞诗代表
+      year: 744
+      range_end: 765
+      precision: 范围
+    evidence: 二人同入河西/西北幕府，诗风雄浑悲壮，世并称「高岑」。
+    source_ids: [src-qts-gaoshi]
+  - relation_type: 同僚
+    target_id: wangchangling
+    direction: 双向
+    period:
+      text: 开元天宝间曾于梁宋、旗亭画壁传说前后交游
+      year: 740
+      precision: 约
+    evidence: 高适曾与王昌龄、王之涣齐名同时，后世常并提盛唐边塞与绝句之交。
+    source_ids: [src-qts-gaoshi]
+
+reception:
+  - era: 同时代
+    evaluator: 杜甫
+    quote: 独步诗名在，只今谁与同。
+    text_display: excerpt
+    comment: 杜甫在《寄彭州高三十五使君适》与《追酬故高蜀州人日见寄》中推重高适诗名与患难真情。
+    source_ids: [src-qts-dufu]
+
+sources_used: [src-jts-vol111, src-qts-gaoshi, src-qts-dufu]
+
+version_notes:
+  created: 2026-11-12
+  last_reviewed: 2026-11-12
+  revisions:
+    - {date: 2026-11-12, note: 初版。补充高适年谱、代表作、足迹与李杜岑王关系网}

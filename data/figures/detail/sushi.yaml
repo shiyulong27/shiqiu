@@ -822,6 +822,35 @@ relations:
       precision: 范围
     evidence: 本传列秦观于轼所奖掖的一时文人之中待之如朋俦；秦观本传（宋史卷444）互证见苏轼于徐为赋黄楼轼以为有屈宋才，元祐初轼以贤良方正荐于朝；秦观死轼叹曰少游不幸死道路哀哉世岂复有斯人乎。苏门四学士中情谊最深者。
     source_ids: [src-songshi-vol338, src-songshi-vol444]
+  - relation_type: 亲属
+    target_id: suzhe
+    direction: 双向
+    period:
+      text: 1057年同榜进士，终生手足相依
+      year: 1057
+      range_end: 1101
+      precision: 范围
+    evidence: 苏洵次子苏辙字子由，嘉祐二年与兄苏轼同登进士第；乌台诗案中苏辙上书请以己官赎兄罪，贬雷州、循州期间兄弟聚首海南渡海相送，《水调歌头·明月几时有》即怀子由之作。
+    source_ids: [src-songshi-vol338, src-dongpoji]
+  - relation_type: 同僚
+    target_id: simaguang
+    direction: 双向
+    period:
+      text: 1069—1086年同属反对王安石新法阵营，元祐元年政见分歧
+      year: 1069
+      range_end: 1086
+      precision: 范围
+    evidence: 熙宁间二人皆反对王安石急进变法；然元祐初司马光欲尽废免役法复差役，苏轼力争免役法亦有便民处不可一概废罢，君子同道而和而不同。
+    source_ids: [src-songshi-vol338, src-songshi-vol336]
+  - relation_type: 论敌
+    target_id: caijing
+    direction: 双向
+    period:
+      text: 1102年崇宁间蔡京刊立元祐党人碑，名列苏轼为元祐奸党首
+      year: 1102
+      precision: 精确
+    evidence: 宋徽宗朝蔡京执政假托绍述新法，将苏轼、司马光等列为元祐党人刊碑禁毁诗文，致苏轼身后仍遭削官追贬。
+    source_ids: [src-songshi-vol338]
 
 reception:
   - era: 同时代

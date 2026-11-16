@@ -1,10 +1,12 @@
+# 唐代君主序列（公元 618–907 年；含武周时期武则天）
+
 - dynasty: tang
   temple_name: 唐高祖
   name: 李渊
   reign_start: "0618"
   reign_end: "0626"
   era_names: [武德]
-  note: 唐朝开国皇帝
+  note: 唐朝开国皇帝，平定群雄一统中原
   role: founder
   confidence: 确定
 
@@ -14,7 +16,34 @@
   reign_start: "0626"
   reign_end: "0649"
   era_names: [贞观]
-  note: 虚心纳谏，开创贞观之治
+  note: 虚心纳谏，任用房杜魏征，开创贞观之治
+  confidence: 确定
+
+- dynasty: tang
+  temple_name: 唐高宗
+  name: 李治
+  reign_start: "0649"
+  reign_end: "0683"
+  era_names: [永徽, 显庆, 龙朔, 麟德, 乾封, 总章, 咸亨, 上元, 仪凤, 调露, 永隆, 开耀, 永淳, 弘道]
+  note: 平定西突厥与高句丽，唐疆域达于极盛；晚年武后渐掌朝政
+  confidence: 确定
+
+- dynasty: tang
+  temple_name: 唐中宗（初立）
+  name: 李显
+  reign_start: "0683"
+  reign_end: "0684"
+  era_names: [嗣圣]
+  note: 高宗崩后即位，旋因欲重用韦后外戚被武则天废为庐陵王
+  confidence: 确定
+
+- dynasty: tang
+  temple_name: 唐睿宗（初立）
+  name: 李旦
+  reign_start: "0684"
+  reign_end: "0690"
+  era_names: [文明, 光宅, 垂拱, 永昌, 载初]
+  note: 居别殿不预政事，由皇太后武则天临朝称制
   confidence: 确定
 
 - dynasty: tang
@@ -23,7 +52,25 @@
   reign_start: "0690"
   reign_end: "0705"
   era_names: [天授, 如意, 长寿, 延载, 证圣, 天册万岁, 万岁登封, 万岁通天, 神功, 圣历, 久视, 大足, 长安]
-  note: 中国历史上唯一正统女皇帝，改国号为周
+  note: 中国历史上唯一正统女皇帝，改国号为周，重用狄仁杰、广开科举
+  confidence: 确定
+
+- dynasty: tang
+  temple_name: 唐中宗（复位）
+  name: 李显
+  reign_start: "0705"
+  reign_end: "0710"
+  era_names: [神龙, 景龙]
+  note: 神龙政变后复位，复唐国号，然韦后与安乐公主干政
+  confidence: 确定
+
+- dynasty: tang
+  temple_name: 唐睿宗（复位）
+  name: 李旦
+  reign_start: "0710"
+  reign_end: "0712"
+  era_names: [景云, 太极, 延和]
+  note: 唐隆政变后复位，二年后禅位于皇太子李隆基
   confidence: 确定
 
 - dynasty: tang
@@ -32,7 +79,124 @@
   reign_start: "0712"
   reign_end: "0756"
   era_names: [先天, 开元, 天宝]
-  note: 开创开元盛世，晚年安史之乱爆发
+  note: 任姚崇宋璟张九龄开创开元盛世，盛唐诗坛群星璀璨；晚年怠政安史之乱爆发
+  confidence: 确定
+
+- dynasty: tang
+  temple_name: 唐肃宗
+  name: 李亨
+  reign_start: "0756"
+  reign_end: "0762"
+  era_names: [至德, 乾元, 上元, 宝应]
+  note: 灵武即位平定安史之乱，任用郭子仪，杜甫曾任其左拾遗
+  confidence: 确定
+
+- dynasty: tang
+  temple_name: 唐代宗
+  name: 李豫
+  reign_start: "0762"
+  reign_end: "0779"
+  era_names: [广德, 永泰, 大历]
+  note: 彻底平定安史之乱，然藩镇割据与吐蕃入寇频仍
+  confidence: 确定
+
+- dynasty: tang
+  temple_name: 唐德宗
+  name: 李适
+  reign_start: "0779"
+  reign_end: "0805"
+  era_names: [建中, 兴元, 贞元]
+  note: 任杨炎推行两税法，历经泾原兵变，贞元诗坛渐兴
+  confidence: 确定
+
+- dynasty: tang
+  temple_name: 唐顺宗
+  name: 李诵
+  reign_start: "0805"
+  reign_end: "0805"
+  era_names: [永贞]
+  note: 支持王叔文、柳宗元、刘禹锡推行永贞革新，旋因病内禅
+  confidence: 确定
+
+- dynasty: tang
+  temple_name: 唐宪宗
+  name: 李纯
+  reign_start: "0805"
+  reign_end: "0820"
+  era_names: [元和]
+  note: 任裴度平定淮西，开创元和中兴；元和诗坛韩孟元白并起
+  confidence: 确定
+
+- dynasty: tang
+  temple_name: 唐穆宗
+  name: 李恒
+  reign_start: "0820"
+  reign_end: "0824"
+  era_names: [长庆]
+  note: 消兵致河北复失，牛李党争与元白长庆体流行于此时
+  confidence: 确定
+
+- dynasty: tang
+  temple_name: 唐敬宗
+  name: 李湛
+  reign_start: "0824"
+  reign_end: "0826"
+  era_names: [宝历]
+  note: 沉湎游猎击鞠，为宦官刘克明等所弑
+  confidence: 确定
+
+- dynasty: tang
+  temple_name: 唐文宗
+  name: 李昂
+  reign_start: "0827"
+  reign_end: "0840"
+  era_names: [大和, 开成]
+  note: 欲除宦官致甘露之变失败，曾感慨「去河北贼易，去朝中朋党难」
+  confidence: 确定
+
+- dynasty: tang
+  temple_name: 唐武宗
+  name: 李炎
+  reign_start: "0840"
+  reign_end: "0846"
+  era_names: [会昌]
+  note: 专任李德裕平泽潞、破回鹘，并下诏灭佛，史称会昌中兴
+  confidence: 确定
+
+- dynasty: tang
+  temple_name: 唐宣宗
+  name: 李忱
+  reign_start: "0846"
+  reign_end: "0859"
+  era_names: [大中]
+  note: 贬李德裕、收复河湟故地，政局暂稳，号「小太宗」
+  confidence: 确定
+
+- dynasty: tang
+  temple_name: 唐懿宗
+  name: 李漼
+  reign_start: "0859"
+  reign_end: "0873"
+  era_names: [咸通]
+  note: 奢侈无度，庞勋起义爆发，唐政日益衰颓
+  confidence: 确定
+
+- dynasty: tang
+  temple_name: 唐僖宗
+  name: 李儇
+  reign_start: "0873"
+  reign_end: "0888"
+  era_names: [乾符, 广明, 中和, 光启, 文德]
+  note: 黄巢起义攻破长安，仓皇奔蜀，藩镇从此彻底失控
+  confidence: 确定
+
+- dynasty: tang
+  temple_name: 唐昭宗
+  name: 李晔
+  reign_start: "0888"
+  reign_end: "0904"
+  era_names: [龙纪, 大顺, 景福, 乾宁, 光化, 天复, 天祐]
+  note: 屡被藩镇与宦官挟持，终为朱温遣人所弑
   confidence: 确定
 
 - dynasty: tang

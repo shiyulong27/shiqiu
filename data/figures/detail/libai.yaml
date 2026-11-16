@@ -679,6 +679,43 @@ relations:
       precision: 约
     evidence: 天宝三载离京后与杜甫相遇订交，同游梁宋东鲁；杜甫存怀李白诗十余首，有醉眠秋共被携手日同行之句。两唐书并称李杜齐名。
     source_ids: [src-jts-vol190b, src-xts-vol202, src-quantangshi-li]
+  - relation_type: 挚友
+    target_id: gaoshi
+    direction: 双向
+    period:
+      text: 约744—745年同游梁宋吹台，饮酒赋诗
+      year: 744
+      precision: 约
+    evidence: 李白离京后与杜甫、高适同游汴州、宋州，登吹台怀古唱和；后世虽因永王璘案在仕途上分途，然盛唐梁宋之游传为佳话。
+    source_ids: [src-jts-vol111, src-quantangshi-li]
+  - relation_type: 挚友
+    target_id: menghaoran
+    direction: 双向
+    period:
+      text: 约727—740年襄汉与江夏订交相送
+      year: 727
+      range_end: 740
+      precision: 范围
+    evidence: 李白流寓安陆期间仰慕孟浩然风流，作《赠孟浩然》（吾爱孟夫子，风流天下闻）及《黄鹤楼送孟浩然之广陵》，二人为盛唐诗坛忘年挚交。
+    source_ids: [src-quantangshi-li, src-quantangshi-meng]
+  - relation_type: 挚友
+    target_id: hezhizhang
+    direction: 双向
+    period:
+      text: 约742年长安相见，解金龟换酒
+      year: 742
+      precision: 约
+    evidence: 贺知章读李白《蜀道难》《乌栖曲》惊呼「子，谪仙人也」，解金龟换酒共饮并荐于唐玄宗，为李白入仕长安关键知音。
+    source_ids: [src-xts-vol202]
+  - relation_type: 挚友
+    target_id: wangchangling
+    direction: 双向
+    period:
+      text: 约748年闻王昌龄迁龙标作诗相寄
+      year: 748
+      precision: 约
+    evidence: 闻王昌龄左迁龙标尉，李白作《闻王昌龄左迁龙标遥有此寄》（我寄愁心与明月，随君直到夜郎西），显见深厚交谊。
+    source_ids: [src-quantangshi-li]
   - relation_type: 社群
     target_id: wangwei
     direction: 双向

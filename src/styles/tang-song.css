@@ -1,0 +1,900 @@
+/* ═══════════════════════════════════════════════════════════════
+   十丘 · 唐宋风云诗画长卷（618–1279）专用样式
+   沿用全站宣纸/水墨/朱砂/靛蓝视觉体系
+   ═══════════════════════════════════════════════════════════════ */
+
+.ts-page {
+  max-width: 1460px;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 4rem;
+  color: var(--fg, #2c241b);
+}
+
+.ts-nav-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  font-size: 0.88rem;
+}
+
+.ts-nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ts-nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--line, #ded5c3);
+  background: var(--card, #fffdf8);
+  color: var(--fg, #2c241b);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.ts-nav-link:hover {
+  border-color: var(--accent, #9c2c1c);
+  color: var(--accent, #9c2c1c);
+}
+
+/* ── Hero ─────────────────────────────────────────────────────── */
+.ts-hero {
+  background: linear-gradient(135deg, rgba(176, 58, 46, 0.08), rgba(31, 97, 141, 0.08));
+  border: 1px solid var(--line, #ded5c3);
+  border-radius: 14px;
+  padding: 1.5rem 1.75rem;
+  margin-bottom: 1rem;
+}
+
+.ts-hero-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.ts-badge {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #9c2c1c;
+  background: rgba(156, 44, 28, 0.1);
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  margin-bottom: 0.45rem;
+}
+
+.ts-title {
+  margin: 0 0 0.35rem;
+  font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+  letter-spacing: 0.02em;
+}
+
+.ts-subtitle {
+  margin: 0;
+  color: var(--muted, #6b5d4d);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.ts-stats-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.ts-stat-pill {
+  background: rgba(255, 253, 248, 0.85);
+  border: 1px solid var(--line, #ded5c3);
+  border-radius: 10px;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.82rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.ts-stat-pill strong {
+  font-size: 1rem;
+  color: #9c2c1c;
+}
+
+/* ── 控制栏与视图切换 ─────────────────────────────────────────── */
+.ts-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(249, 246, 239, 0.96);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--line, #ded5c3);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 14px rgba(44, 36, 27, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.ts-toolbar-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+}
+
+.ts-view-tabs {
+  display: inline-flex;
+  background: rgba(44, 36, 27, 0.06);
+  padding: 0.22rem;
+  border-radius: 10px;
+  gap: 0.2rem;
+}
+
+.ts-view-tab {
+  border: none;
+  background: transparent;
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--muted, #6b5d4d);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ts-view-tab.is-active {
+  background: #fffdf8;
+  color: #9c2c1c;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  font-weight: 600;
+}
+
+.ts-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 260px;
+  flex: 1;
+  max-width: 380px;
+}
+
+.ts-search-input {
+  width: 100%;
+  padding: 0.42rem 2rem 0.42rem 2rem;
+  border-radius: 8px;
+  border: 1px solid var(--line, #ded5c3);
+  background: #fffdf8;
+  font-family: inherit;
+  font-size: 0.88rem;
+  color: var(--fg, #2c241b);
+}
+
+.ts-search-icon {
+  position: absolute;
+  left: 0.6rem;
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+.ts-search-clear {
+  position: absolute;
+  right: 0.45rem;
+  border: none;
+  background: transparent;
+  color: var(--muted, #6b5d4d);
+  cursor: pointer;
+  font-size: 0.85rem;
+  padding: 0.15rem 0.3rem;
+}
+
+.ts-filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.ts-period-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.ts-period-jump {
+  border: 1px solid var(--line, #ded5c3);
+  background: #fffdf8;
+  color: var(--fg, #2c241b);
+  border-radius: 999px;
+  padding: 0.22rem 0.65rem;
+  font-size: 0.78rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ts-period-jump:hover,
+.ts-period-jump.is-active {
+  background: var(--p-color, #9c2c1c);
+  border-color: var(--p-color, #9c2c1c);
+  color: #fff;
+}
+
+.ts-sep {
+  width: 1px;
+  height: 18px;
+  background: var(--line, #ded5c3);
+  margin: 0 0.25rem;
+}
+
+.ts-chip-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.22rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--line, #ded5c3);
+  background: #fffdf8;
+  font-size: 0.8rem;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+
+.ts-chip-toggle input {
+  accent-color: #9c2c1c;
+  margin: 0;
+}
+
+.ts-chip-exile {
+  border-color: rgba(142, 68, 173, 0.35);
+  color: #6c3483;
+}
+
+.ts-chip-exile:has(input:checked) {
+  background: #6c3483;
+  color: #fff;
+  border-color: #6c3483;
+}
+
+/* ── 主体布局（主区 + 可选关系聚焦抽屉） ─────────────────────── */
+.ts-workspace {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.ts-workspace.has-spotlight {
+  grid-template-columns: minmax(0, 1fr) 370px;
+}
+
+@media (max-width: 1080px) {
+  .ts-workspace.has-spotlight {
+    grid-template-columns: 1fr;
+  }
+}
+
+.ts-view-pane[hidden] {
+  display: none !important;
+}
+
+/* ── 聚焦提示条 ───────────────────────────────────────────────── */
+.ts-focus-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.65rem;
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  background: linear-gradient(90deg, rgba(156, 44, 28, 0.1), rgba(212, 172, 13, 0.12));
+  border: 1px solid rgba(156, 44, 28, 0.3);
+  margin-bottom: 1rem;
+  font-size: 0.88rem;
+}
+
+.ts-focus-banner[hidden] {
+  display: none;
+}
+
+.ts-focus-clear {
+  border: 1px solid #9c2c1c;
+  background: #fffdf8;
+  color: #9c2c1c;
+  border-radius: 6px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.8rem;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.ts-focus-clear:hover {
+  background: #9c2c1c;
+  color: #fff;
+}
+
+/* ── 时期区块 & 阵容名录卡 ────────────────────────────────────── */
+.ts-period-section {
+  margin-bottom: 2.25rem;
+}
+
+.ts-period-banner {
+  border-left: 5px solid var(--p-color, #9c2c1c);
+  background: #fffdf8;
+  border-top: 1px solid var(--line, #ded5c3);
+  border-right: 1px solid var(--line, #ded5c3);
+  border-bottom: 1px solid var(--line, #ded5c3);
+  border-radius: 12px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 0.9rem;
+}
+
+.ts-period-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 0.45rem;
+}
+
+.ts-period-title {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--p-color, #9c2c1c);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.ts-period-years {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--muted, #6b5d4d);
+}
+
+.ts-period-desc {
+  margin: 0 0 0.75rem;
+  font-size: 0.88rem;
+  color: var(--muted, #6b5d4d);
+}
+
+.ts-roster-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.ts-roster-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.8rem;
+}
+
+.ts-roster-label {
+  font-weight: 600;
+  color: var(--muted, #6b5d4d);
+  min-width: 78px;
+}
+
+.ts-roster-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.16rem 0.55rem;
+  border-radius: 999px;
+  border: 1px solid var(--line, #ded5c3);
+  background: #faf6ed;
+  font-size: 0.78rem;
+  font-family: inherit;
+  color: var(--fg, #2c241b);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.ts-roster-chip:hover {
+  border-color: #9c2c1c;
+  transform: translateY(-1px);
+}
+
+.ts-roster-chip.is-ruler {
+  background: rgba(212, 172, 13, 0.14);
+  border-color: rgba(183, 149, 11, 0.35);
+  cursor: default;
+}
+
+.ts-roster-chip.is-ruler:hover {
+  transform: none;
+}
+
+.ts-roster-chip.is-minister {
+  background: rgba(46, 134, 193, 0.08);
+  border-color: rgba(46, 134, 193, 0.28);
+}
+
+.ts-roster-chip.is-poet {
+  background: rgba(156, 44, 28, 0.07);
+  border-color: rgba(156, 44, 28, 0.25);
+}
+
+.ts-roster-chip.is-focused {
+  background: #9c2c1c !important;
+  border-color: #9c2c1c !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+.ts-roster-chip.is-peer {
+  background: #f39c12 !important;
+  border-color: #d68910 !important;
+  color: #fff !important;
+  font-weight: 600;
+}
+
+.ts-roster-chip.is-dimmed {
+  opacity: 0.35;
+}
+
+/* ── 三栏平行时间轴行 ─────────────────────────────────────────── */
+.ts-grid-head {
+  display: grid;
+  grid-template-columns: minmax(250px, 0.92fr) 115px minmax(320px, 1.35fr);
+  gap: 0.75rem;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted, #6b5d4d);
+  border-bottom: 2px solid var(--line, #ded5c3);
+  margin-bottom: 0.5rem;
+}
+
+.ts-grid-head-center {
+  text-align: center;
+}
+
+.ts-year-row {
+  display: grid;
+  grid-template-columns: minmax(250px, 0.92fr) 115px minmax(320px, 1.35fr);
+  gap: 0.75rem;
+  padding: 0.65rem 0.4rem;
+  border-bottom: 1px dashed rgba(200, 190, 170, 0.55);
+  align-items: start;
+  transition: background 0.15s ease, opacity 0.15s ease;
+}
+
+.ts-year-row[hidden] {
+  display: none !important;
+}
+
+.ts-year-row.is-highlighted {
+  background: rgba(243, 156, 18, 0.09);
+  border-radius: 8px;
+}
+
+.ts-year-row.is-dimmed {
+  opacity: 0.32;
+}
+
+@media (max-width: 780px) {
+  .ts-grid-head {
+    display: none;
+  }
+  .ts-year-row {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+    padding: 0.75rem 0.6rem;
+    background: #fffdf8;
+    border: 1px solid var(--line, #ded5c3);
+    border-radius: 10px;
+    margin-bottom: 0.6rem;
+  }
+}
+
+.ts-col-left,
+.ts-col-right {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-width: 0;
+}
+
+.ts-col-axis {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  padding-top: 0.15rem;
+}
+
+.ts-axis-year {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--fg, #2c241b);
+  background: #faf6ed;
+  border: 1px solid var(--line, #ded5c3);
+  border-radius: 999px;
+  padding: 0.14rem 0.6rem;
+}
+
+.ts-axis-ruler {
+  margin-top: 0.25rem;
+  font-size: 0.72rem;
+  color: #8a6d3b;
+  line-height: 1.3;
+}
+
+/* ── 卡片样式：皇帝 / 事件 / 名臣 / 贬谪 / 作品 ───────────────── */
+.ts-card {
+  background: #fffdf8;
+  border: 1px solid var(--line, #ded5c3);
+  border-radius: 9px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.84rem;
+  line-height: 1.5;
+  transition: all 0.15s ease;
+}
+
+.ts-card[hidden] {
+  display: none !important;
+}
+
+.ts-card.is-focus-match {
+  border-color: #9c2c1c;
+  box-shadow: 0 0 0 2px rgba(156, 44, 28, 0.18);
+}
+
+.ts-card.is-peer-match {
+  border-color: #d68910;
+  box-shadow: 0 0 0 2px rgba(243, 156, 18, 0.2);
+}
+
+.ts-card-ruler {
+  background: linear-gradient(135deg, rgba(241, 196, 15, 0.12), rgba(255, 253, 248, 0.95));
+  border-color: rgba(183, 149, 11, 0.45);
+}
+
+.ts-card-event {
+  border-left: 3px solid #2e86c1;
+}
+
+.ts-card-event[data-importance="5"] {
+  border-left-color: #c0392b;
+  background: linear-gradient(135deg, rgba(192, 57, 43, 0.05), #fffdf8);
+}
+
+.ts-card-minister {
+  border-left: 3px solid #2471a3;
+  background: rgba(36, 113, 163, 0.03);
+}
+
+.ts-card-exile {
+  border-left: 3px solid #7d3c98;
+  background: rgba(125, 60, 152, 0.04);
+}
+
+.ts-card-work {
+  border-left: 3px solid #9c2c1c;
+}
+
+.ts-card-work.is-exile-work {
+  border-left-color: #7d3c98;
+  background: linear-gradient(135deg, rgba(125, 60, 152, 0.06), #fffdf8);
+}
+
+.ts-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.25rem;
+}
+
+.ts-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  padding: 0.06rem 0.42rem;
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.ts-tag-ruler {
+  background: rgba(183, 149, 11, 0.18);
+  color: #7d6608;
+}
+
+.ts-tag-event {
+  background: rgba(46, 134, 193, 0.14);
+  color: #1b4f72;
+}
+
+.ts-tag-minister {
+  background: rgba(36, 113, 163, 0.15);
+  color: #1b4f72;
+}
+
+.ts-tag-exile {
+  background: rgba(125, 60, 152, 0.15);
+  color: #6c3483;
+}
+
+.ts-tag-place {
+  background: rgba(39, 174, 96, 0.12);
+  color: #1e8449;
+}
+
+.ts-tag-rel-hint {
+  background: #f39c12;
+  color: #fff;
+}
+
+.ts-author-btn {
+  border: 1px solid rgba(156, 44, 28, 0.3);
+  background: rgba(156, 44, 28, 0.08);
+  color: #9c2c1c;
+  font-weight: 600;
+  font-size: 0.76rem;
+  padding: 0.08rem 0.5rem;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s ease;
+}
+
+.ts-author-btn:hover {
+  background: #9c2c1c;
+  color: #fff;
+}
+
+.ts-card-title {
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--fg, #2c241b);
+}
+
+.ts-card-meta {
+  font-size: 0.78rem;
+  color: var(--muted, #6b5d4d);
+}
+
+.ts-card-summary {
+  margin: 0.2rem 0 0;
+  font-size: 0.82rem;
+  color: #4a3f33;
+}
+
+.ts-work-excerpt {
+  margin: 0.35rem 0 0;
+  padding: 0.4rem 0.6rem;
+  background: rgba(244, 238, 225, 0.65);
+  border-radius: 6px;
+  font-family: 'Noto Serif SC', 'Songti SC', serif;
+  font-size: 0.86rem;
+  color: #2c241b;
+  line-height: 1.65;
+}
+
+/* ── 右侧关系与作品聚焦抽屉 ───────────────────────────────────── */
+.ts-spotlight {
+  position: sticky;
+  top: 7.2rem;
+  background: #fffdf8;
+  border: 1px solid var(--line, #ded5c3);
+  border-radius: 14px;
+  padding: 1.1rem;
+  box-shadow: 0 8px 24px rgba(44, 36, 27, 0.09);
+  max-height: calc(100vh - 8.2rem);
+  overflow-y: auto;
+}
+
+.ts-spotlight[hidden] {
+  display: none !important;
+}
+
+.ts-spot-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--line, #ded5c3);
+  padding-bottom: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ts-spot-name {
+  margin: 0;
+  font-size: 1.25rem;
+  color: #9c2c1c;
+}
+
+.ts-spot-sub {
+  font-size: 0.8rem;
+  color: var(--muted, #6b5d4d);
+  margin-top: 0.2rem;
+}
+
+.ts-spot-close {
+  border: 1px solid var(--line, #ded5c3);
+  background: transparent;
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  color: var(--muted, #6b5d4d);
+}
+
+.ts-spot-section {
+  margin-top: 0.9rem;
+}
+
+.ts-spot-section h4 {
+  margin: 0 0 0.45rem;
+  font-size: 0.88rem;
+  color: var(--fg, #2c241b);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.ts-spot-rel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.ts-spot-rel-item {
+  border: 1px solid var(--line, #ded5c3);
+  background: #faf6ed;
+  border-radius: 8px;
+  padding: 0.45rem 0.6rem;
+  font-size: 0.8rem;
+}
+
+.ts-spot-rel-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  margin-bottom: 0.2rem;
+}
+
+.ts-rel-badge {
+  font-size: 0.72rem;
+  padding: 0.08rem 0.42rem;
+  border-radius: 999px;
+  font-weight: 600;
+  background: rgba(156, 44, 28, 0.12);
+  color: #9c2c1c;
+}
+
+.ts-rel-badge[data-type="挚友"] {
+  background: rgba(211, 84, 0, 0.15);
+  color: #a04000;
+}
+
+.ts-rel-badge[data-type="论敌"] {
+  background: rgba(142, 68, 173, 0.15);
+  color: #6c3483;
+}
+
+.ts-rel-badge[data-type="师承"] {
+  background: rgba(30, 132, 73, 0.15);
+  color: #1e8449;
+}
+
+.ts-rel-badge[data-type="同僚"] {
+  background: rgba(36, 113, 163, 0.15);
+  color: #1b4f72;
+}
+
+.ts-spot-work-item {
+  border-left: 3px solid #9c2c1c;
+  padding: 0.35rem 0 0.35rem 0.6rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.ts-spot-work-item.is-exile {
+  border-left-color: #7d3c98;
+}
+
+/* ── ECharts 关系图谱视图 ─────────────────────────────────────── */
+.ts-graph-panel {
+  background: #fffdf8;
+  border: 1px solid var(--line, #ded5c3);
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.ts-graph-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.ts-graph-circles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.ts-circle-btn {
+  border: 1px solid var(--line, #ded5c3);
+  background: #faf6ed;
+  border-radius: 999px;
+  padding: 0.28rem 0.75rem;
+  font-size: 0.82rem;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.ts-circle-btn.is-active {
+  background: #9c2c1c;
+  border-color: #9c2c1c;
+  color: #fff;
+  font-weight: 600;
+}
+
+.ts-graph-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  font-size: 0.78rem;
+  color: var(--muted, #6b5d4d);
+}
+
+.ts-graph-canvas {
+  width: 100%;
+  height: 620px;
+  border-radius: 10px;
+  background: radial-gradient(circle at center, #fffdf8, #f7f1e3);
+  border: 1px solid rgba(222, 213, 195, 0.7);
+}
+
+/* ── 贬谪诗路编年视图 ─────────────────────────────────────────── */
+.ts-exile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 0.9rem;
+}
+
+.ts-exile-card {
+  background: #fffdf8;
+  border: 1px solid var(--line, #ded5c3);
+  border-top: 4px solid #7d3c98;
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.ts-empty-state {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--muted, #6b5d4d);
+  background: #fffdf8;
+  border: 1px dashed var(--line, #ded5c3);
+  border-radius: 12px;
+}
+
+.ts-empty-state[hidden] {
+  display: none;
+}

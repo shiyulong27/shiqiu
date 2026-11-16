@@ -1050,3 +1050,33 @@
   isbn_or_id: ""
   status: 有效
   notes: 2026-08-26 实取成功：全文在手；不见宋元早期著录，赖明辑本传世，attribution 存疑。
+- id: src-jts-vol111
+  type: 原始文献
+  title: 旧唐书·卷一百一十一·列传第六十一（高适传）
+  author_or_org: 后晋·刘昫等
+  edition_or_url: https://zh.wikisource.org/wiki/舊唐書/卷111
+  access_date: "2026-11-12"
+  pub_date: ""
+  isbn_or_id: ""
+  status: 有效
+  notes: 记高适早年落拓梁宋、晚年平永王璘乱、出镇西川及封渤海县侯始末。
+- id: src-qts-gaoshi
+  type: 原始文献
+  title: 全唐诗·高适卷（维基文库）
+  author_or_org: 唐·高适
+  edition_or_url: https://zh.wikisource.org/wiki/全唐詩/高適
+  access_date: "2026-11-12"
+  pub_date: ""
+  isbn_or_id: ""
+  status: 有效
+  notes: 收录《燕歌行》《别董大》《封丘作》等高适代表诗作。
+- id: src-songshi-vol336
+  type: 原始文献
+  title: 宋史·卷三百三十六·列传第九十五（司马光传）
+  author_or_org: 元·脱脱等
+  edition_or_url: https://zh.wikisource.org/wiki/宋史/卷336
+  access_date: "2026-11-12"
+  pub_date: ""
+  isbn_or_id: ""
+  status: 有效
+  notes: 记司马光论新法、修资治通鉴及元祐执政始末。

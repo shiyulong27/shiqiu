@@ -1,4 +1,4 @@
-# 宋代君主（仅录北宋与南宋关键开国、末代及代表君主；辽、夏、金君主从略）。
+# 宋代君主序列（北宋 960–1127、南宋 1127–1279；辽、夏、金君主从略）
 
 - dynasty: beisong
   temple_name: 宋太祖
@@ -6,8 +6,62 @@
   reign_start: "0960"
   reign_end: "0976"
   era_names: [建隆, 乾德, 开宝]
-  note: 陈桥兵变开国，杯酒释兵权
+  note: 陈桥兵变开国，任赵普筹划，杯酒释兵权，定崇文抑武国策
   role: founder
+  confidence: 确定
+
+- dynasty: beisong
+  temple_name: 宋太宗
+  name: 赵光义
+  reign_start: "0976"
+  reign_end: "0997"
+  era_names: [太平兴国, 雍熙, 端拱, 淳化, 至道]
+  note: 灭北汉并收吴越，广开科举取士，然两次北伐幽燕失利
+  confidence: 确定
+
+- dynasty: beisong
+  temple_name: 宋真宗
+  name: 赵恒
+  reign_start: "0997"
+  reign_end: "1022"
+  era_names: [咸平, 景德, 大中祥符, 天禧, 乾兴]
+  note: 任寇准亲征订立澶渊之盟，开启北宋百年对辽和平
+  confidence: 确定
+
+- dynasty: beisong
+  temple_name: 宋仁宗
+  name: 赵祯
+  reign_start: "1022"
+  reign_end: "1063"
+  era_names: [天圣, 明道, 景祐, 宝元, 康定, 庆历, 皇祐, 至和, 嘉祐]
+  note: 庆历新政与嘉祐科举人才辈出，范仲淹、晏殊、欧阳修、苏轼、王安石、司马光同世
+  confidence: 确定
+
+- dynasty: beisong
+  temple_name: 宋英宗
+  name: 赵曙
+  reign_start: "1063"
+  reign_end: "1067"
+  era_names: [治平]
+  note: 发生濮议之争，命司马光编撰《资治通鉴》
+  confidence: 确定
+
+- dynasty: beisong
+  temple_name: 宋神宗
+  name: 赵顼
+  reign_start: "1067"
+  reign_end: "1085"
+  era_names: [熙宁, 元丰]
+  note: 任王安石推行熙宁变法，新旧党争起；元丰间发生乌台诗案而独怜苏轼
+  confidence: 确定
+
+- dynasty: beisong
+  temple_name: 宋哲宗
+  name: 赵煦
+  reign_start: "1085"
+  reign_end: "1100"
+  era_names: [元祐, 绍圣, 元符]
+  note: 前期高太后听政起用司马光、苏轼（元祐更化），亲政后绍述新法贬斥元祐党人
   confidence: 确定
 
 - dynasty: beisong
@@ -16,7 +70,17 @@
   reign_start: "1100"
   reign_end: "1126"
   era_names: [建中靖国, 崇宁, 大观, 政和, 重和, 宣和]
-  note: 艺术造诣极高，精于瘦金体，靖康之难被俘
+  note: 艺术造诣极高，精于瘦金体，任蔡京立元祐党人碑；靖康之难被俘
+  confidence: 确定
+
+- dynasty: beisong
+  temple_name: 宋钦宗
+  name: 赵桓
+  reign_start: "1126"
+  reign_end: "1127"
+  era_names: [靖康]
+  note: 靖康之变中汴京陷落，与徽宗同被金军掳北，北宋亡
+  role: last
   confidence: 确定
 
 - dynasty: nansong
@@ -25,8 +89,71 @@
   reign_start: "1127"
   reign_end: "1162"
   era_names: [建炎, 绍兴]
-  note: 南宋开国皇帝，缔结绍兴和议
+  note: 南宋开国皇帝，重用秦桧缔结绍兴和议并赐死岳飞，偏安江南
   role: founder
+  confidence: 确定
+
+- dynasty: nansong
+  temple_name: 宋孝宗
+  name: 赵昚
+  reign_start: "1162"
+  reign_end: "1189"
+  era_names: [隆兴, 乾道, 淳熙]
+  note: 为岳飞平反，励精图治成「乾淳之治」；陆游、范成大、杨万里、辛弃疾、朱熹活跃于此时
+  confidence: 确定
+
+- dynasty: nansong
+  temple_name: 宋光宗
+  name: 赵惇
+  reign_start: "1189"
+  reign_end: "1194"
+  era_names: [绍熙]
+  note: 与太上皇孝宗失和，绍熙内禅退位
+  confidence: 确定
+
+- dynasty: nansong
+  temple_name: 宋宁宗
+  name: 赵扩
+  reign_start: "1194"
+  reign_end: "1224"
+  era_names: [庆元, 嘉泰, 开禧, 嘉定]
+  note: 历经庆元党禁与韩侂胄开禧北伐，辛弃疾、陆游卒于其朝
+  confidence: 确定
+
+- dynasty: nansong
+  temple_name: 宋理宗
+  name: 赵昀
+  reign_start: "1224"
+  reign_end: "1264"
+  era_names: [宝庆, 绍定, 端平, 嘉熙, 淳祐, 宝祐, 开庆, 景定]
+  note: 端平入洛失利，蒙古大举南侵，独尊理学
+  confidence: 确定
+
+- dynasty: nansong
+  temple_name: 宋度宗
+  name: 赵禥
+  reign_start: "1264"
+  reign_end: "1274"
+  era_names: [咸淳]
+  note: 委政权臣贾似道，襄樊陷落，南宋危急
+  confidence: 确定
+
+- dynasty: nansong
+  temple_name: 宋恭帝
+  name: 赵㬎
+  reign_start: "1274"
+  reign_end: "1276"
+  era_names: [德祐]
+  note: 临安陷落，随谢太后奉表降元
+  confidence: 确定
+
+- dynasty: nansong
+  temple_name: 宋端宗
+  name: 赵昰
+  reign_start: "1276"
+  reign_end: "1278"
+  era_names: [景炎]
+  note: 于福州即位抗元，流亡海上病卒于碙洲
   confidence: 确定
 
 - dynasty: nansong
@@ -35,6 +162,6 @@
   reign_start: "1278"
   reign_end: "1279"
   era_names: [祥兴]
-  note: 南宋末代幼帝，崖山海战投海殉国
+  note: 南宋末代幼帝，崖山海战陆秀夫负之投海殉国
   role: last
   confidence: 确定

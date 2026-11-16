@@ -1,0 +1,421 @@
+---
+import { fileURLToPath } from 'node:url'
+import Base from '../../layouts/Base.astro'
+import { loadAll } from '../../lib/load.js'
+import { buildTangSongTimeline } from '../../lib/tangSongTimeline.js'
+import '../../styles/tang-song.css'
+
+const dataDir = fileURLToPath(new URL('../../../data', import.meta.url))
+const data = loadAll(dataDir)
+const model = buildTangSongTimeline(data)
+
+const { periodBlocks, figures, worksTimeline, edges, relationsMap, stats } = model
+const exileWorks = worksTimeline.filter((w) => w.isExile)
+const base = import.meta.env.BASE_URL
+
+// 精简传给客户端 JS 的结构化载荷（驱动关系抽屉与 ECharts 关系图谱）
+const clientPayload = {
+  baseUrl: base,
+  figures: figures.map((f) => ({
+    id: f.id,
+    name: f.name,
+    field: f.field,
+    roles: f.roles,
+    note: f.note,
+    courtesyName: f.courtesyName,
+    artName: f.artName,
+    offices: f.offices,
+    startYear: f.startYear,
+    endYear: f.endYear,
+    detailPath: f.detailPath,
+    isPoet: f.isPoet,
+    isCi: f.isCi,
+    isMinister: f.isMinister,
+    periodId: f.periodId,
+    works: f.works,
+  })),
+  edges,
+  relationsMap,
+}
+
+const serializedPayload = JSON.stringify(clientPayload).replace(/<\//g, '<\\/')
+---
+
+<Base
+  title="唐宋风云诗画长卷（618–1279） · 皇帝、宰相、诗人关系与贬谪作品时间轴"
+  description="覆盖唐代开国至南宋崖山（618–1279），平行对照历代皇帝、当朝宰相名臣、政局大事、诗人词人关系网及贬谪创作地诗作。"
+  wide={true}
+>
+  <div class="ts-page">
+    <nav class="ts-nav-bar" aria-label="页面导航">
+      <a href={base} class="ts-nav-link">← 返回【十丘】知识总门户</a>
+      <div class="ts-nav-links">
+        <a href={`${base}timeline/`} class="ts-nav-link">📜 上下五千年总长卷</a>
+        <a href={`${base}history/emperors-battles/`} class="ts-nav-link">👑 帝王世系与决战</a>
+        <a href={`${base}figures/`} class="ts-nav-link">👤 千古风流人物库</a>
+        <a href={`${base}groups/`} class="ts-nav-link">🌟 历史天团并称</a>
+      </div>
+    </nav>
+
+    <header class="ts-hero">
+      <div class="ts-hero-top">
+        <div>
+          <span class="ts-badge">📜 唐宋专题时空长卷 · 公元 618 — 1279 年</span>
+          <h1 class="ts-title">唐宋风云诗画长卷</h1>
+          <p class="ts-subtitle">
+            皇权纪年 × 宰相名臣与政局 × 诗人词人交游关系 × 贬谪诗路与代表作品 —— 点击任意诗人或名臣即可展开其关系网与系年名作
+          </p>
+        </div>
+      </div>
+
+      <div class="ts-stats-grid">
+        <span class="ts-stat-pill">👑 <strong>{stats.rulersCount}</strong> 位皇帝</span>
+        <span class="ts-stat-pill">📜 <strong>{stats.eventsCount}</strong> 件大事</span>
+        <span class="ts-stat-pill">✍️ <strong>{stats.poetsCount}</strong> 位诗人 · <strong>{stats.ciCount}</strong> 位词人</span>
+        <span class="ts-stat-pill">🏛️ <strong>{stats.ministersCount}</strong> 位宰相/名臣/将领</span>
+        <span class="ts-stat-pill">📖 <strong>{stats.worksCount}</strong> 篇系年诗词（含 <strong>{stats.exileWorksCount}</strong> 篇贬谪/迁谪名作）</span>
+        <span class="ts-stat-pill">🤝 <strong>{stats.relationsCount}</strong> 组名士交游与论敌关系</span>
+      </div>
+    </header>
+
+    {/* 吸顶工具栏 */}
+    <div class="ts-toolbar">
+      <div class="ts-toolbar-row">
+        <div class="ts-view-tabs" role="tablist" aria-label="专题视图模式">
+          <button type="button" class="ts-view-tab is-active" data-view="timeline">📜 并行时空时间轴</button>
+          <button type="button" class="ts-view-tab" data-view="graph">🕸️ 名士关系图谱</button>
+          <button type="button" class="ts-view-tab" data-view="exile">🧳 贬谪诗路编年 ({exileWorks.length})</button>
+        </div>
+
+        <div class="ts-search-wrap">
+          <span class="ts-search-icon">🔍</span>
+          <input
+            type="search"
+            id="ts-search-input"
+            class="ts-search-input"
+            placeholder="搜诗人(李白/苏轼)、宰相、皇帝、诗名或地点(黄州/永州)…"
+            autocomplete="off"
+          />
+          <button type="button" id="ts-search-clear" class="ts-search-clear" title="清空搜索">✕</button>
+        </div>
+      </div>
+
+      <div class="ts-filters-row">
+        <div class="ts-period-pills" title="快速跳转到指定时期">
+          {periodBlocks.map((p) => (
+            <button
+              type="button"
+              class="ts-period-jump"
+              data-period-id={p.id}
+              style={`--p-color:${p.color}`}
+            >
+              {p.name}
+            </button>
+          ))}
+        </div>
+
+        <span class="ts-sep" aria-hidden="true"></span>
+
+        <label class="ts-chip-toggle" title="显示皇帝登基与在位信息">
+          <input type="checkbox" id="flt-rulers" checked />
+          <span>👑 皇帝</span>
+        </label>
+        <label class="ts-chip-toggle" title="显示当朝宰相、名臣、名将">
+          <input type="checkbox" id="flt-ministers" checked />
+          <span>🏛️ 宰相名臣</span>
+        </label>
+        <label class="ts-chip-toggle" title="显示唐宋政局与历史大事件">
+          <input type="checkbox" id="flt-events" checked />
+          <span>📜 政局大事</span>
+        </label>
+        <label class="ts-chip-toggle" title="显示诗人及诗作">
+          <input type="checkbox" id="flt-poets" checked />
+          <span>✍️ 诗人</span>
+        </label>
+        <label class="ts-chip-toggle" title="显示词人及词作">
+          <input type="checkbox" id="flt-ci" checked />
+          <span>🎵 词人</span>
+        </label>
+        <label class="ts-chip-toggle ts-chip-exile" title="仅看贬谪、流放、左迁经历及对应诗词作品">
+          <input type="checkbox" id="flt-exile-only" />
+          <span>⚠️ 仅看贬谪行迹与作品</span>
+        </label>
+      </div>
+    </div>
+
+    {/* 人物关系聚焦提示条 */}
+    <div class="ts-focus-banner" id="ts-focus-banner" hidden>
+      <span id="ts-focus-banner-text"></span>
+      <button type="button" class="ts-focus-clear" id="ts-focus-clear">✕ 退出人物聚焦</button>
+    </div>
+
+    <div class="ts-workspace" id="ts-workspace">
+      <main>
+        {/* ══ 视图一：并行时空时间轴 ══════════════════════════════ */}
+        <section id="pane-timeline" class="ts-view-pane">
+          <div class="ts-empty-state" id="ts-empty-state" hidden>
+            当前筛选条件下暂无匹配记录，请放宽开关或清空搜索关键词。
+          </div>
+
+          {periodBlocks.map((period) => {
+            const periodMinisters = period.figures.filter((f) => f.isMinister)
+            const periodPoets = period.figures.filter((f) => f.isPoet || f.isCi)
+            return (
+              <section
+                class="ts-period-section"
+                id={`period-${period.id}`}
+                style={`--p-color:${period.color}`}
+              >
+                <header class="ts-period-banner">
+                  <div class="ts-period-head">
+                    <h2 class="ts-period-title">
+                      <span>{period.name}</span>
+                      <span class="ts-period-years">({period.start}–{period.end}年)</span>
+                    </h2>
+                    <span class="ts-card-meta">
+                      {period.rulers.length} 位帝王 · {period.events.length} 件大事 · {period.works.length} 篇系年作品
+                    </span>
+                  </div>
+                  <p class="ts-period-desc">{period.desc}</p>
+
+                  <div class="ts-roster-groups">
+                    <div class="ts-roster-row">
+                      <span class="ts-roster-label">👑 皇帝</span>
+                      {period.rulers.map((r) => (
+                        <span class="ts-roster-chip is-ruler" title={`${r.name} · 年号：${r.eraNames.join('、')}`}>
+                          {r.templeName}({r.startYear}–{r.endYear})
+                        </span>
+                      ))}
+                    </div>
+
+                    {periodMinisters.length > 0 && (
+                      <div class="ts-roster-row">
+                        <span class="ts-roster-label">🏛️ 宰相名臣</span>
+                        {periodMinisters.map((m) => (
+                          <button
+                            type="button"
+                            class="ts-roster-chip is-minister"
+                            data-fig-id={m.id}
+                            title={`点击查看「${m.name}」关系网与生平`}
+                          >
+                            {m.name}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+
+                    {periodPoets.length > 0 && (
+                      <div class="ts-roster-row">
+                        <span class="ts-roster-label">✍️ 诗人词人</span>
+                        {periodPoets.map((p) => (
+                          <button
+                            type="button"
+                            class="ts-roster-chip is-poet"
+                            data-fig-id={p.id}
+                            title={`点击聚焦「${p.name}」的好友关系与作品`}
+                          >
+                            {p.name}
+                            {(relationsMap[p.id]?.length ?? 0) > 0 && (
+                              <span class="ts-card-meta">({relationsMap[p.id].length})</span>
+                            )}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </header>
+
+                <div class="ts-grid-head">
+                  <div>👑 皇权更替与政局大事</div>
+                  <div class="ts-grid-head-center">纪年 · 在位君主</div>
+                  <div>✍️ 诗人词人 · 宰相名臣 · 贬谪与作品</div>
+                </div>
+
+                {period.yearRows.map((row) => (
+                  <div class="ts-year-row" data-year={row.year}>
+                    {/* 左栏：皇帝即位与重大事件 */}
+                    <div class="ts-col-left">
+                      {row.startingRulers.map((r) => (
+                        <article
+                          class="ts-card ts-card-ruler"
+                          data-kind="ruler"
+                          data-search={`${row.year} ${r.dynastyName} ${r.templeName} ${r.name} ${r.eraNames.join(' ')} ${r.note}`}
+                        >
+                          <div class="ts-card-head">
+                            <span class="ts-tag ts-tag-ruler">👑 {r.dynastyName}登基</span>
+                            <span class="ts-card-title">{r.templeName} {r.name}</span>
+                            <span class="ts-card-meta">{r.startYear}–{r.endYear}</span>
+                          </div>
+                          {r.eraNames.length > 0 && (
+                            <div class="ts-card-meta">年号：{r.eraNames.join('、')}</div>
+                          )}
+                          {r.note && <p class="ts-card-summary">{r.note}</p>}
+                        </article>
+                      ))}
+
+                      {row.events.map((ev) => (
+                        <article
+                          class="ts-card ts-card-event"
+                          data-kind="event"
+                          data-importance={ev.importance}
+                          data-search={`${row.year} ${ev.title} ${ev.category} ${ev.summary} ${ev.tags.join(' ')}`}
+                        >
+                          <div class="ts-card-head">
+                            <span class="ts-tag ts-tag-event">{ev.category}</span>
+                            {ev.importance >= 5 && <span class="ts-tag ts-tag-ruler">👑 历史转折</span>}
+                            <span class="ts-card-title">{ev.title}</span>
+                          </div>
+                          {ev.summary && <p class="ts-card-summary">{ev.summary}</p>}
+                        </article>
+                      ))}
+                    </div>
+
+                    {/* 中轴：纪年与在位皇帝提示 */}
+                    <div class="ts-col-axis">
+                      <span class="ts-axis-year">{row.year}年</span>
+                      {row.reigningRuler && (
+                        <span class="ts-axis-ruler">
+                          {row.reigningRuler.templeName}
+                          <br />
+                          {row.reigningRuler.name}
+                        </span>
+                      )}
+                    </div>
+
+                    {/* 右栏：宰相名臣代表节点 + 贬谪行迹 + 诗词作品 */}
+                    <div class="ts-col-right">
+                      {row.ministers.map((m) => (
+                        <article
+                          class="ts-card ts-card-minister"
+                          data-kind="minister"
+                          data-author-id={m.id}
+                          data-is-poet={m.isPoet ? '1' : '0'}
+                          data-is-ci={m.isCi ? '1' : '0'}
+                          data-is-minister="1"
+                          data-search={`${row.year} ${m.name} ${m.roles.join(' ')} ${m.tags.join(' ')} ${m.note}`}
+                        >
+                          <div class="ts-card-head">
+                            <span class="ts-tag ts-tag-minister">🏛️ {m.roles[0] || m.field}</span>
+                            <button type="button" class="ts-author-btn" data-fig-id={m.id}>{m.name}</button>
+                            <span class="ts-card-meta">({m.startYear ?? '?'}–{m.endYear ?? '?'})</span>
+                          </div>
+                          <p class="ts-card-summary">{m.note}</p>
+                        </article>
+                      ))}
+
+                      {row.exileNodes.map((node) => (
+                        <article
+                          class="ts-card ts-card-exile"
+                          data-kind="exile"
+                          data-author-id={node.figureId}
+                          data-is-poet={node.isPoet ? '1' : '0'}
+                          data-is-ci={node.isCi ? '1' : '0'}
+                          data-is-minister="0"
+                          data-is-exile="1"
+                          data-search={`${row.year} ${node.figureName} ${node.title} ${node.place} ${node.summary}`}
+                        >
+                          <div class="ts-card-head">
+                            <span class="ts-tag ts-tag-exile">⚠️ 贬谪行迹</span>
+                            <button type="button" class="ts-author-btn" data-fig-id={node.figureId}>{node.figureName}</button>
+                            {node.place && <span class="ts-tag ts-tag-place">📍 {node.place}</span>}
+                          </div>
+                          <div class="ts-card-title">{node.title}</div>
+                          <p class="ts-card-summary">{node.summary}</p>
+                        </article>
+                      ))}
+
+                      {row.works.map((w) => (
+                        <article
+                          class={`ts-card ts-card-work ${w.isExile ? 'is-exile-work' : ''}`}
+                          data-kind="work"
+                          data-author-id={w.authorId}
+                          data-is-poet={w.isPoet ? '1' : '0'}
+                          data-is-ci={w.isCi ? '1' : '0'}
+                          data-is-minister={figures.find((x) => x.id === w.authorId)?.isMinister ? '1' : '0'}
+                          data-is-exile={w.isExile ? '1' : '0'}
+                          data-search={`${row.year} ${w.authorName} ${w.title} ${w.place} ${w.context} ${w.excerpt} ${w.themes.join(' ')}`}
+                        >
+                          <div class="ts-card-head">
+                            <button type="button" class="ts-author-btn" data-fig-id={w.authorId}>{w.authorName}</button>
+                            <span class="ts-card-title">《{w.title}》</span>
+                            {w.genre && <span class="ts-card-meta">[{w.genre}]</span>}
+                            {w.place && <span class="ts-tag ts-tag-place">📍 {w.place}</span>}
+                            {w.isExile && <span class="ts-tag ts-tag-exile">⚠️ 贬谪/迁谪作</span>}
+                          </div>
+                          <p class="ts-card-summary">{w.context}</p>
+                          {w.excerpt && <blockquote class="ts-work-excerpt">{w.excerpt}</blockquote>}
+                        </article>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </section>
+            )
+          })}
+        </section>
+
+        {/* ══ 视图二：ECharts 名士关系图谱 ════════════════════════ */}
+        <section id="pane-graph" class="ts-view-pane" hidden>
+          <div class="ts-graph-panel">
+            <div class="ts-graph-controls">
+              <div class="ts-graph-circles">
+                <button type="button" class="ts-circle-btn is-active" data-circle="all">全唐宋关系总图</button>
+                <button type="button" class="ts-circle-btn" data-circle="shengtang">初盛唐诗坛（李杜高岑王孟）</button>
+                <button type="button" class="ts-circle-btn" data-circle="zhongtang">中晚唐（韩柳元白小李杜）</button>
+                <button type="button" class="ts-circle-btn" data-circle="beisong">北宋（欧苏王司马苏门）</button>
+                <button type="button" class="ts-circle-btn" data-circle="nansong">南宋（岳秦陆辛范杨朱）</button>
+              </div>
+              <div class="ts-graph-legend">
+                <span>🟠 挚友</span>
+                <span>🟢 师承</span>
+                <span>🟣 论敌</span>
+                <span>🔵 同僚</span>
+                <span>⚪ 社群/影响（虚线）</span>
+              </div>
+            </div>
+            <div id="ts-graph-canvas" class="ts-graph-canvas"></div>
+            <p class="ts-card-meta" style="margin-top:0.55rem;">
+              提示：支持滚轮缩放、拖拽节点；点击任意人物圆点即可在右侧展开其好友/论敌详情与贬谪作品，并一键定位回时间轴。
+            </p>
+          </div>
+        </section>
+
+        {/* ══ 视图三：贬谪诗路编年 ════════════════════════════════ */}
+        <section id="pane-exile" class="ts-view-pane" hidden>
+          <p class="ts-card-meta" style="margin-bottom:0.85rem;">
+            按时间顺序汇集唐宋诗人、词人在贬谪、左迁、流放或遇赦途中的代表名篇与创作地，展现「国家不幸诗家幸」的千古名句脉络。
+          </p>
+          <div class="ts-exile-grid">
+            {exileWorks.map((w) => (
+              <article
+                class="ts-exile-card"
+                data-author-id={w.authorId}
+                data-search={`${w.year} ${w.authorName} ${w.title} ${w.place} ${w.context} ${w.excerpt}`}
+              >
+                <div class="ts-card-head">
+                  <span class="ts-tag ts-tag-exile">{w.year}年</span>
+                  <button type="button" class="ts-author-btn" data-fig-id={w.authorId}>{w.authorName}</button>
+                  {w.place && <span class="ts-tag ts-tag-place">📍 {w.place}</span>}
+                </div>
+                <div class="ts-card-title">《{w.title}》 <span class="ts-card-meta">{w.genre}</span></div>
+                <p class="ts-card-summary">{w.context}</p>
+                {w.excerpt && <blockquote class="ts-work-excerpt">{w.excerpt}</blockquote>}
+              </article>
+            ))}
+          </div>
+        </section>
+      </main>
+
+      {/* 右侧：人物关系与作品聚焦抽屉 */}
+      <aside class="ts-spotlight" id="ts-spotlight" hidden aria-label="人物关系与作品聚焦详情">
+        <div style="display:flex;justify-content:flex-end;margin-bottom:0.25rem;">
+          <button type="button" class="ts-spot-close" id="ts-spot-close" title="关闭聚焦面板">✕ 关闭</button>
+        </div>
+        <div id="ts-spot-content"></div>
+      </aside>
+    </div>
+  </div>
+
+  <script type="application/json" id="ts-client-data" set:html={serializedPayload}></script>
+  <script src="../../client/tang-song-ui.js"></script>
+</Base>

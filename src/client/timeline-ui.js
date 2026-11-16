@@ -17,6 +17,8 @@ if (timeline) {
   const showFigures = document.getElementById('show-figures')
   const figureFieldsBar = document.getElementById('figure-fields-bar')
   const figFieldToggles = [...document.querySelectorAll('.fig-field-toggle')]
+  const figRoleBtns = [...document.querySelectorAll('.chip-fig-role')]
+  let activeFigRole = 'all'
   const catToggles = [...document.querySelectorAll('.cat-toggle')]
   const jump = document.getElementById('jump-dynasty')
   const current = document.getElementById('current-dynasty')
@@ -143,11 +145,17 @@ if (timeline) {
       card.hidden = !(impOk && catOk)
     }
 
-    // 2. 决定人物卡片的去留（按领域多选过滤）
+    // 2. 决定人物卡片的去留（按领域多选过滤与身份细分过滤）
     for (let i = 0; i < allFigureCards.length; i++) {
       const figCard = allFigureCards[i]
       const fieldOk = activeFigFields.has(figCard.dataset.field)
-      figCard.hidden = !fieldOk
+      let roleOk = true
+      if (activeFigRole !== 'all') {
+        const rolesStr = figCard.dataset.roles || ''
+        const rolesArr = rolesStr ? rolesStr.split(',') : []
+        roleOk = rolesArr.includes(activeFigRole)
+      }
+      figCard.hidden = !(fieldOk && roleOk)
     }
 
     // 3. 极速行可见性与中轴空行收拢计算
@@ -204,6 +212,20 @@ if (timeline) {
   showWorld?.addEventListener('change', apply)
   showFigures?.addEventListener('change', apply)
   figFieldToggles.forEach((t) => t.addEventListener('change', apply))
+  figRoleBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const role = btn.dataset.role || 'all'
+      if (activeFigRole === role && role !== 'all') {
+        activeFigRole = 'all'
+      } else {
+        activeFigRole = role
+      }
+      figRoleBtns.forEach((b) => {
+        b.classList.toggle('is-active', (b.dataset.role || 'all') === activeFigRole)
+      })
+      apply()
+    })
+  })
   catToggles.forEach((t) => t.addEventListener('change', apply))
 
   // ── 交互式生命周期纵向高亮光束 (Lifespan Projection Beam) ──────────
@@ -736,6 +758,7 @@ if (timeline) {
       showWorld: showWorld ? showWorld.checked : true,
       showFigures: showFigures ? showFigures.checked : false,
       figureFields: figFieldToggles.filter((t) => t.checked).map((t) => t.value),
+      figureRole: activeFigRole,
       categories: catToggles.filter((t) => t.checked).map((t) => t.value),
     }
 
@@ -775,6 +798,14 @@ if (timeline) {
       const figFieldSet = new Set(settings.figureFields)
       figFieldToggles.forEach((t) => {
         t.checked = figFieldSet.has(t.value)
+      })
+    }
+
+    // 3.2 人物身份细分 (figureRole)
+    if (typeof settings.figureRole === 'string') {
+      activeFigRole = settings.figureRole
+      figRoleBtns.forEach((b) => {
+        b.classList.toggle('is-active', (b.dataset.role || 'all') === activeFigRole)
       })
     }
 

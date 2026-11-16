@@ -734,6 +734,25 @@ relations:
     confidence: 存疑
     dispute: 直接交往细节（书信唱和、柳卒后愈为撰祭文墓志）主要见于别集而非两唐书正文，本条以正史同传并列与共同事业为主要证据。
     source_ids: [src-jts-vol160]
+  - relation_type: 挚友
+    target_id: mengjiao
+    direction: 双向
+    period:
+      text: 约792年长安订交至814年孟郊卒，诗坛号「韩孟」
+      year: 792
+      range_end: 814
+      precision: 范围
+    evidence: 韩愈推重孟郊奇崛诗风，作《醉留东野》《荐士》极力举荐，二人险韵联句并称「韩孟诗派」。
+    source_ids: [src-jts-vol160, src-qts-hanyu]
+  - relation_type: 同僚
+    target_id: peidu
+    direction: 双向
+    period:
+      text: 817年从裴度征淮西，任行军司马
+      year: 817
+      precision: 精确
+    evidence: 元和十二年裴度督师平定淮西吴元济之乱，韩愈任行军司马随征并撰《平淮西碑》，二人相知甚深。
+    source_ids: [src-jts-vol160, src-xts-vol176]
   - relation_type: 思想影响
     target_id: dufu
     direction: 单向

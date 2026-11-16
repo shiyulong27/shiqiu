@@ -287,6 +287,8 @@ export function buildTimeline(data) {
       id: f.id,
       name: f.name,
       field: f.field,
+      roles: f.roles ?? [],
+      tags: f.tags ?? [],
       note: f.note,
       confidence: f.confidence,
       dispute: f.dispute,

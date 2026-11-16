@@ -681,6 +681,36 @@ relations:
     evidence: 本传记修奖引王安石声誉谓必显于世（同卷曾巩附传并载巩导安石于欧阳修）；及守青州又以请止散青苗钱为安石所诋故求归愈切——奖掖与分歧均有实取。
     confidence: 确定
     source_ids: [src-songshi-vol319]
+  - relation_type: 挚友
+    target_id: fanzhongyan
+    direction: 双向
+    period:
+      text: 1036—1045年庆历新政前后共患难，以朋党相许
+      year: 1036
+      range_end: 1052
+      precision: 范围
+    evidence: 景祐间范仲淹因言事贬饶州，欧阳修贻书切责谏官高若讷而同遭贬夷陵；庆历新政中同为改革中坚，修作《朋党论》为范仲淹等正名。
+    source_ids: [src-songshi-vol319]
+  - relation_type: 挚友
+    target_id: meiyaochen
+    direction: 双向
+    period:
+      text: 约1031年洛阳幕府订交至1060年梅尧臣卒
+      year: 1031
+      range_end: 1060
+      precision: 范围
+    evidence: 在洛阳同为钱惟演幕僚，同倡宋诗革新；嘉祐二年二人共同主持礼部试拔擢苏轼，梅尧臣卒后欧阳修为其编集作序。
+    source_ids: [src-songshi-vol319]
+  - relation_type: 师承
+    target_id: zenggong
+    direction: 双向
+    period:
+      text: 约1041—1057年奖掖提携，嘉祐二年同榜进士
+      year: 1041
+      range_end: 1057
+      precision: 范围
+    evidence: 曾巩早年持文谒欧阳修备受赏识，嘉祐二年与苏轼同为欧阳修门生登第，曾巩复引荐王安石于欧阳修，同为北宋古文运动中坚。
+    source_ids: [src-songshi-vol319]
 
 reception:
   - era: 同时代

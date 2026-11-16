@@ -863,6 +863,26 @@ relations:
       precision: 约
     evidence: 新唐书本传载少与李白齐名时号李杜，尝从白及高适过汴州酒酣登吹台慷慨怀古人莫测也；旧唐书亦载天宝末诗人甫与李白齐名。诗证俱在：与李十二白同寻范十隐居（醉眠秋共被携手日同行）、春日忆李白（白也诗无敌）、冬日有怀李白、赠李白等均为实取原文。
     source_ids: [src-xts-vol201, src-jts-vol190b, src-qts-dufu]
+  - relation_type: 挚友
+    target_id: gaoshi
+    direction: 双向
+    period:
+      text: 744年梁宋吹台订交至765年高适卒
+      year: 744
+      range_end: 765
+      precision: 范围
+    evidence: 新唐书杜甫传记尝从白及高适过汴州酒酣登吹台；杜甫流寓成都草堂期间高适任彭州、蜀州刺史及西川节度使屡加周济，杜甫作《追酬故高蜀州人日见寄》痛悼知己。
+    source_ids: [src-xts-vol201, src-qts-dufu, src-jts-vol111]
+  - relation_type: 挚友
+    target_id: cencan
+    direction: 双向
+    period:
+      text: 约757—768年长安同朝及入蜀唱和
+      year: 757
+      range_end: 768
+      precision: 范围
+    evidence: 肃宗至德间同在凤翔、长安为官（杜甫任左拾遗、岑参任右补阙），常有早朝唱和（《寄左省杜拾遗》）；后同历蜀地多有诗篇往还。
+    source_ids: [src-qts-dufu]
   - relation_type: 思想影响
     target_id: yuanzhen
     direction: 单向（甫→稹）

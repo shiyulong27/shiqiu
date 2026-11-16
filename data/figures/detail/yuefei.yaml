@@ -577,7 +577,27 @@ footprints:
 # 岳家军群体（社群组）无具体 target_id，其军纪口碑已入 timeline 第13条与 reception 同时代层；
 # 韩世忠「莫须有」之问入 reception 同时代层。秦桧入库后应补建 论敌 组（evidence 引本传
 # 檜手書小紙付獄、兀朮遺檜書必殺飛始可和、莫须有问答三段铁证）。
-relations: []
+relations:
+  - relation_type: 论敌
+    target_id: qinhui
+    direction: 双向
+    period:
+      text: 1137—1141年主战与主和剧烈冲突，终被秦桧构陷遇害
+      year: 1137
+      range_end: 1141
+      precision: 范围
+    evidence: 本传载秦桧力主绍兴和议，金帅兀术遗桧书谓「必杀飞，始可和」，桧遂手书小纸付狱以「莫须有」三字致岳飞父子冤死风波亭。
+    source_ids: [src-songshi-vol365]
+  - relation_type: 同僚
+    target_id: hanshizhong
+    direction: 双向
+    period:
+      text: 建炎至绍兴间同为南宋抗金主力大将
+      year: 1130
+      range_end: 1141
+      precision: 范围
+    evidence: 本传载岳飞下狱后，同列大将韩世忠心不平，诣秦桧诘其实，桧曰飞子云与张宪书虽不明其事体莫须有，世忠慨然叹曰「莫须有三字何以服天下」。
+    source_ids: [src-songshi-vol365]
 
 reception:
   - era: 同时代

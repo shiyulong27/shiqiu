@@ -3,6 +3,7 @@ import { CATEGORIES, FIELDS } from '../lib/enums.js'
 
 const { dynasties } = Astro.props
 const figureFields = [...FIELDS, '传说']
+const figureRoles = ['诗人', '词人', '散文家', '思想家', '政治家', '军事家']
 ---
 
 <div class="toolbar">
@@ -61,12 +62,22 @@ const figureFields = [...FIELDS, '传说']
         <span class="switch-label">人物</span>
       </label>
       <div class="figure-fields-bar" id="figure-fields-bar" hidden>
-        {figureFields.map((f) => (
-          <label class="chip chip-fig-field" data-field={f} title={`筛选「${f}」领域人物`}>
-            <input type="checkbox" class="fig-field-toggle chip-input" value={f} checked />
-            <span class="chip-label">{f}</span>
-          </label>
-        ))}
+        <div class="figure-fields-group">
+          {figureFields.map((f) => (
+            <label class="chip chip-fig-field" data-field={f} title={`筛选「${f}」领域人物`}>
+              <input type="checkbox" class="fig-field-toggle chip-input" value={f} checked />
+              <span class="chip-label">{f}</span>
+            </label>
+          ))}
+        </div>
+        <div class="figure-filter-sep" aria-hidden="true"></div>
+        <div class="figure-roles-group" id="figure-roles-group" title="按身份/细分角色快速聚焦">
+          <span class="filter-group-tag">身份:</span>
+          <button type="button" class="chip chip-fig-role is-active" data-role="all" title="显示全部身份">全部</button>
+          {figureRoles.map((r) => (
+            <button type="button" class="chip chip-fig-role" data-role={r} title={`仅看「${r}」`}>{r}</button>
+          ))}
+        </div>
       </div>
     </div>
 

@@ -24,6 +24,9 @@ const fmt = (str) => {
 const lifespanText = figure.birth && figure.death
   ? `${fmt(figure.birth)}–${fmt(figure.death)}${figure.lifespanYears ? ` · 享年${figure.lifespanYears}岁` : ''}`
   : figure.birth ? `${fmt(figure.birth)}生` : figure.note
+
+const roles = figure.roles ?? []
+const rolesStr = roles.join(',')
 ---
 
 <article
@@ -32,6 +35,7 @@ const lifespanText = figure.birth && figure.death
   data-figure-id={figure.id}
   data-figure-name={figure.name}
   data-field={figure.field}
+  data-roles={rolesStr}
   data-row-start={figure.rowStart}
   data-row-end={figure.rowEnd}
   data-start-year={figure.startYear}
@@ -43,6 +47,13 @@ const lifespanText = figure.birth && figure.death
         <span class="field-icon">{icon}</span>
         <span class="field-name">{figure.field}</span>
       </span>
+      {roles.length > 0 && (
+        <span class="figure-roles-wrap">
+          {roles.map((r) => (
+            <span class="figure-role-pill" data-role={r}>{r}</span>
+          ))}
+        </span>
+      )}
       <h4 class="figure-card-name">
         {figure.name}
         {figure.confidence && figure.confidence !== '确切' && (

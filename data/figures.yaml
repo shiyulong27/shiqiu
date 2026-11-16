@@ -651,6 +651,8 @@
   death: '-0278'
   field: 文学
   note: 楚国诗人，楚辞之祖，著《离骚》《九歌》
+  roles: [诗人, 辞赋家, 政治家]
+  tags: [战国, 楚辞, 离骚]
   has_detail: true
   confidence: 有争议
   dispute: 生卒年有多种推定说法。
@@ -920,6 +922,8 @@
   death: '0232'
   field: 文学
   note: 建安文学代表，「才高八斗」，作《洛神赋》《七步诗》
+  roles: [诗人, 辞赋家]
+  tags: [建安文学, 三曹, 洛神赋]
   has_detail: true
   confidence: 确定
 - id: jikang
@@ -973,6 +977,8 @@
   death: '0427'
   field: 文学
   note: 田园诗之宗，不为五斗米折腰
+  roles: [诗人, 散文家]
+  tags: [东晋, 田园诗派, 隐逸]
   has_detail: true
   confidence: 有争议
   dispute: 生年有 365 与 372 等说。
@@ -1004,6 +1010,15 @@
   death: '0763'
   field: 思想
   note: 扬州高僧，六次东渡日本弘扬佛法与大唐文化
+  confidence: 确定
+- id: zhangjiuling
+  name: 张九龄
+  birth: '0678'
+  death: '0740'
+  field: 文学
+  note: 岭南首位宰相，开凿大庾岭梅关；盛唐诗坛伯乐与开先之宗，诗风清淡秀雅、骨气端翔
+  roles: [诗人, 政治家]
+  tags: [盛唐, 开元盛世, 梅关古道, 唐诗先驱, 开元名相]
   confidence: 确定
 - id: guoziyi
   name: 郭子仪
@@ -1039,6 +1054,8 @@
   death: '0770'
   field: 文学
   note: 诗圣，沉郁顿挫，忧国忧民，被称为「诗史」
+  roles: [诗人]
+  tags: [盛唐, 现实主义, 诗史]
   has_detail: true
   confidence: 确定
 - id: chairong
@@ -1069,6 +1086,8 @@
   death: '0978'
   field: 文学
   note: 南唐后主，词中之帝，作《虞美人》《相见欢》
+  roles: [词人]
+  tags: [南唐, 词中之帝, 婉约词]
   has_detail: true
   confidence: 确定
 - id: kouzhun
@@ -1105,6 +1124,8 @@
   death: '1101'
   field: 文学
   note: 苏东坡，诗词文书画皆精，旷达豪放之宗
+  roles: [词人, 诗人, 散文家, 书法家]
+  tags: [北宋, 豪放词, 三苏, 唐宋八大家]
   has_detail: true
   confidence: 确定
 - id: liqingzhao
@@ -1113,6 +1134,8 @@
   death: '1155'
   field: 文学
   note: 婉约词宗，易安体传世，南渡后词风转沉郁
+  roles: [词人]
+  tags: [两宋之交, 易安体, 婉约词]
   has_detail: true
   confidence: 有争议
   dispute: 卒年无确载，约 1155 为推定；晚年流寓行迹及再嫁与否亦有争议。
@@ -1289,6 +1312,8 @@
   death: '1685'
   field: 文学
   note: 清代著名词人，御前侍卫，词风清丽婉约、格高韵远，著有《饮水词》，被誉为“清代第一词人”
+  roles: [词人]
+  tags: [清代, 纳兰词, 饮水词, 婉约词]
   confidence: 确定
 - id: zhangtingyu
   name: 张廷玉
@@ -2398,4 +2423,208 @@
   roles: [医学家]
   tags: [四大名医, 医圣, 伤寒杂病论, 辨证论治]
   note: 东汉医学家，被后世尊为「医圣」，目睹汉末疫病流离撰《伤寒杂病论》，创立中医理法方药辨证论治体系
+  confidence: 确定
+- id: gaoshi
+  name: 高适
+  related_dynasties: [tang]
+  birth: '0704'
+  death: '0765'
+  field: 文学
+  roles: [诗人, 政治家]
+  tags: [盛唐, 边塞诗派, 高岑, 封侯]
+  has_detail: true
+  note: 字达夫，盛唐边塞诗派代表，与岑参并称「高岑」；早年与李白、杜甫同游梁宋，晚年出镇西川并封渤海县侯，为唐代诗人达官之冠
+  confidence: 有争议
+  dispute: 生年传统有约700—704诸说，此处从学界常用之704年。
+- id: cencan
+  name: 岑参
+  related_dynasties: [tang]
+  birth: '0715'
+  death: '0770'
+  field: 文学
+  roles: [诗人]
+  tags: [盛唐, 边塞诗派, 高岑]
+  note: 盛唐边塞诗派代表诗人，两度出塞任职西北幕府，诗风奇伟雄丽，与高适并称「高岑」，与杜甫友善
+  confidence: 确定
+- id: wangchangling
+  name: 王昌龄
+  related_dynasties: [tang]
+  birth: '0698'
+  death: '0756'
+  field: 文学
+  roles: [诗人]
+  tags: [盛唐, 七绝圣手, 诗家天子, 贬谪]
+  note: 盛唐七绝圣手，世称「诗家天子」；与李白、孟浩然、高适友善，曾被贬龙标尉，作《芙蓉楼送辛渐》
+  confidence: 有争议
+  dispute: 生年约698系学界推定，安史之乱中被害年份约756。
+- id: hezhizhang
+  name: 贺知章
+  related_dynasties: [tang]
+  birth: '0659'
+  death: '0744'
+  field: 文学
+  roles: [诗人, 政治家]
+  tags: [盛唐, 吴中四士, 饮中八仙, 谪仙人]
+  note: 盛唐礼部侍郎、秘书监，性旷达善草书，与张旭等并称「饮中八仙」；长安初见李白叹为「谪仙人」
+  confidence: 确定
+- id: mengjiao
+  name: 孟郊
+  related_dynasties: [tang]
+  birth: '0751'
+  death: '0814'
+  field: 文学
+  roles: [诗人]
+  tags: [中唐, 郊寒岛瘦, 诗囚, 游子吟]
+  note: 中唐苦吟诗人代表，世称「诗囚」，与韩愈为忘年挚友，作《游子吟》传诵千古
+  confidence: 确定
+- id: jiadao
+  name: 贾岛
+  related_dynasties: [tang]
+  birth: '0779'
+  death: '0843'
+  field: 文学
+  roles: [诗人]
+  tags: [中唐, 郊寒岛瘦, 推敲]
+  note: 中唐苦吟诗人，早年为僧名无本，得韩愈赏识还俗，「推敲」典故出自其诗句斟酌
+  confidence: 确定
+- id: fangxuanling
+  name: 房玄龄
+  related_dynasties: [tang]
+  birth: '0579'
+  death: '0648'
+  field: 政治
+  roles: [政治家]
+  tags: [贞观名相, 房谋杜断]
+  note: 唐太宗贞观名相，善谋略而杜如晦善决断，史称「房谋杜断」，佐成贞观之治并监修晋书
+  confidence: 确定
+- id: direnjie
+  name: 狄仁杰
+  related_dynasties: [tang]
+  birth: '0630'
+  death: '0700'
+  field: 政治
+  roles: [政治家]
+  tags: [武周名相, 斗南一人]
+  note: 武周时期名相，断案如神、直言敢谏，力主复立唐嗣并举荐张柬之、姚崇等贤臣
+  confidence: 确定
+- id: yaochong
+  name: 姚崇
+  related_dynasties: [tang]
+  birth: '0651'
+  death: '0721'
+  field: 政治
+  roles: [政治家]
+  tags: [开元名相, 姚宋]
+  note: 唐玄宗开元初宰相，提出十事要说，灭蝗兴利、裁汰冗官，与宋璟并称「姚宋」
+  confidence: 确定
+- id: songjing
+  name: 宋璟
+  related_dynasties: [tang]
+  birth: '0663'
+  death: '0737'
+  field: 政治
+  roles: [政治家]
+  tags: [开元名相, 姚宋]
+  note: 唐玄宗开元名相，接替姚崇执政，守法持正、抑外戚近幸，与姚崇并称「姚宋」
+  confidence: 确定
+- id: lilinpu
+  name: 李林甫
+  related_dynasties: [tang]
+  birth: '0683'
+  death: '0753'
+  field: 政治
+  roles: [政治家]
+  tags: [天宝权相, 口蜜腹剑, 排抑文士]
+  note: 唐玄宗天宝时期专权宰相十九年，嫉贤妒能、排抑进士文人（李白、杜甫、王昌龄等仕途皆受其压制），重用胡将埋下安史之乱隐患
+  confidence: 有争议
+  dispute: 卒年确为天宝十一载（752底或753初，按公历多作753年1月），生年系推算。
+- id: peidu
+  name: 裴度
+  related_dynasties: [tang]
+  birth: '0765'
+  death: '0839'
+  field: 政治
+  roles: [政治家, 军事家]
+  tags: [元和中兴名相, 平淮西]
+  note: 唐宪宗朝名相，亲赴前线督师任用李愬雪夜入蔡州平定淮西；奖掖后进，与白居易、刘禹锡、韩愈交游甚厚
+  confidence: 确定
+- id: niusengru
+  name: 牛僧孺
+  related_dynasties: [tang]
+  birth: '0779'
+  death: '0847'
+  field: 政治
+  roles: [政治家]
+  tags: [牛李党争, 牛党领袖]
+  note: 晚唐牛党领袖，穆宗、文宗朝宰相，与李德裕牛李党争绵延近四十年；镇扬州时礼遇幕僚杜牧
+  confidence: 确定
+- id: lideyu
+  name: 李德裕
+  related_dynasties: [tang]
+  birth: '0787'
+  death: '0850'
+  field: 政治
+  roles: [政治家]
+  tags: [会昌名相, 牛李党争, 李党领袖, 贬谪]
+  note: 晚唐李党领袖、武宗朝宰相，辅佐会昌中兴，平泽潞、破回鹘；宣宗朝遭牛党排挤一贬崖州，著《会昌一品集》
+  confidence: 确定
+- id: zhaopu
+  name: 赵普
+  related_dynasties: [beisong]
+  birth: '0922'
+  death: '0992'
+  field: 政治
+  roles: [政治家]
+  tags: [北宋开国名相, 杯酒释兵权]
+  note: 北宋开国名相，佐太祖策划陈桥兵变与「杯酒释兵权」，提出「先南后北」统一战略
+  confidence: 确定
+- id: simaguang
+  name: 司马光
+  related_dynasties: [beisong]
+  birth: '1019'
+  death: '1086'
+  field: 政治
+  roles: [政治家, 史学家]
+  tags: [北宋名相, 旧党领袖, 资治通鉴]
+  note: 字君实，北宋旧党领袖、宰相，主编编年体巨著《资治通鉴》；反对王安石新法而退居洛阳十五年，元祐初执政尽罢新法，与苏轼亦友亦异
+  confidence: 确定
+- id: caijing
+  name: 蔡京
+  related_dynasties: [beisong]
+  birth: '1047'
+  death: '1126'
+  field: 政治
+  roles: [政治家, 书法家]
+  tags: [北宋权相, 元祐党人碑, 花石纲]
+  note: 宋徽宗朝权相，假托绍述新法排斥异己、刊立元祐党人碑，大兴花石纲致民怨沸腾，靖康之难贬死潭州
+  confidence: 确定
+- id: qinhui
+  name: 秦桧
+  related_dynasties: [nansong]
+  birth: '1090'
+  death: '1155'
+  field: 政治
+  roles: [政治家]
+  tags: [南宋权相, 绍兴和议, 主和派]
+  note: 宋高宗朝专权宰相十九年，主和抑战、力促绍兴和议，以「莫须有」杀害岳飞，打压主战派士大夫
+  confidence: 确定
+- id: hanshizhong
+  name: 韩世忠
+  related_dynasties: [nansong]
+  birth: '1089'
+  death: '1151'
+  field: 军事
+  roles: [军事家]
+  tags: [南宋中兴四将, 黄天荡]
+  note: 南宋中兴四将之一，大仪镇大捷、黄天荡阻击金兀术；公开诘问秦桧岳飞何罪，晚年辞官杜门谢客
+  confidence: 确定
+- id: meiyaochen
+  name: 梅尧臣
+  related_dynasties: [beisong]
+  birth: '1002'
+  death: '1060'
+  field: 文学
+  roles: [诗人]
+  tags: [北宋, 宋诗开山, 欧梅]
+  note: 北宋诗文革新先驱，与苏舜钦并称「苏梅」、与欧阳修并称「欧梅」，曾任嘉祐二年礼部试考官共拔苏轼
   confidence: 确定
