@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro'
+import CommonSenseFoundations from '../../components/CommonSenseFoundations.astro'
 import { commonSenseData } from '../../data/commonSenseData.js'
 
 const base = import.meta.env.BASE_URL
@@ -9,7 +10,7 @@ const { meta, categoryTabs, safetyTopics, publicSigns, trashClassification, heal
 const simulatorItems = [
   { name: "矿泉水塑料瓶", cat: "recyclable", emoji: "🧴" },
   { name: "废旧旧报纸", cat: "recyclable", emoji: "📰" },
-  { name: "废纽扣电池", cat: "hazardous", emoji: "🔋" },
+  { name: "废含汞纽扣电池", cat: "hazardous", emoji: "🔋" },
   { name: "过期感冒药", cat: "hazardous", emoji: "💊" },
   { name: "啃完的苹果核", cat: "food-waste", emoji: "🍏" },
   { name: "喝剩的茶叶渣", cat: "food-waste", emoji: "🍵" },
@@ -18,7 +19,7 @@ const simulatorItems = [
 ]
 ---
 
-<Base title="少儿生活与百科常识大宝典 · 安全第一平安成长" wide={true}>
+<Base title="少儿生活与百科常识大宝典 · 从零开始认识生活与世界" wide={true}>
   <div class="cs-container">
     <!-- 顶部全景导航与导言 -->
     <header class="cs-header">
@@ -30,12 +31,13 @@ const simulatorItems = [
           <a href={`${base}geography/heritage/`} class="cs-sub-nav">🏯 中华世界遗产</a>
           <a href={`${base}science/`} class="cs-sub-nav">🚀 华夏科学探索</a>
           <a href={`${base}chinese/solar-terms/`} class="cs-sub-nav">🌾 二十四节气</a>
+          <a href={`${base}culture/traditional/`} class="cs-sub-nav">📖 生活里的传统文化</a>
         </div>
       </div>
 
       <div class="cs-hero">
         <div class="cs-title-wrap">
-          <span class="cs-badge">🛡️ 安全常识 · 伴你平安智慧茁壮成长</span>
+          <span class="cs-badge">🔎 从零开始 · 生活处处有学问</span>
           <h1 class="cs-main-title">{meta.title}</h1>
           <p class="cs-subtitle">{meta.subtitle}</p>
         </div>
@@ -59,6 +61,8 @@ const simulatorItems = [
         </div>
       </div>
     </header>
+
+    <CommonSenseFoundations />
 
     <!-- 模块一：应急自救与安全 (Safety) -->
     <section class="cs-module-section" data-section="safety">
@@ -126,7 +130,7 @@ const simulatorItems = [
     <section class="cs-module-section" data-section="trash">
       <div class="cs-section-title">
         <h2>♻️ 垃圾四分类与变废为宝 (Waste Sorting)</h2>
-        <p class="cs-section-sub">认识蓝色、红色、绿色、灰色四色垃圾桶，爱护环境从垃圾分类做起！</p>
+        <p class="cs-section-sub">分类名称、桶色和投放要求因地区而异。细分示例参考上海2024年指引，实际投放请先查当地规定；危险物品交给成人处理。</p>
       </div>
 
       <!-- 四分类规则卡片 -->
@@ -207,7 +211,7 @@ const simulatorItems = [
     <section class="cs-module-section" data-section="health">
       <div class="cs-section-title">
         <h2>🍎 健康生活与护眼习惯 (Health & Hygiene)</h2>
-        <p class="cs-section-sub">内外夹弓大立腕七步洗手、20-20-20 护眼法则与儿童膳食平衡宝塔</p>
+        <p class="cs-section-sub">认真洗手、合理用眼、认识多样食物；年龄、过敏与身体状况不同，具体健康安排请与照护者和专业人员商量。</p>
       </div>
 
       <div class="cs-health-grid">
@@ -235,7 +239,7 @@ const simulatorItems = [
     <section class="cs-module-section" data-section="etiquette">
       <div class="cs-section-title">
         <h2>🤝 文明社交与家风礼仪 (Social Etiquette)</h2>
-        <p class="cs-section-sub">懂礼貌、知礼节，做一个谦逊阳光、受人喜爱的新时代好少年</p>
+        <p class="cs-section-sub">学习询问、尊重与感谢；有礼貌也可以拒绝不愿意的身体接触，并向可信成人求助。</p>
       </div>
 
       <div class="cs-etiquette-grid">
@@ -253,6 +257,24 @@ const simulatorItems = [
           </div>
         ))}
       </div>
+    </section>
+
+    <section class="cs-module-section" aria-label="资料说明">
+      <h2>继续查证：来源与适用范围</h2>
+      <p>垃圾分类名称、桶色和投放要求因地区而异，本页细分示例参考上海2024年投放指引，实际投放请查当地规定。应急内容用于日常学习，不代替现场专业指引。</p>
+      <ul>
+        <li><a href="https://www.mem.gov.cn/xw/xwfbh/2025n09y29xwfbh/wzsl_4260/202509/t20250929_560335.shtml" target="_blank" rel="noopener noreferrer">应急管理部2025年9月发布会：火场避险与湿毛巾的作用边界</a></li>
+        <li><a href="https://www.usgs.gov/faqs/what-should-i-do-during-earthquake?page=0" target="_blank" rel="noopener noreferrer">美国地质调查局：地震中按室内、室外等情境避险</a></li>
+        <li><a href="https://www.moe.gov.cn/jyb_xwfb/gzdt_gzdt/s5987/201507/t20150724_195531.html" target="_blank" rel="noopener noreferrer">教育部：防溺水，不盲目施救</a></li>
+        <li><a href="https://www.ndcpa.gov.cn/jbkzzx/c100030/common/content/content_2048932401755099136.html" target="_blank" rel="noopener noreferrer">国家疾控局：儿童青少年健康行动计划（2026—2030年）</a></li>
+        <li><a href="https://www.cdc.gov/handwashing" target="_blank" rel="noopener noreferrer">美国疾控中心：肥皂、流水和认真揉搓的洗手方法</a></li>
+        <li><a href="https://www.aao.org/eye-health/tips-prevention/are-computer-glasses-worth-it" target="_blank" rel="noopener noreferrer">美国眼科学会：20-20-20是屏幕用眼休息提醒</a></li>
+        <li><a href="https://www.chinacdc.cn/jkkp/zyws/zdzs/202408/t20240825_295630.html" target="_blank" rel="noopener noreferrer">中国疾控中心：水银温度计破损风险与处置知识（孩子不自行清理）</a></li>
+        <li><a href="https://www.shanghai.gov.cn/gwk/search/content/40b9feaa-53db-472f-8a6b-2c3cf0465def" target="_blank" rel="noopener noreferrer">上海市生活垃圾分类投放指引（2024版）</a></li>
+        <li><a href="https://www.gov.cn/banshi/2005-08/23/content_25579_2.htm" target="_blank" rel="noopener noreferrer">道路交通安全法实施条例：车辆与行人信号分别阅读</a>；<a href="https://jtgl.beijing.gov.cn/jgj/lszt/659722/10860935/index.html" target="_blank" rel="noopener noreferrer">北京交管：交通标志图解</a></li>
+        <li><a href="https://js.119.gov.cn/202004/35463ade55aa4cb185f79be3182b26de_c_231d327e4f3f4b30be4d.html" target="_blank" rel="noopener noreferrer">中国消防：燃气泄漏时避免明火、电火花与现场打电话</a></li>
+      </ul>
+      <p>本轮查阅：2026-10-14。文化、称谓和礼俗可继续阅读<a href={`${base}culture/traditional/`}>传统文化与民俗常识</a>。</p>
     </section>
 
     <!-- 弹窗：公共标识详情 -->

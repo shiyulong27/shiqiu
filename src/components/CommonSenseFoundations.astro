@@ -1,0 +1,44 @@
+---
+import { foundationDomains as domains, foundationEntries, foundationSources as sources } from '../data/commonSenseFoundationsData.js';
+const entries = foundationEntries.filter(e => e.reviewStatus === 'verified');
+const sourceMap = new Map(sources.map(s => [s.id, s]));
+const paths = [
+  ['察觉信号', '说出感受', '找可信成人'],
+  ['认识原料', '了解加工', '安全储存与用餐'],
+  ['先保护自己', '说清地点与情况', '获得成人或专业帮助'],
+  ['观察一天', '比较一年', '查天文与气象资料'],
+  ['观察特征', '记录环境', '核对并尊重生命'],
+  ['提出问题', '安全观察与比较', '用证据修正猜想'],
+  ['明确需要', '算清总价', '与照护者商量'],
+  ['找原始页面', '看作者与日期', '核对证据和语境'],
+];
+---
+<section class="cs-module-section foundations" data-section="foundations" id="foundations">
+  <header><p class="foundation-eyebrow">从零开始 · 八类生活观察</p><h2>先把身边的世界，弄懂一点点</h2><p>从一个问题出发，先读短答，再看对照和小情境。不会时可以问，遇到危险先求助。</p></header>
+  <div class="foundation-controls"><label for="foundation-search">想找哪个问题？<input id="foundation-search" type="search" placeholder="试试：月亮、过敏、找零、AI……"/></label><label for="foundation-domain">选择主题<select id="foundation-domain"><option value="all">全部八类</option>{domains.map(d=><option value={d.id}>{d.title}</option>)}</select></label><button id="foundation-clear" type="button">清除</button></div>
+  <p id="foundation-count" role="status" aria-live="polite">显示 {entries.length} 个问题</p><p id="foundation-empty" hidden>这次没找到。换一个词，或清除主题后再试。</p>
+  <nav class="foundation-directory" aria-label="常识入门主题">{domains.map(d=><a href={`#foundation-${d.id}`} data-foundation-jump>{d.title} ↘</a>)}</nav>
+  {domains.map((domain,i)=><section class="foundation-domain" id={`foundation-${domain.id}`} data-foundation-group>
+    <header><span class="domain-index">{String(i+1).padStart(2,'0')}</span><div><h3>{domain.title}</h3><p>{domain.intro}</p></div></header>
+    <figure class="foundation-sketch"><ol>{paths[i].map((text,j)=><li><span class="step-number">{j+1}</span>{text}{j<2&&<span class="step-arrow" aria-hidden="true">→</span>}</li>)}</ol><figcaption>原创学习路径示意：先观察与理解，再行动或求助。</figcaption></figure>
+    <div class="foundation-cards">{entries.filter(e=>e.domainId===domain.id).map(entry=><article id={entry.id} data-foundation-entry data-domain={entry.domainId} data-search={`${entry.id} ${entry.title} ${entry.shortAnswer} ${entry.explanation}`.toLocaleLowerCase()}>
+      <p class="entry-number">{entry.id}</p><h4>{entry.title}</h4><p class="entry-answer">{entry.shortAnswer}</p>
+      <details><summary>看看解释与小情境 <span aria-hidden="true">＋</span></summary><p>{entry.explanation}</p><dl>{entry.compare.map(([label,text])=><div><dt>{label}</dt><dd>{text}</dd></div>)}</dl><p class="practice"><b>试一试</b>{entry.example.replace(/^教学情境：/,'')}</p><p class="foundation-scope"><b>多想一步</b>{entry.scopeNote}</p><ul class="foundation-sources">{entry.sourceIds.map(id=>{const s=sourceMap.get(id);return s&&<li><a href={s.url} target="_blank" rel="noopener noreferrer">{s.publisher} · {s.title} ↗</a><small>{s.supports}</small></li>})}</ul></details>
+    </article>)}</div>
+  </section>)}
+  <p class="foundation-footer">教学对话、对照与流程由本项目整理；引用资料查阅日期：2026-10-14。具体健康、安全和消费问题由照护者协助，按实际情况向专业人员求助。</p>
+</section>
+<script>
+  const input=document.querySelector<HTMLInputElement>('#foundation-search')!;
+  const domain=document.querySelector<HTMLSelectElement>('#foundation-domain')!;
+  function update(){let count=0;const terms=input.value.trim().toLocaleLowerCase().split(/\s+/);document.querySelectorAll<HTMLElement>('[data-foundation-entry]').forEach(e=>{e.hidden=!(terms.every(t=>e.dataset.search!.includes(t))&&(domain.value==='all'||domain.value===e.dataset.domain));if(!e.hidden)count++;});document.querySelectorAll<HTMLElement>('[data-foundation-group]').forEach(g=>g.hidden=!g.querySelector('[data-foundation-entry]:not([hidden])'));document.querySelector('#foundation-count')!.textContent=`显示 ${count} 个问题`;(document.querySelector('#foundation-empty') as HTMLElement).hidden=count!==0;}
+  function clear(){input.value='';domain.value='all';update();}
+  input.addEventListener('input',update);domain.addEventListener('change',update);document.querySelector('#foundation-clear')!.addEventListener('click',()=>{clear();input.focus();});document.querySelectorAll('[data-foundation-jump]').forEach(a=>a.addEventListener('click',clear));
+  // 稳定条目链接从其他页面进入时，将被旧页分类隐藏的入门区恢复显示。
+  function revealHash(){const target=document.getElementById(decodeURIComponent(location.hash.slice(1)));if(target?.closest('.foundations')){clear();document.querySelector<HTMLButtonElement>('.cs-filter-tab[data-cat="foundations"]')?.click();requestAnimationFrame(()=>target.scrollIntoView());}}
+  window.addEventListener('hashchange',revealHash);window.addEventListener('DOMContentLoaded',revealHash);revealHash();
+</script>
+<style>
+  .foundations{font-family:'Noto Sans SC','Microsoft YaHei',sans-serif;color:#294333;line-height:1.85}.foundations>header{max-width:780px;padding:8px 0 22px}.foundation-eyebrow{font-size:13px;color:#77744f;letter-spacing:.12em}.foundations h2{font-family:'Noto Serif SC','SimSun',serif;font-size:32px;margin:10px 0}.foundations>header>p:last-child{font-size:16px;color:#5c6b5e}.foundation-controls{display:flex;gap:16px;flex-wrap:wrap;align-items:end}.foundation-controls label{display:grid;gap:7px;font-size:13px}.foundation-controls label:first-child{flex:1;min-width:220px}.foundation-controls input,.foundation-controls select{font:inherit;font-size:16px;padding:12px;border:1px solid #b8c6b0;border-radius:4px;background:#fffef9;color:#294333}.foundation-controls button{border:0;background:none;color:#365d3c;font:inherit;padding:13px;cursor:pointer}#foundation-count{font-size:13px;color:#637361;margin:12px 0}.foundation-directory{display:flex;flex-wrap:wrap;gap:8px 20px;border-block:1px solid #d9dfd1;padding:18px 0;margin:15px 0 30px}.foundation-directory a{font-size:14px;color:#326045;text-decoration:none}.foundation-domain{padding:25px 0;scroll-margin-top:25px}.foundation-domain>header{display:flex;gap:20px;align-items:start}.domain-index{font-family:Georgia,serif;font-size:36px;color:#b0925d;line-height:1.2}.foundation-domain h3{font-size:25px;font-weight:600;margin:0 0 7px}.foundation-domain header p{font-size:14px;color:#647463;margin:0}.foundation-sketch{padding:24px;margin:22px 0;background:#eef2e5;border:1px solid #d6deca}.foundation-sketch ol{display:flex;justify-content:space-between;gap:20px;list-style:none;padding:0;margin:0}.foundation-sketch li{position:relative;flex:1;text-align:center;font-size:16px;color:#36523b}.step-number{display:block;margin:0 auto 8px;border:1px solid #b4c09e;background:#faf9ee;border-radius:50%;width:34px;line-height:34px;color:#8b7448;font-size:14px}.step-arrow{position:absolute;right:-18px;top:30px;color:#86936c}.foundation-sketch figcaption{font-size:11px;color:#66725c;margin-top:20px}.foundation-cards{display:grid;grid-template-columns:1fr 1fr;gap:0 34px}.foundation-cards article{min-width:0;padding:24px 0;border-bottom:1px solid #d7dece;scroll-margin-top:22px}.entry-number{font-size:11px;color:#7a806b;margin:0 0 7px}.foundation-cards h4{font-size:20px;line-height:1.5;margin:0 0 10px}.entry-answer{font-size:15px;margin:0 0 10px}.foundation-cards details{font-size:14px;color:#4f6151}.foundation-cards summary{color:#356345;cursor:pointer;padding:7px 0;list-style:none;font-size:13px}.foundation-cards summary::-webkit-details-marker{display:none}.foundation-cards summary span{float:right}.foundation-cards dl{margin:18px 0;background:#eef2e5;padding:4px 14px}.foundation-cards dl>div{padding:9px 0;border-bottom:1px solid #d8e0cc}.foundation-cards dl>div:last-child{border:0}.foundation-cards dt{font-size:12px;font-weight:600}.foundation-cards dd{margin:2px 0 0}.practice,.foundation-scope{padding:13px 14px;background:#f3efdf}.practice b,.foundation-scope b{display:block;font-size:12px;margin-bottom:4px}.practice{background:#eef2e5}.foundation-sources{list-style:none;padding:0;font-size:12px;overflow-wrap:anywhere}.foundation-sources li{margin:14px 0}.foundation-sources a{color:#376546;text-decoration:none}.foundation-sources small{display:block;font-size:11px;color:#72806d}.foundation-footer{font-size:13px;color:#6b7766;border-top:1px solid #d7dece;padding-top:20px}.foundations :focus-visible{outline:3px solid #986a31;outline-offset:4px}.foundations [hidden]{display:none!important}
+  @media(max-width:700px){.foundations h2{font-size:27px}.foundation-cards{grid-template-columns:1fr}.foundation-sketch{padding:18px}.foundation-sketch ol{flex-direction:column;gap:27px}.foundation-sketch li{font-size:16px}.step-arrow{position:static;display:block;transform:rotate(90deg);line-height:1;margin-top:12px}.foundation-domain h3{font-size:23px}.foundation-controls label:first-child{width:100%;flex-basis:100%}.foundation-controls select{max-width:245px}}
+</style>
