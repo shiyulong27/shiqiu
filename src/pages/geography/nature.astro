@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro'
+import '../../styles/learning.css'
 import { naturalGeographyData } from '../../data/naturalGeographyData.js'
 
 const base = import.meta.env.BASE_URL
@@ -8,18 +9,28 @@ const { meta, terrainSteps, mountainFramework, rivers, coreDividingLines, landfo
 
 <Base title="华夏自然地理与世界大画卷 · 十丘通识" wide={true}>
   <div class="geo-container">
-    <!-- 顶部全景导言与导航 -->
-    <header class="geo-header">
-      <div class="geo-nav-bar">
-        <a href={base} class="geo-back-btn">← 返回【十丘】知识总门户</a>
-        <div class="geo-nav-links">
-          <a href={`${base}geography/explore/`} class="geo-sub-nav">🧭 中国省份通识</a>
-          <a href={`${base}geography/heritage/`} class="geo-sub-nav">🏯 中华世界遗产</a>
-          <a href={`${base}biology/`} class="geo-sub-nav">🌿 神奇动物与恐龙</a>
-          <a href={`${base}astronomy/`} class="geo-sub-nav">🌌 浩瀚星空与深空</a>
-          <a href={`${base}timeline/`} class="geo-sub-nav">📜 上下五千年长卷</a>
+    <!-- 顶部统一通栏面包屑与快速切换条 -->
+    <header class="learn-header" style="margin-bottom: 1.25rem;">
+      <div class="learn-header-top">
+        <nav class="learn-breadcrumb">
+          <a href={base}>🏠 知识总门户</a>
+          <span>/</span>
+          <a href={`${base}geography/explore/`}>🗺️ 山川地理</a>
+          <span>/</span>
+          <strong style="color: #0284c7;">🏔️ 华夏自然地理</strong>
+        </nav>
+        <div class="learn-subject-switcher">
+          <a href={base} class="subject-chip chip-home">🏠 门户首页</a>
+          <a href={`${base}geography/explore/`} class="subject-chip" style="background: #fffbeb; color: #b45309; border: 1px solid #fde68a;">🧭 中国省份探索</a>
+          <a href={`${base}geography/nature/`} class="subject-chip active" style="background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd;">🏔️ 华夏自然地理</a>
+          <a href={`${base}geography/heritage/`} class="subject-chip" style="background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa;">🏯 中华世界遗产</a>
+          <a href={`${base}geography/`} class="subject-chip" style="background: #f8fafc; color: #475569; border: 1px solid #e2e8f0;">📜 历代疆域与古都</a>
         </div>
       </div>
+    </header>
+
+    <!-- 顶部全景导言与锚点导航 -->
+    <header class="geo-header">
 
       <div class="geo-hero">
         <div class="geo-title-wrap">

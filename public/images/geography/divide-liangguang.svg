@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="100%" height="100%">
+  <defs>
+    <linearGradient id="lgBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fffbeb"/>
+      <stop offset="100%" stop-color="#f8fafc"/>
+    </linearGradient>
+    <linearGradient id="riverGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981"/>
+      <stop offset="50%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <filter id="lgShadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="800" height="480" rx="16" fill="url(#lgBg)"/>
+  <rect x="12" y="12" width="776" height="456" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+
+  <!-- 顶部标题 -->
+  <g transform="translate(30, 42)">
+    <text font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="900" fill="#92400e">
+      🌴 苍梧广信 · 两广同源 —— 广东与广西地理历史分野
+    </text>
+    <text y="22" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#64748b">
+      以汉代“广信”分东西 · 初开粤地宜广布恩信 · 西江黄金走廊 · 南岭五岭与秦汉灵渠
+    </text>
+  </g>
+
+  <!-- 广西卡片（广信之西） -->
+  <g transform="translate(36, 85)" filter="url(#lgShadow)">
+    <rect width="345" height="150" rx="10" fill="#f0fdf4" stroke="#6ee7b7" stroke-width="1.2"/>
+    <text x="18" y="28" font-size="16" font-weight="900" fill="#065f46">广西 (广信以西 · 桂海山水)</text>
+    <text x="18" y="52" font-size="12" fill="#064e3b">🏞️ 奇绝地貌：喀斯特峰林天下一绝 (桂林山水、德天跨国瀑布)</text>
+    <text x="18" y="74" font-size="12" fill="#064e3b">🌊 西江源流：浔江与桂江汇于<tspan font-weight="bold">梧州</tspan>入西江，向东奔流注入广东</text>
+    <text x="18" y="96" font-size="12" fill="#064e3b">📜 省名渊源：宋置“广南西路”，治所桂州(桂林)，简称“桂”</text>
+    <text x="18" y="118" font-size="12" fill="#064e3b">🛶 水利奇迹：秦始皇凿<tspan font-weight="bold">兴安灵渠</tspan>，连通湘江与漓江，贯通南北</text>
+    <text x="18" y="136" font-size="11.5" font-weight="bold" fill="#047857">💡 “桂林山水甲天下，阳朔堪称甲桂林”</text>
+  </g>
+
+  <!-- 广东卡片（广信之东） -->
+  <g transform="translate(419, 85)" filter="url(#lgShadow)">
+    <rect width="345" height="150" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.2"/>
+    <text x="18" y="28" font-size="16" font-weight="900" fill="#1e40af">广东 (广信以东 · 岭南热土)</text>
+    <text x="18" y="52" font-size="12" fill="#1e3a8a">🏙️ 区域格局：珠江三角洲与大湾区，面向南海的千年外贸第一大港</text>
+    <text x="18" y="74" font-size="12" fill="#1e3a8a">🌊 珠江汇海：西江、北江、东江汇聚珠江三角洲，八口入海浩浩荡荡</text>
+    <text x="18" y="96" font-size="12" fill="#1e3a8a">📜 省名渊源：宋置“广南东路”，治所广州，简称“粤”</text>
+    <text x="18" y="118" font-size="12" fill="#1e3a8a">⛰️ 南岭关隘：唐代名相张九龄开辟<tspan font-weight="bold">梅关古道</tspan>，打通中原入粤天堑</text>
+    <text x="18" y="136" font-size="11.5" font-weight="bold" fill="#1d4ed8">💡 “日啖荔枝三百颗，不辞长作岭南人”</text>
+  </g>
+
+  <!-- 中央连结：汉代广信与西江黄金通道 -->
+  <g transform="translate(36, 250)">
+    <rect width="728" height="70" rx="10" fill="#1e293b"/>
+    
+    <path d="M 40 38 Q 200 18, 364 38 Q 530 58, 688 38" fill="none" stroke="url(#riverGrad)" stroke-width="8" stroke-linecap="round"/>
+    
+    <circle cx="364" cy="38" r="9" fill="#f59e0b" stroke="#ffffff" stroke-width="2.5"/>
+    <text x="364" y="22" text-anchor="middle" font-size="13" font-weight="900" fill="#fef08a">
+      📍 核心原点：汉代广信县 (今广东封开 / 广西梧州交界)
+    </text>
+    <text x="364" y="58" text-anchor="middle" font-size="11.5" fill="#e2e8f0">
+      西汉元鼎六年（前111年）汉武帝平南越，下诏“初开粤地，宜广布恩信”！广信以东为广东，广信以西为广西！
+    </text>
+  </g>
+
+  <!-- 底部典故考据与两广同源 -->
+  <g transform="translate(36, 336)">
+    <rect width="728" height="114" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+    
+    <text x="18" y="24" font-size="13" font-weight="bold" fill="#0f172a">
+      📜 历史典故与岭南同源文化
+    </text>
+
+    <g transform="translate(18, 36)">
+      <rect width="338" height="66" rx="6" fill="#fff" stroke="#cbd5e1" stroke-width="1"/>
+      <text x="12" y="18" font-size="11.5" font-weight="bold" fill="#d97706">粤语（白话）发祥与骑楼建筑</text>
+      <text x="12" y="36" font-size="10.5" fill="#64748b">古广信为岭南早期政治经济文化中心。两广同饮西江水，两广白话音韵相通，两岸遍布遮风挡雨的南洋骑楼街，文脉同根同源。</text>
+    </g>
+
+    <g transform="translate(372, 36)">
+      <rect width="338" height="66" rx="6" fill="#fff" stroke="#cbd5e1" stroke-width="1"/>
+      <text x="12" y="18" font-size="11.5" font-weight="bold" fill="#059669">南岭“五岭”与沟通中原古道</text>
+      <text x="12" y="36" font-size="10.5" fill="#64748b">越城岭、都庞岭、萌渚岭、骑田岭、大庾岭屏障两广。秦始皇筑灵渠、张九龄凿大庾岭梅关，让岭南同中华大一统紧密相连。</text>
+    </g>
+  </g>
+</svg>

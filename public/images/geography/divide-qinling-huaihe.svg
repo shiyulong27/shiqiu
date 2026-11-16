@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#f1f5f9"/>
+    </linearGradient>
+    <linearGradient id="northGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff7ed"/>
+      <stop offset="100%" stop-color="#ffedd5"/>
+    </linearGradient>
+    <linearGradient id="southGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ecfdf5"/>
+      <stop offset="100%" stop-color="#d1fae5"/>
+    </linearGradient>
+    <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ea580c"/>
+      <stop offset="45%" stop-color="#dc2626"/>
+      <stop offset="70%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="800" height="480" rx="16" fill="url(#bgGrad)"/>
+  <rect x="12" y="12" width="776" height="456" rx="12" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5"/>
+
+  <!-- 顶部标题 -->
+  <g transform="translate(30, 42)">
+    <text font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="900" fill="#1e293b">
+      ⚖️ 秦岭 · 淮河一线 —— 中国地理南北分界大动脉
+    </text>
+    <text y="22" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#64748b">
+      气候分水岭 · 800mm等降水量线 · 1月0℃等温线 · 水稻小麦主产界 · 暖气分界线
+    </text>
+  </g>
+
+  <!-- 北方大区示意卡 -->
+  <g transform="translate(36, 85)" filter="url(#shadow)">
+    <rect width="345" height="155" rx="10" fill="url(#northGrad)" stroke="#fdba74" stroke-width="1.2"/>
+    <text x="18" y="28" font-size="16" font-weight="900" fill="#c2410c">北方地区 (暖温带 · 半湿润区)</text>
+    <text x="18" y="52" font-size="12" fill="#431407">🌾 粮食作物：以<tspan font-weight="bold">小麦、玉米</tspan>为主 (一年一熟或两年三熟)</text>
+    <text x="18" y="74" font-size="12" fill="#431407">🚜 耕地土壤：<tspan font-weight="bold">旱地耕作</tspan>为主 (黄土、黑土、潮土)</text>
+    <text x="18" y="96" font-size="12" fill="#431407">🐴 传统交通：<tspan font-weight="bold">南船北马</tspan>之“马”，陆路平原为主</text>
+    <text x="18" y="118" font-size="12" fill="#431407">❄️ 气候水文：河流<tspan font-weight="bold">有结冰期</tspan>，年降水量 &lt; 800 毫米</text>
+    <text x="18" y="140" font-size="12" fill="#c2410c" font-weight="bold">🔥 冬季采暖：北方集中统一供暖线以北</text>
+  </g>
+
+  <!-- 南方大区示意卡 -->
+  <g transform="translate(419, 85)" filter="url(#shadow)">
+    <rect width="345" height="155" rx="10" fill="url(#southGrad)" stroke="#86efac" stroke-width="1.2"/>
+    <text x="18" y="28" font-size="16" font-weight="900" fill="#047857">南方地区 (亚热带 · 湿润区)</text>
+    <text x="18" y="52" font-size="12" fill="#064e3b">🍚 粮食作物：以<tspan font-weight="bold">水稻</tspan>为主 (一年两熟至三熟)</text>
+    <text x="18" y="74" font-size="12" fill="#064e3b">🌱 耕地土壤：<tspan font-weight="bold">水田耕作</tspan>为主 (水稻土、红壤)</text>
+    <text x="18" y="96" font-size="12" fill="#064e3b">⛵ 传统交通：<tspan font-weight="bold">南船北马</tspan>之“船”，水网纵横舟楫行</text>
+    <text x="18" y="118" font-size="12" fill="#064e3b">💧 气候水文：河流<tspan font-weight="bold">无结冰期</tspan>，年降水量 &gt; 800 毫米</text>
+    <text x="18" y="140" font-size="12" fill="#047857" font-weight="bold">🍊 自然植被：亚热带常绿阔叶林 · 橘生淮南</text>
+  </g>
+
+  <!-- 中间核心界线动态彩带 -->
+  <g transform="translate(36, 258)">
+    <rect width="728" height="58" rx="8" fill="#1e293b"/>
+    <path d="M 15 29 C 140 10, 260 48, 380 25 C 500 2, 620 40, 713 29" fill="none" stroke="url(#lineGrad)" stroke-width="6" stroke-linecap="round"/>
+    
+    <!-- 核心节点图钉 -->
+    <!-- 节点1：秦岭终南山 -->
+    <circle cx="95" cy="24" r="8" fill="#ea580c" stroke="#ffffff" stroke-width="2"/>
+    <text x="95" y="47" text-anchor="middle" font-size="10" fill="#fdba74" font-weight="bold">秦岭(终南山)</text>
+
+    <!-- 节点2：桐柏山淮源 -->
+    <circle cx="280" cy="30" r="8" fill="#f59e0b" stroke="#ffffff" stroke-width="2"/>
+    <text x="280" y="47" text-anchor="middle" font-size="10" fill="#fde68a" font-weight="bold">桐柏山淮源</text>
+
+    <!-- 节点3：信阳 -->
+    <circle cx="430" cy="20" r="8" fill="#10b981" stroke="#ffffff" stroke-width="2"/>
+    <text x="430" y="47" text-anchor="middle" font-size="10" fill="#a7f3d0" font-weight="bold">信阳(江南北国)</text>
+
+    <!-- 节点4：蚌埠 -->
+    <circle cx="560" cy="32" r="8" fill="#0284c7" stroke="#ffffff" stroke-width="2"/>
+    <text x="560" y="47" text-anchor="middle" font-size="10" fill="#bae6fd" font-weight="bold">安徽蚌埠</text>
+
+    <!-- 节点5：淮安分界园 -->
+    <circle cx="680" cy="27" r="8" fill="#3b82f6" stroke="#ffffff" stroke-width="2"/>
+    <text x="680" y="47" text-anchor="middle" font-size="10" fill="#bfdbfe" font-weight="bold">江苏淮安标志园</text>
+  </g>
+
+  <!-- 底部典故考据与金句栏 -->
+  <g transform="translate(36, 332)">
+    <rect width="728" height="118" rx="8" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1"/>
+    
+    <text x="18" y="26" font-size="13" font-weight="bold" fill="#0f172a">
+      📜 历史典故与千古名句（地理文化记忆）
+    </text>
+
+    <g transform="translate(18, 42)">
+      <rect width="338" height="60" rx="6" fill="#fff" stroke="#fed7aa" stroke-width="1"/>
+      <text x="12" y="20" font-size="11" font-weight="bold" fill="#c2410c">“橘生淮南则为橘，生于淮北则为枳”</text>
+      <text x="12" y="38" font-size="10.5" fill="#64748b">源自《晏子春秋》。因南北水土气候差异，一河之隔，果实甘苦截然不同。</text>
+    </g>
+
+    <g transform="translate(372, 42)">
+      <rect width="338" height="60" rx="6" fill="#fff" stroke="#bae6fd" stroke-width="1"/>
+      <text x="12" y="20" font-size="11" font-weight="bold" fill="#0369a1">“云横秦岭家何在？雪拥蓝关马不前”</text>
+      <text x="12" y="38" font-size="10.5" fill="#64748b">唐代韩愈过蓝田关远眺巍峨秦岭。一山阻隔冷暖风云，是华夏中央第一分水岭。</text>
+    </g>
+  </g>
+</svg>

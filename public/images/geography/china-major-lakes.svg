@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="100%" height="100%">
+  <defs>
+    <linearGradient id="lakeBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0fdfa"/>
+      <stop offset="100%" stop-color="#f8fafc"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-opacity="0.06"/>
+    </filter>
+  </defs>
+
+  <rect width="800" height="480" rx="16" fill="url(#lakeBg)"/>
+  <rect x="12" y="12" width="776" height="456" rx="12" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5"/>
+
+  <!-- 顶部标题 -->
+  <g transform="translate(30, 42)">
+    <text font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="900" fill="#0f766e">
+      🏞️ 中华五大淡水湖与名水大泊全景巡礼
+    </text>
+    <text y="22" font-family="system-ui, -apple-system, sans-serif" font-size="12" fill="#64748b">
+      江河肾脏 · 防洪调蓄天然巨浸 · 鱼米水乡文明发祥 · 湿地候鸟天堂
+    </text>
+  </g>
+
+  <!-- 6个大湖矩阵 -->
+  <!-- 1. 鄱阳湖 -->
+  <g transform="translate(36, 80)" filter="url(#cardShadow)">
+    <rect width="232" height="175" rx="8" fill="#f0fdf4" stroke="#86efac" stroke-width="1"/>
+    <text x="14" y="24" font-size="14" font-weight="900" fill="#15803d">1. 鄱阳湖 · 第一大淡水湖</text>
+    <text x="14" y="44" font-size="11" fill="#475569">📍 所在：<tspan font-weight="bold" fill="#1e293b">江西省北部 · 九江/南昌</tspan></text>
+    <text x="14" y="62" font-size="11" fill="#475569">📐 丰水期面积：<tspan font-weight="bold" fill="#047857">约 3,150 k㎡</tspan></text>
+    <text x="14" y="80" font-size="11" fill="#475569">💧 水系：纳赣抚信饶修五水注长江</text>
+    <text x="14" y="98" font-size="11" fill="#475569">🕊️ 生态：亚洲最大白鹤越冬湿地</text>
+    <line x1="14" y1="108" x2="218" y2="108" stroke="#bbf7d0" stroke-width="1"/>
+    <text x="14" y="126" font-size="10.5" font-weight="bold" fill="#15803d">📜 “渔舟唱晚，响穷彭蠡之滨”</text>
+    <text x="14" y="144" font-size="10" fill="#64748b">王勃《滕王阁序》名句中的彭蠡即古鄱阳湖</text>
+    <text x="14" y="162" font-size="10" fill="#047857" font-weight="bold">⚖️ 地理特点：“高水是湖，低水似河”</text>
+  </g>
+
+  <!-- 2. 洞庭湖 -->
+  <g transform="translate(284, 80)" filter="url(#cardShadow)">
+    <rect width="232" height="175" rx="8" fill="#eff6ff" stroke="#93c5fd" stroke-width="1"/>
+    <text x="14" y="24" font-size="14" font-weight="900" fill="#1d4ed8">2. 洞庭湖 · 第二大淡水湖</text>
+    <text x="14" y="44" font-size="11" fill="#475569">📍 所在：<tspan font-weight="bold" fill="#1e293b">湖南省北部 · 岳阳/常德</tspan></text>
+    <text x="14" y="62" font-size="11" fill="#475569">📐 面积：<tspan font-weight="bold" fill="#1d4ed8">约 2,579 k㎡</tspan></text>
+    <text x="14" y="80" font-size="11" fill="#475569">💧 水系：长江中游吞吐第一大巨浸</text>
+    <text x="14" y="98" font-size="11" fill="#475569">🌾 粮仓：“湖广熟，天下足”核心水网</text>
+    <line x1="14" y1="108" x2="218" y2="108" stroke="#bfdbfe" stroke-width="1"/>
+    <text x="14" y="126" font-size="10.5" font-weight="bold" fill="#1d4ed8">📜 “气蒸云梦泽，波撼岳阳城”</text>
+    <text x="14" y="144" font-size="10" fill="#64748b">孟浩然题岳阳楼，写尽洞庭八百里奔涌豪气</text>
+    <text x="14" y="162" font-size="10" fill="#1e40af" font-weight="bold">⚖️ 地理特点：长江四口南流入，城陵矶复出</text>
+  </g>
+
+  <!-- 3. 太湖 -->
+  <g transform="translate(532, 80)" filter="url(#cardShadow)">
+    <rect width="232" height="175" rx="8" fill="#fdf4ff" stroke="#f0abfc" stroke-width="1"/>
+    <text x="14" y="24" font-size="14" font-weight="900" fill="#a21caf">3. 太湖 · 第三大淡水湖</text>
+    <text x="14" y="44" font-size="11" fill="#475569">📍 所在：<tspan font-weight="bold" fill="#1e293b">江苏省南部与浙江省交界</tspan></text>
+    <text x="14" y="62" font-size="11" fill="#475569">📐 面积：<tspan font-weight="bold" fill="#a21caf">约 2,427 k㎡</tspan></text>
+    <text x="14" y="80" font-size="11" fill="#475569">💧 水系：长三角核心水系 · 经黄浦江入海</text>
+    <text x="14" y="98" font-size="11" fill="#475569">🍵 风物：碧螺春茶、太湖石、太湖三白</text>
+    <line x1="14" y1="108" x2="218" y2="108" stroke="#f5d0fe" stroke-width="1"/>
+    <text x="14" y="126" font-size="10.5" font-weight="bold" fill="#a21caf">📜 “太湖三万六千顷，浩荡汪洋”</text>
+    <text x="14" y="144" font-size="10" fill="#64748b">包孕吴越，滋养了苏州、无锡、湖州锦绣江南</text>
+    <text x="14" y="162" font-size="10" fill="#86198f" font-weight="bold">⚖️ 地理特点：碟形浅水湖，水乡文化摇篮</text>
+  </g>
+
+  <!-- 4. 洪泽湖 -->
+  <g transform="translate(36, 272)" filter="url(#cardShadow)">
+    <rect width="232" height="175" rx="8" fill="#fffbeb" stroke="#fcd34d" stroke-width="1"/>
+    <text x="14" y="24" font-size="14" font-weight="900" fill="#b45309">4. 洪泽湖 · 第四大淡水湖</text>
+    <text x="14" y="44" font-size="11" fill="#475569">📍 所在：<tspan font-weight="bold" fill="#1e293b">江苏省淮安市/宿迁市</tspan></text>
+    <text x="14" y="62" font-size="11" fill="#475569">📐 面积：<tspan font-weight="bold" fill="#b45309">约 2,069 k㎡</tspan></text>
+    <text x="14" y="80" font-size="11" fill="#475569">💧 枢纽：淮河干流水库 · 大运河南北中枢</text>
+    <text x="14" y="98" font-size="11" fill="#475569">🦀 风产：洪泽湖大闸蟹 · 著名的“日出斗金”</text>
+    <line x1="14" y1="108" x2="218" y2="108" stroke="#fde68a" stroke-width="1"/>
+    <text x="14" y="126" font-size="10.5" font-weight="bold" fill="#b45309">📜 “日出斗金，天下第一悬湖”</text>
+    <text x="14" y="144" font-size="10" fill="#64748b">明清洪泽湖大堤石工墙长67公里，世界遗产</text>
+    <text x="14" y="162" font-size="10" fill="#92400e" font-weight="bold">⚖️ 地理特点：湖底高出东部平原，悬湖调洪</text>
+  </g>
+
+  <!-- 5. 巢湖 -->
+  <g transform="translate(284, 272)" filter="url(#cardShadow)">
+    <rect width="232" height="175" rx="8" fill="#f0fdfa" stroke="#5eead4" stroke-width="1"/>
+    <text x="14" y="24" font-size="14" font-weight="900" fill="#0f766e">5. 巢湖 · 第五大淡水湖</text>
+    <text x="14" y="44" font-size="11" fill="#475569">📍 所在：<tspan font-weight="bold" fill="#1e293b">安徽省合肥市中南部</tspan></text>
+    <text x="14" y="62" font-size="11" fill="#475569">📐 面积：<tspan font-weight="bold" fill="#0f766e">约 780 k㎡</tspan></text>
+    <text x="14" y="80" font-size="11" fill="#475569">💧 水系：裕溪河沟通长江 · 引江济淮主通道</text>
+    <text x="14" y="98" font-size="11" fill="#475569">🏯 名胜：中庙姥山岛 · 三河古镇</text>
+    <line x1="14" y1="108" x2="218" y2="108" stroke="#99f6e4" stroke-width="1"/>
+    <text x="14" y="126" font-size="10.5" font-weight="bold" fill="#0f766e">📜 “天与人间作画本，并吞膏泽”</text>
+    <text x="14" y="144" font-size="10" fill="#64748b">宋苏轼赞巢湖烟波浩渺，是江淮咽喉要津</text>
+    <text x="14" y="162" font-size="10" fill="#115e59" font-weight="bold">⚖️ 地理特点：江淮运河重纽，连接长江与淮河</text>
+  </g>
+
+  <!-- 6. 特别大湖：青海湖 -->
+  <g transform="translate(532, 272)" filter="url(#cardShadow)">
+    <rect width="232" height="175" rx="8" fill="#f0f9ff" stroke="#7dd3fc" stroke-width="1"/>
+    <text x="14" y="24" font-size="14" font-weight="900" fill="#0284c7">👑 青海湖 · 中国最大湖泊</text>
+    <text x="14" y="44" font-size="11" fill="#475569">📍 所在：<tspan font-weight="bold" fill="#1e293b">青海省东北部青藏高原</tspan></text>
+    <text x="14" y="62" font-size="11" fill="#475569">📐 面积：<tspan font-weight="bold" fill="#0284c7">约 4,625 k㎡ (内陆咸水湖)</tspan></text>
+    <text x="14" y="80" font-size="11" fill="#475569">⛰️ 地位：高原第一圣湖 · 海拔 3,196 米</text>
+    <text x="14" y="98" font-size="11" fill="#475569">🐟 生态：青海湖裸鲤(湟鱼) · 鸟岛天鹅</text>
+    <line x1="14" y1="108" x2="218" y2="108" stroke="#bae6fd" stroke-width="1"/>
+    <text x="14" y="126" font-size="10.5" font-weight="bold" fill="#0284c7">📜 “西海浩渺如碧玉，水天一色”</text>
+    <text x="14" y="144" font-size="10" fill="#64748b">古称“西海”，四周群山环抱，高原上的蓝宝石</text>
+    <text x="14" y="162" font-size="10" fill="#0369a1" font-weight="bold">⚖️ 地理特点：阻隔沙漠化向东蔓延的生态屏障</text>
+  </g>
+</svg>
