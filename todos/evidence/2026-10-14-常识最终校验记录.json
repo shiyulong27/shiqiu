@@ -1,0 +1,61 @@
+{
+  "at": "2026-10-14T13:30:26+08:00",
+  "commands": [
+    "node scripts/verify_traditional_culture.mjs --require-complete",
+    "node scripts/verify_commonSense_foundations.mjs",
+    "node scripts/verify_commonSense_data.mjs",
+    "npx vitest run test/traditionalCulture.test.js",
+    "node scripts/check_commonsense_pages.mjs",
+    "git diff --check -- src/data/commonSenseData.js src/pages/knowledge/commonsense.astro src/pages/index.astro"
+  ],
+  "results": [
+    {
+      "checkIndex": 0,
+      "chunk_id": "a1d652",
+      "wall_time_seconds": 0.5483613,
+      "exit_code": 0,
+      "original_token_count": 67,
+      "output": "{\n  \"structure\": \"passed\",\n  \"publicEntries\": 128,\n  \"chapterCounts\": {\n    \"C01\": 16,\n    \"C02\": 16,\n    \"C03\": 16,\n    \"C04\": 16,\n    \"C05\": 16,\n    \"C06\": 16,\n    \"C07\": 16,\n    \"C08\": 16\n  },\n  \"pendingCount\": 0,\n  \"pending\": [],\n  \"visuals\": 23,\n  \"quiz\": 8\n}\n"
+    },
+    {
+      "checkIndex": 1,
+      "chunk_id": "c558e7",
+      "wall_time_seconds": 0.5282016,
+      "exit_code": 0,
+      "original_token_count": 24,
+      "output": "{\n  \"structure\": \"passed\",\n  \"entries\": 64,\n  \"domains\": 8,\n  \"sources\": 47,\n  \"missing\": []\n}\n"
+    },
+    {
+      "checkIndex": 2,
+      "chunk_id": "5db8e1",
+      "wall_time_seconds": 0.5882673,
+      "exit_code": 0,
+      "original_token_count": 67,
+      "output": "--- 开始静态校验生活与百科常识宝典数据 (commonSenseData.js) ---\n✅ 静态校验 100% 通过！\n- 应急安全专题: 5 组\n- 交通与公共标识: 8 个\n- 垃圾四大分类: 4 类\n- 健康生活习惯: 3 套\n- 亲子生活常识挑战题: 8 道\n"
+    },
+    {
+      "checkIndex": 3,
+      "chunk_id": "ee51d8",
+      "wall_time_seconds": 2.711191,
+      "exit_code": 0,
+      "original_token_count": 104,
+      "output": "npm warn Unknown user config \"home\". This will stop working in the next major version of npm. See `npm help npmrc` for supported config options.\n\n RUN  v3.2.7 D:/project/git/shiqiu\n\n ✓ test/traditionalCulture.test.js (7 tests) 19ms\n\n Test Files  1 passed (1)\n      Tests  7 passed (7)\n   Start at  13:30:20\n   Duration  540ms (transform 73ms, setup 0ms, collect 130ms, tests 19ms, environment 0ms, prepare 135ms)\n\n"
+    },
+    {
+      "checkIndex": 4,
+      "chunk_id": "096966",
+      "wall_time_seconds": 7.6016393,
+      "exit_code": 0,
+      "original_token_count": 156,
+      "output": "{\n  \"at\": \"2026-10-14T05:30:25.959Z\",\n  \"traditionalEntries\": 128,\n  \"foundationEntries\": 64,\n  \"checks\": [\n    \"传统页128条；搜索/跨篇场景与主题取交集；空态/清空/目录定位\",\n    \"答题漏答、满分解析、重做、Esc关闭及焦点返回\",\n    \"360px正文与时辰/生克/庭院/乐器图无横向溢出；采用移动版图片\",\n    \"旧常识页64条、入门分类/检索/空态/清空、原安全分类、入门稳定锚点\",\n    \"首页入口、两页互链和本次专题延伸链接HTTP200\"\n  ],\n  \"consoleErrors\": [],\n  \"productionBuild\": \"未执行，按用户要求留给用户\"\n}\n"
+    },
+    {
+      "checkIndex": 5,
+      "chunk_id": "bf693c",
+      "wall_time_seconds": 0.492943,
+      "exit_code": 0,
+      "original_token_count": 0,
+      "output": ""
+    }
+  ]
+}
